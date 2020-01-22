@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace KidsManagement.Data
+{
+    //toq klas trqa li mi vub6te?
+    public static class Const
+    {
+        public const int humanNameMinLen = 2;
+        public const int humanNameMaxLen = 40;
+
+        public const int entityNameMaxLen = 30;
+        public const int entityMinCount = 1;
+        public const int entityMaxCount = 256;
+        public const int textMaxLen= 256;
+        
+    }
+}
