@@ -1,13 +1,17 @@
-﻿using Kids.Management.Data.Models.Enums;
+﻿using KidsManagement.Data.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Kids.Management.Data.Models
+namespace KidsManagement.Data.Models
 {
     public class Payment
     {
+        public Payment()
+        {
+            this.IsDeleted = false;
+        }
         [Key]
         public int Id { get; set; }
 
@@ -22,7 +26,7 @@ namespace Kids.Management.Data.Models
         public PaymentType Type { get; set; }
 
         //in percent
-        public int Discount { get; set; }
+        public double Discount { get; set; }
 
         public string DiscountBasis { get; set; }
 
@@ -30,5 +34,14 @@ namespace Kids.Management.Data.Models
         public int StudentId { get; set; }
 
         public Student Student { get; set; }
+
+
+        [Required]
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime LastModified { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

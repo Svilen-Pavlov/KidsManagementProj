@@ -1,4 +1,4 @@
-﻿using Kids.Management.Data.Models.Enums;
+﻿using KidsManagement.Data.Models.Enums;
 using KidsManagement.Data;
 using System;
 using System.Collections.Generic;
@@ -6,10 +6,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Kids.Management.Data.Models
+namespace KidsManagement.Data.Models
 {
     public class Group
     {
+        public Group()
+        {
+            this.IsDeleted = false;
+        }
         [Key]
         public int Id { get; set; }
 
@@ -24,7 +28,7 @@ namespace Kids.Management.Data.Models
         public AgeGroup AgeGroup { get; set; }
 
         [Required]
-        public DateTime StartDate { get; set; }   
+        public DateTime StartDate { get; set; }
 
         [Required]
         public DateTime EndDate { get; set; }
@@ -56,5 +60,13 @@ namespace Kids.Management.Data.Models
 
         //attendance?
         //variant za vuzrast predu4/ u4ili6tna
+
+        [Required]
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime LastModified { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

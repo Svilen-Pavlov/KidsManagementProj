@@ -7,10 +7,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Kids.Management.Data.Models
+namespace KidsManagement.Data.Models
 {
     public class Parent
     {
+        public Parent()
+        {
+            this.IsDeleted = false;
+        }
         [Key]
         public int Id { get; set; }
 
@@ -38,12 +42,19 @@ namespace Kids.Management.Data.Models
 
         [EmailAddress]
         public string AlternativeEmail { get; set; }
-
-
+                               
 
         //many to many
         public IEnumerable<Note> AdminNotes { get; set; }
 
         public IEnumerable<StudentParent> Children { get; set; }
+
+        [Required]
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime LastModified { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

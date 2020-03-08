@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\KidsManagement.Data.Models\KidsManagement.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\KidsManagement.Data\KidsManagement.Data.csproj" />
+    <ProjectReference Include="..\..\ViewModels\KidsManagement.ViewModels\KidsManagement.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

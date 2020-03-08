@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Kids.Management.Data.Models
+namespace KidsManagement.Data.Models
 {
     public class Admin
     {

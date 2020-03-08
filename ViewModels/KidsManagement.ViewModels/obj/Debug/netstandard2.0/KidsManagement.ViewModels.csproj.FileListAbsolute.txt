@@ -1,0 +1,13 @@
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\bin\Debug\netstandard2.0\KidsManagement.ViewModels.deps.json
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\bin\Debug\netstandard2.0\KidsManagement.ViewModels.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\obj\Debug\netstandard2.0\KidsManagement.ViewModels.AssemblyInfoInputs.cache
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\obj\Debug\netstandard2.0\KidsManagement.ViewModels.AssemblyInfo.cs
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\bin\Debug\netstandard2.0\KidsManagement.ViewModels.pdb
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\bin\Debug\netstandard2.0\KidsManagement.Data.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\bin\Debug\netstandard2.0\KidsManagement.Data.Models.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\bin\Debug\netstandard2.0\KidsManagement.Data.Models.pdb
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\bin\Debug\netstandard2.0\KidsManagement.Data.pdb
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\obj\Debug\netstandard2.0\KidsManagement.ViewModels.csprojAssemblyReference.cache
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\obj\Debug\netstandard2.0\KidsManagement.ViewModels.csproj.CopyComplete
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\obj\Debug\netstandard2.0\KidsManagement.ViewModels.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\ViewModels\KidsManagement.ViewModels\obj\Debug\netstandard2.0\KidsManagement.ViewModels.pdb

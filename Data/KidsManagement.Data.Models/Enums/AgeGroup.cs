@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Kids.Management.Data.Models.Enums
+namespace KidsManagement.Data.Models.Enums
 {
     public enum AgeGroup
     {
-        Preschool,
-        Primary,
-        Secondary,
-        High
+        Preschool=0,
+        Primary=1,
+        Secondary=2,
+        High=3
     }
 }

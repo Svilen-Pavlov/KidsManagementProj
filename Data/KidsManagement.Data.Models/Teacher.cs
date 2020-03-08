@@ -6,10 +6,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Kids.Management.Data.Models
+namespace KidsManagement.Data.Models
 {
     public class Teacher
     {
+
         [Key]
         public int Id { get; set; }
         [Required]
@@ -38,5 +39,8 @@ namespace Kids.Management.Data.Models
         //public IEnumerable<DayOfWeek> WorkDays { get; set; }
         //[Required]
         //public int TotalStudentsCount { get; set; } FOR SERVICES!
+
+
+
     }
 }

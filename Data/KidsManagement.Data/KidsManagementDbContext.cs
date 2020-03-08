@@ -1,4 +1,4 @@
-﻿using Kids.Management.Data.Models;
+﻿using KidsManagement.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

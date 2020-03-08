@@ -1,7 +1,7 @@
-﻿using Kids.Management.Data.Models;
-using Kids.Management.Data.Models.Enums;
-using KidsManagement.Data;
+﻿using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Enums;
+using KidsManagement.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,8 @@ namespace KidsManagementConsole
         public static void Main()
         {
             var db = new KidsManagementDbContext();
+
+            db.Database.Migrate();
 
             //SeedParentsTeachersAdmins(parents, teachers, db);
             //SeedLevels(db);
@@ -43,8 +45,9 @@ namespace KidsManagementConsole
                     StartDate = startDate.Date,
                     EndDate = startDate.AddDays(16 * 7),
                     EndTime = new TimeSpan(19, 00, 0),
-                    Level = level
-
+                    Level = level,
+                    CreatedOn=DateTime.UtcNow,
+                    
                 };
                 startDate.AddDays(1);
 
@@ -109,7 +112,7 @@ namespace KidsManagementConsole
                 };
                 teachers.Add(teacher);
             }
-
+            
             db.Admins.Add(admin);
             db.Parents.AddRange(parents);
             db.Teachers.AddRange(teachers);

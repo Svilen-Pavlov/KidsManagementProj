@@ -6,3 +6,10 @@ D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.S
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\obj\Debug\netstandard2.0\KidsManagement.Services.dll
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\obj\Debug\netstandard2.0\KidsManagement.Services.pdb
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\obj\Debug\netstandard2.0\KidsManagement.Services.csprojAssemblyReference.cache
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\bin\Debug\netstandard2.0\KidsManagement.Data.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\bin\Debug\netstandard2.0\KidsManagement.Data.Models.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\bin\Debug\netstandard2.0\KidsManagement.Data.Models.pdb
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\bin\Debug\netstandard2.0\KidsManagement.Data.pdb
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\obj\Debug\netstandard2.0\KidsManagement.Services.csproj.CopyComplete
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\bin\Debug\netstandard2.0\KidsManagement.ViewModels.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Services\KidsManagement.Services\bin\Debug\netstandard2.0\KidsManagement.ViewModels.pdb

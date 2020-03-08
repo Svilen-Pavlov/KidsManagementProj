@@ -47,3 +47,8 @@ D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\obj\Debug\net
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\obj\Debug\netcoreapp3.1\KidsConsole.csproj.CopyComplete
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\obj\Debug\netcoreapp3.1\KidsConsole.dll
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\obj\Debug\netcoreapp3.1\KidsConsole.pdb
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\KidsManagement.Services.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\KidsManagement.Services.pdb
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\KidsManagement.ViewModels.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\KidsManagement.ViewModels.pdb

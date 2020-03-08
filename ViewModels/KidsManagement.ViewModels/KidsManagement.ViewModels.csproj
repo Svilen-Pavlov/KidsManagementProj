@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Payment\" />
+    <Folder Include="Student\" />
+    <Folder Include="Teacher\" />
+    <Folder Include="Parent\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\KidsManagement.Data.Models\KidsManagement.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\KidsManagement.Data\KidsManagement.Data.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-﻿namespace Kids.Management.Data.Models
+﻿namespace KidsManagement.Data.Models
 {
     public class LevelTeacher
     {
