@@ -6,6 +6,7 @@ namespace KidsManagement.Data.Models
 {
     public class Level
     {
+
         [Key]
         public int Id { get; set; }
         [Required]

@@ -5,10 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Payment\" />
-    <Folder Include="Student\" />
-    <Folder Include="Teacher\" />
-    <Folder Include="Parent\" />
+    <Folder Include="Payments\" />
+    <Folder Include="Students\" />
+    <Folder Include="Parents\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -18,14 +18,8 @@ namespace KidsManagement.Services.Groups
             this.db = db;
         }
 
-        public void AddStudent(int studentId, int groupId)
-        {
-            var student = this.db.Students.FirstOrDefault(x => x.Id == studentId);
-            student.GroupId = groupId;
-            this.db.SaveChanges();
-        }
 
-        public void Create(GroupCreateInputModel input)
+        public int CreateGroup(GroupCreateInputModel input)
         {
             var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == input.TeacherId);
             var level = this.db.Levels.FirstOrDefault(x => x.Id == input.LevelId);
@@ -50,13 +44,14 @@ namespace KidsManagement.Services.Groups
             this.db.Groups.Add(group);
             this.db.SaveChanges();
 
+            return group.Id;
         }
 
-        public GroupDetailsViewModel FindById(int id)
+        public GroupDetailsViewModel FindById(int groupId)
         {
-            var group = this.db.Groups.FirstOrDefault(x => x.Id == id);
-            var level = this.db.Levels.FirstOrDefault(x => x.Id == group.LevelId);
-            var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == group.TeacherId);
+            var group = this.db.Groups.FirstOrDefault(x => x.Id == groupId);
+            var level = this.db.Levels.FirstOrDefault(x => x.Id == group.LevelId); //dali 6e go nameri
+            var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == group.TeacherId); //dali 6e go nameri
             var students = this.db.Students.Where(x => x.GroupId == group.Id).ToArray();
             var model = new GroupDetailsViewModel
             {
@@ -74,18 +69,37 @@ namespace KidsManagement.Services.Groups
                 StartTime = group.StartTime,
                 TeacherId = group.TeacherId,
                 TeacherName = teacher.FullName,
-                Students = students
+                Students = students 
             };
 
             return model;
         }
+        public void AddStudent(int studentId, int groupId)
+        {
+            var student = this.db.Students.FirstOrDefault(x => x.Id == studentId && x.IsDeleted==false);
+            student.GroupId = groupId;
+            student.LastModified = DateTime.UtcNow;
+            this.db.SaveChanges();
+        }
 
         public void RemoveStudent(int studentId, int groupId)
         {
-            var student = this.db.Students.FirstOrDefault(x => x.Id == studentId);
-
+            var student = this.db.Students.FirstOrDefault(x => x.Id == studentId && x.IsDeleted == false);
             student.GroupId = 0;
+            student.LastModified = DateTime.UtcNow;
             this.db.SaveChanges();
+        }
+
+        public void ChangeTeacher(int newTeacherId, int groupId) //teacher service or here?
+        {
+            var group = this.db.Groups.FirstOrDefault(x => x.Id == groupId);
+            group.TeacherId = newTeacherId;
+            this.db.SaveChanges();
+        }
+
+        public bool GroupExists(int groupId)
+        {
+            return this.db.Groups.Any(x => x.Id == groupId);
         }
     }
 }
