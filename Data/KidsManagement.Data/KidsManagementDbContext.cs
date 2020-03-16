@@ -9,6 +9,10 @@ namespace KidsManagement.Data
 {
     public class KidsManagementDbContext : DbContext
     {
+        //public KidsManagementDbContext(DbContextOptions<KidsManagementDbContext> options):base (options)
+        //{
+
+        //}
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Group> Groups { get; set; }

@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Enums;
+using KidsManagement.ViewModels.Students;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -37,7 +38,7 @@ namespace KidsManagement.ViewModels.Groups
         public int LevelId { get; set; }
         public string LevelName { get; set; }
 
-        public IEnumerable<Student> Students { get; set; }
+        public IEnumerable<StudentDetailsViewModel> Students { get; set; }
 
     }
 }

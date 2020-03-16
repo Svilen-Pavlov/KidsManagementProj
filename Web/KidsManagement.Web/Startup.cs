@@ -2,9 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using KidsManagement.Data;
+using KidsManagement.Services.Groups;
+using KidsManagement.Services.Parents;
+using KidsManagement.Services.Payments;
+using KidsManagement.Services.Students;
+using KidsManagement.Services.Teachers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +31,16 @@ namespace KidsManagement.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IGroupsService, GroupsService>();
+            //services.AddTransient<IStudentsService, StudentsService>();
+            //services.AddTransient<ITeachersService, TeachersService>();
+            //services.AddTransient<IParentsService, ParentsService>();
+            //services.AddTransient<IPaymentsService, PaymentsService>();
+            
+            services.AddDbContext<KidsManagementDbContext>(options =>
+            options.UseSqlServer(
+                Configuration.GetConnectionString("KidsManagementDb")));
+
             services.AddControllersWithViews();
         }
 

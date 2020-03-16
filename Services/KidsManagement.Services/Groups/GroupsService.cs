@@ -1,10 +1,12 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
 using KidsManagement.ViewModels.Groups;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KidsManagement.Services.Groups
 {
@@ -19,7 +21,7 @@ namespace KidsManagement.Services.Groups
         }
 
 
-        public int CreateGroup(GroupCreateInputModel input)
+        public async Task<int> CreateGroup(GroupCreateInputModel input)
         {
             var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == input.TeacherId);
             var level = this.db.Levels.FirstOrDefault(x => x.Id == input.LevelId);
@@ -41,8 +43,8 @@ namespace KidsManagement.Services.Groups
                 CreatedOn = DateTime.UtcNow,
             };
 
-            this.db.Groups.Add(group);
-            this.db.SaveChanges();
+            await this.db.Groups.AddAsync(group);
+            await this.db.SaveChangesAsync();
 
             return group.Id;
         }
@@ -69,14 +71,14 @@ namespace KidsManagement.Services.Groups
                 StartTime = group.StartTime,
                 TeacherId = group.TeacherId,
                 TeacherName = teacher.FullName,
-                Students = students 
+                //Students = new students
             };
 
             return model;
         }
         public void AddStudent(int studentId, int groupId)
         {
-            var student = this.db.Students.FirstOrDefault(x => x.Id == studentId && x.IsDeleted==false);
+            var student = this.db.Students.FirstOrDefault(x => x.Id == studentId && x.IsDeleted == false);
             student.GroupId = groupId;
             student.LastModified = DateTime.UtcNow;
             this.db.SaveChanges();
@@ -100,6 +102,40 @@ namespace KidsManagement.Services.Groups
         public bool GroupExists(int groupId)
         {
             return this.db.Groups.Any(x => x.Id == groupId);
+        }
+
+        public AllGroupsDetailsViewModel GetAll()
+        {
+            var groups = this.db.Groups
+                .Include(x => x.Level)
+                .Include(x => x.Students)
+                .Include(x=>x.Teacher)
+                .Select(x => new GroupDetailsViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    AgeGroup = x.AgeGroup,
+                    CurrentLessonNumber = x.CurrentLessonNumber,
+                    DayOfWeek = x.DayOfWeek,
+                    StartDate = x.StartDate,
+                    EndDate = x.EndDate,
+                    Duration = x.Duration,
+                    StartTime = x.StartTime,
+                    EndTime = x.EndTime,
+                    
+                    LevelId = x.LevelId,
+                    LevelName = x.Level.Name,
+                    //Students = x.Students,
+                    TeacherId=x.TeacherId,
+                    TeacherName=x.Teacher.FullName
+                }).ToArray();
+
+
+            var groupsList = new List<GroupDetailsViewModel>(groups);
+
+            var model = new AllGroupsDetailsViewModel(){ Groups = groupsList };
+
+            return model;
         }
     }
 }

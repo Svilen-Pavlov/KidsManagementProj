@@ -3,12 +3,13 @@ using KidsManagement.ViewModels.Groups;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KidsManagement.Services.Groups
 {
     public interface IGroupsService
     {
-        int CreateGroup(GroupCreateInputModel model);
+        Task<int> CreateGroup(GroupCreateInputModel model);
 
         GroupDetailsViewModel FindById(int id);
 
@@ -17,5 +18,7 @@ namespace KidsManagement.Services.Groups
         void RemoveStudent(int studentId, int groupId);
 
         bool GroupExists(int groupId);
+
+        AllGroupsDetailsViewModel GetAll();
     }
 }

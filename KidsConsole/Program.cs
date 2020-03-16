@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KidsManagement.Services.Groups;
 
 namespace KidsManagementConsole
 {
@@ -13,9 +14,12 @@ namespace KidsManagementConsole
         public static void Main()
         {
             var db = new KidsManagementDbContext();
+            var gs = new GroupsService(db);
+            var result = gs.GetAll();
+            Console.WriteLine(gs.GetAll().ToString());
 
             db.Database.Migrate();
-
+            Console.WriteLine();
             //SeedParentsTeachersAdmins(parents, teachers, db);
             //SeedLevels(db);
             //SeedGroups(db);
