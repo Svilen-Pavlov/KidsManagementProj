@@ -20,10 +20,10 @@ namespace KidsManagement.Data.Models
 
         [Required]
         public int AdminId { get; set; }
-        public Admin Admin { get; set; }
+        public virtual Admin Admin { get; set; }
         
         [Required]
         public int ParentId { get; set; }
-        public Parent Parent { get; set; }
+        public virtual Parent Parent { get; set; }
     }
 }

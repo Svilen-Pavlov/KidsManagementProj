@@ -32,7 +32,7 @@ namespace KidsManagement.Data.Models
         public decimal Salary { get; set; }
 
 
-        public IEnumerable<Note> AdminNotes { get; set; }
+        public virtual IEnumerable<Note> AdminNotes { get; set; }
 
         //public DateTime/TimeSpan WorkingDays { get; set; }
     }

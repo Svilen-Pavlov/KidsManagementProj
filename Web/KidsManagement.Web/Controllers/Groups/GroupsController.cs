@@ -22,5 +22,16 @@ namespace KidsManagement.Web.Controllers.Groups
 
             return this.View(model); 
         }
+
+        public IActionResult Details(int groupId)
+        {
+            //todo: correct redirect
+            if (this.groupsService.GroupExists(groupId) ==false)
+            {
+                return this.Redirect("/");
+            }
+            var model = this.groupsService.FindById(groupId);
+            return this.View(model);
+        }
     }
 }

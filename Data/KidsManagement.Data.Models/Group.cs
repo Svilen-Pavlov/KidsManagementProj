@@ -56,7 +56,7 @@ namespace KidsManagement.Data.Models
         public int LevelId { get; set; }
         public Level Level { get; set; }
 
-        public IEnumerable<Student> Students { get; set; }
+        public virtual IEnumerable<Student> Students { get; set; }
 
         //attendance?
         //variant za vuzrast predu4/ u4ili6tna

@@ -1,0 +1,41 @@
+﻿@using KidsManagement.ViewModels.Groups;
+
+@model AllGroupsDetailsViewModel;
+@{
+    ViewData["Title"] = "Details";
+}
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">All Groups</h1>
+        <div>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">LevelName</th>
+                        <th scope="col">DayOfWeek</th>
+                        <th scope="col">StartTime</th>
+                        <th scope="col">TeacherName</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var group in Model.Groups)
+                    {
+                    <tr>
+                        <th scope="row">@group.Name</th>
+                        <td>@group.LevelName</td>
+                        <td>@group.DayOfWeek</td>
+                        <td>@group.StartTime</td>
+                        <td>@group.TeacherName</td>
+                        <td>
+                            <div class="button-holder">
+                                <a href="/Groups/Details?groupId=@group.Id" class="btn btn-info text-uppercase">Info</a>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+                           
+            </table>
+        </div>
+</section>

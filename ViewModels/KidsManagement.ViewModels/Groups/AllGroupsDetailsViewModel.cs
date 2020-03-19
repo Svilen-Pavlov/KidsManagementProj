@@ -7,6 +7,6 @@ namespace KidsManagement.ViewModels.Groups
     public class AllGroupsDetailsViewModel
     {
         
-        public IEnumerable<GroupDetailsViewModel> Groups { get; set; }
+        public IEnumerable<AllSinglegroupDetailsViewModel> Groups { get; set; }
     }
 }

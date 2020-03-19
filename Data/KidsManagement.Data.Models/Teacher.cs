@@ -31,10 +31,10 @@ namespace KidsManagement.Data.Models
 
 
 
-        public IEnumerable<Group> Groups { get; set; }
-        public IEnumerable<Comment> StudentComments { get; set; }
+        public virtual IEnumerable<Group> Groups { get; set; }
+        public virtual IEnumerable<Comment> StudentComments { get; set; }
         //many to many
-        public IEnumerable<LevelTeacher> QualifiedLevels { get; set; }
+        public virtual IEnumerable<LevelTeacher> QualifiedLevels { get; set; }
 
         //public IEnumerable<DayOfWeek> WorkDays { get; set; }
         //[Required]

@@ -20,5 +20,7 @@ namespace KidsManagement.Services.Groups
         bool GroupExists(int groupId);
 
         AllGroupsDetailsViewModel GetAll();
+
+        
     }
 }

@@ -33,7 +33,7 @@ namespace KidsManagement.Data.Models
         [Required]
         public int StudentId { get; set; }
 
-        public Student Student { get; set; }
+        public virtual Student Student { get; set; }
 
 
         [Required]

@@ -38,8 +38,7 @@ namespace KidsManagement.Web
             //services.AddTransient<IPaymentsService, PaymentsService>();
             
             services.AddDbContext<KidsManagementDbContext>(options =>
-            options.UseSqlServer(
-                Configuration.GetConnectionString("KidsManagementDb")));
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllersWithViews();
         }

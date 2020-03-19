@@ -45,9 +45,9 @@ namespace KidsManagement.Data.Models
                                
 
         //many to many
-        public IEnumerable<Note> AdminNotes { get; set; }
+        public virtual IEnumerable<Note> AdminNotes { get; set; }
 
-        public IEnumerable<StudentParent> Children { get; set; }
+        public virtual IEnumerable<StudentParent> Children { get; set; }
 
         [Required]
         public DateTime CreatedOn { get; set; }

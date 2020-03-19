@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
 using KidsManagement.ViewModels.Groups;
+using KidsManagement.ViewModels.Students;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -62,16 +63,24 @@ namespace KidsManagement.Services.Groups
                 CurrentLessonNumber = group.CurrentLessonNumber,
                 AgeGroup = group.AgeGroup,
                 DayOfWeek = group.DayOfWeek,
-                Duration = group.Duration,
-                EndDate = group.EndDate,
-                EndTime = group.EndTime,
+                Duration = group.Duration.ToString(@"hh\:mm"),
+                StartDate = group.StartDate.ToString("d"),
+                EndDate = group.EndDate.ToString("d"),
+                StartTime = group.StartTime.ToString(@"hh\:mm"),
+                EndTime = group.EndTime.ToString(@"hh\:mm"),
                 LevelId = group.LevelId,
                 LevelName = level.Name,
-                StartDate = group.StartDate,
-                StartTime = group.StartTime,
                 TeacherId = group.TeacherId,
                 TeacherName = teacher.FullName,
-                //Students = new students
+                Students = students.Select(s=>new AllSingleStudentsViewModel()
+                { 
+                    FulLName=s.FullName,
+                    Age=s.Age,
+                    Gender=s.Gender,
+                    GroupName=group.Name,
+                    Id=s.Id
+                }
+                ).ToArray()
             };
 
             return model;
@@ -108,30 +117,21 @@ namespace KidsManagement.Services.Groups
         {
             var groups = this.db.Groups
                 .Include(x => x.Level)
-                .Include(x => x.Students)
                 .Include(x=>x.Teacher)
-                .Select(x => new GroupDetailsViewModel
+                .Select(x => new AllSinglegroupDetailsViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    AgeGroup = x.AgeGroup,
-                    CurrentLessonNumber = x.CurrentLessonNumber,
                     DayOfWeek = x.DayOfWeek,
-                    StartDate = x.StartDate,
-                    EndDate = x.EndDate,
-                    Duration = x.Duration,
                     StartTime = x.StartTime,
-                    EndTime = x.EndTime,
-                    
-                    LevelId = x.LevelId,
                     LevelName = x.Level.Name,
-                    //Students = x.Students,
-                    TeacherId=x.TeacherId,
                     TeacherName=x.Teacher.FullName
-                }).ToArray();
+                })
+                .ToArray()
+                .OrderBy(x=>x.TeacherName);
 
 
-            var groupsList = new List<GroupDetailsViewModel>(groups);
+            var groupsList = new List<AllSinglegroupDetailsViewModel>(groups);
 
             var model = new AllGroupsDetailsViewModel(){ Groups = groupsList };
 

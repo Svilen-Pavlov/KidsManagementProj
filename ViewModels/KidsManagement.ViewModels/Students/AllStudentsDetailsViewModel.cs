@@ -4,8 +4,8 @@ using System.Text;
 
 namespace KidsManagement.ViewModels.Students
 {
-    public class AllStudentsViewModel
+    public class AllStudentsDetailsViewModel
     {
-        IEnumerable<AllStudentsViewModel> Students { get; set; }
+        IEnumerable<AllSingleStudentsViewModel> Students { get; set; }
     }
 }

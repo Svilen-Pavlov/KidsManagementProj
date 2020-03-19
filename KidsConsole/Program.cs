@@ -13,12 +13,12 @@ namespace KidsManagementConsole
     {
         public static void Main()
         {
-            var db = new KidsManagementDbContext();
-            var gs = new GroupsService(db);
-            var result = gs.GetAll();
-            Console.WriteLine(gs.GetAll().ToString());
+            //var db = new KidsManagementDbContext();
+            //var gs = new GroupsService(db);
+            //var result = gs.GetAll();
+            //Console.WriteLine(gs.GetAll().ToString());
 
-            db.Database.Migrate();
+            //db.Database.Migrate();
             Console.WriteLine();
             //SeedParentsTeachersAdmins(parents, teachers, db);
             //SeedLevels(db);

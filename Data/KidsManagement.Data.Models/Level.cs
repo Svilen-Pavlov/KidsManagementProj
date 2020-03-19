@@ -22,8 +22,8 @@ namespace KidsManagement.Data.Models
         public string StudyMaterialsDescription { get; set; }
 
         
-        public IEnumerable<LevelTeacher> EligibleTeachers { get; set; }
-        public IEnumerable<Group> Groups { get; set; }
+        public virtual IEnumerable<LevelTeacher> EligibleTeachers { get; set; }
+        public virtual IEnumerable<Group> Groups { get; set; }
 
 
 
