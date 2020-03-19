@@ -150,3 +150,4 @@ D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\ob
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\bin\Debug\netcoreapp3.1\AutoMapper.dll
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\obj\Debug\netcoreapp3.1\Razor\Views\Groups\Index.cshtml.g.cs
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\obj\Debug\netcoreapp3.1\Razor\Views\Groups\Details.cshtml.g.cs
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\obj\Debug\netcoreapp3.1\Razor\Views\Students\Details.cshtml.g.cs

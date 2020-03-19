@@ -13,6 +13,7 @@ namespace KidsManagement.Data.Models
     {
         public Student()
         {
+            this.CreatedOn = DateTime.Now;
             this.IsDeleted = false;
         }
         [Key]
@@ -49,17 +50,17 @@ namespace KidsManagement.Data.Models
         public StudentStatus Status { get; set; }
 
         
-        public int GroupId { get; set; }
-        public Group Group { get; set; }
+        public int? GroupId { get; set; }
+        public virtual Group Group { get; set; }
 
         //many to many
-        public IEnumerable<StudentParent> Parents { get; set; }
+        public virtual IEnumerable<StudentParent> Parents { get; set; }
 
         //one to many
-        public IEnumerable<Payment> Payments { get; set; }
+        public virtual IEnumerable<Payment> Payments { get; set; }
 
         //many to many?? TODO
-        public IEnumerable<Comment> TeacherComments { get; set; }
+        public virtual IEnumerable<Comment> TeacherComments { get; set; }
 
 
         [Required]
@@ -69,5 +70,10 @@ namespace KidsManagement.Data.Models
 
         [Required]
         public bool IsDeleted { get; set; }
+
+        public override string ToString()
+        {
+            return this.FullName;
+        }
     }
 }

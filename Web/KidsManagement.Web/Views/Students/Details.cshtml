@@ -1,0 +1,55 @@
+﻿@using KidsManagement.ViewModels.Students;
+
+@model StudentDetailsViewModel
+
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Group</h1>
+        <div>
+            <div class="form-group">
+                <label for="startPoint">Student Name</label>
+                <input type="text" readonly class="form-control" id="FirstName" name="FirstName" value="@Model.FirstName">
+            </div>
+            <div class="form-group">
+                <label for="endPoint">MiddleName</label>
+                <input type="text" readonly class="form-control" id="MiddleName" name="MiddleName" value="@Model.MiddleName">
+            </div>
+            <div class="form-group">
+                <label for="departureTime">LastName</label>
+                <input type="text" readonly class="form-control" id="LastName" name="LastName" value="@Model.LastName">
+            </div>
+            <div class="form-group">
+                <label for="seats">Gender</label>
+                <input type="text" readonly class="form-control" id="Gender" name="Gender" value="@Model.Gender">
+            </div>
+            <div class="form-group">
+                <label for="description">Age</label>
+                <input type="text" readonly class="form-control" id="Age" name="Age" value="@Model.Age">
+            </div>
+            <div class="form-group">
+                <label for="description">BirthDate</label>
+                <input type="text" readonly class="form-control" id="BirthDate" name="BirthDate" value="@Model.BirthDate">
+            </div>
+            <div class="form-group">
+                <label for="description">Grade</label>
+                <input type="text" readonly class="form-control" id="Grade" name="Grade" value="@Model.Grade">
+            </div>
+            <div class="form-group">
+                <label for="description">Status</label>
+                <input type="text" readonly class="form-control" id="Status" name="Status" value="@Model.Status">
+            </div>
+          
+
+            @*<label for="description">Students List</label>
+            @foreach (var student in Model.Students)
+            {
+                <div class="form-group">
+                    <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age @student.Gender </a>
+                </div>
+            }*@
+
+            
+        </div>
+    </div>
+</section>

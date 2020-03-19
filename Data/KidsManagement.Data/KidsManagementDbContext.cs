@@ -9,6 +9,10 @@ namespace KidsManagement.Data
 {
     public class KidsManagementDbContext : DbContext
     {
+        public KidsManagementDbContext()
+        {
+
+        }
         public KidsManagementDbContext(DbContextOptions<KidsManagementDbContext> options) : base(options)
         {
 

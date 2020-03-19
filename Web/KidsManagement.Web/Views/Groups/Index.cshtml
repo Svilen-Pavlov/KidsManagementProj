@@ -11,6 +11,7 @@
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
+                        <th scope="col">Id</th>
                         <th scope="col">Name</th>
                         <th scope="col">LevelName</th>
                         <th scope="col">DayOfWeek</th>
@@ -19,10 +20,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var group in Model.Groups)
+                    @foreach (var group in Model.Groups.OrderBy(x=>x.Id))
                     {
                     <tr>
-                        <th scope="row">@group.Name</th>
+                        <th scope="row">@group.Id</th>
+                        <td>@group.Name</td>
                         <td>@group.LevelName</td>
                         <td>@group.DayOfWeek</td>
                         <td>@group.StartTime</td>

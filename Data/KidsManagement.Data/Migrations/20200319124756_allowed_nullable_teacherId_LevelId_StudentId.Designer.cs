@@ -4,14 +4,16 @@ using KidsManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KidsManagement.Data.Migrations
 {
     [DbContext(typeof(KidsManagementDbContext))]
-    partial class KidsManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200319124756_allowed_nullable_teacherId_LevelId_StudentId")]
+    partial class allowed_nullable_teacherId_LevelId_StudentId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,9 +120,7 @@ namespace KidsManagement.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("LevelId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MaxStudents")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -135,6 +135,7 @@ namespace KidsManagement.Data.Migrations
                         .HasColumnType("time(0)");
 
                     b.Property<int?>("TeacherId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -435,12 +436,14 @@ namespace KidsManagement.Data.Migrations
                     b.HasOne("KidsManagement.Data.Models.Level", "Level")
                         .WithMany("Groups")
                         .HasForeignKey("LevelId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("KidsManagement.Data.Models.Teacher", "Teacher")
                         .WithMany("Groups")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KidsManagement.Data.Models.LevelTeacher", b =>

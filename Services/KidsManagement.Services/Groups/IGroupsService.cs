@@ -13,14 +13,14 @@ namespace KidsManagement.Services.Groups
 
         GroupDetailsViewModel FindById(int id);
 
-        void AddStudent(int studentId, int groupId);
+        Task AddStudent(int studentId, int groupId);
 
-        void RemoveStudent(int studentId, int groupId);
+        Task RemoveStudent(int studentId, int groupId);
 
-        bool GroupExists(int groupId);
+        Task<bool> GroupExists(int groupId);
 
         AllGroupsDetailsViewModel GetAll();
 
-        
+        Task<bool> GroupIsFull(int groupId);
     }
 }

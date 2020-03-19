@@ -12,6 +12,7 @@ namespace KidsManagement.Data.Models
     {
         public Group()
         {
+            this.CreatedOn = DateTime.Now;
             this.IsDeleted = false;
         }
         [Key]
@@ -47,13 +48,12 @@ namespace KidsManagement.Data.Models
         [Column(TypeName = "time(0)")]
         public TimeSpan EndTime { get; set; }
 
+        public int? MaxStudents { get; set; }
 
-        [Required]
-        public int TeacherId { get; set; }
+        public int? TeacherId { get; set; }
         public Teacher Teacher { get; set; }
 
-        [Required]
-        public int LevelId { get; set; }
+        public int? LevelId { get; set; }
         public Level Level { get; set; }
 
         public virtual IEnumerable<Student> Students { get; set; }
@@ -68,5 +68,10 @@ namespace KidsManagement.Data.Models
 
         [Required]
         public bool IsDeleted { get; set; }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

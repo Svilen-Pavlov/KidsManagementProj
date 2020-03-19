@@ -68,37 +68,38 @@ namespace KidsManagement.Services.Groups
                 EndDate = group.EndDate.ToString("d"),
                 StartTime = group.StartTime.ToString(@"hh\:mm"),
                 EndTime = group.EndTime.ToString(@"hh\:mm"),
-                LevelId = group.LevelId,
+                LevelId = (int)group.LevelId,
                 LevelName = level.Name,
-                TeacherId = group.TeacherId,
+                TeacherId = (int)group.TeacherId,
                 TeacherName = teacher.FullName,
-                Students = students.Select(s=>new AllSingleStudentsViewModel()
-                { 
-                    FulLName=s.FullName,
-                    Age=s.Age,
-                    Gender=s.Gender,
-                    GroupName=group.Name,
-                    Id=s.Id
+                MaxStudents=(int)group.MaxStudents,
+                Students = students.Select(s => new AllSingleStudentsViewModel()
+                {
+                    FulLName = s.FullName,
+                    Age = s.Age,
+                    Gender = s.Gender,
+                    GroupName = group.Name,
+                    Id = s.Id
                 }
                 ).ToArray()
             };
 
             return model;
         }
-        public void AddStudent(int studentId, int groupId)
+        public async Task AddStudent(int studentId, int groupId)
         {
-            var student = this.db.Students.FirstOrDefault(x => x.Id == studentId && x.IsDeleted == false);
+            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId && x.IsDeleted == false);
             student.GroupId = groupId;
             student.LastModified = DateTime.UtcNow;
-            this.db.SaveChanges();
+            await this.db.SaveChangesAsync();
         }
 
-        public void RemoveStudent(int studentId, int groupId)
+        public async Task RemoveStudent(int studentId, int groupId)
         {
-            var student = this.db.Students.FirstOrDefault(x => x.Id == studentId && x.IsDeleted == false);
+            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId && x.IsDeleted == false);
             student.GroupId = 0;
             student.LastModified = DateTime.UtcNow;
-            this.db.SaveChanges();
+            await this.db.SaveChangesAsync();
         }
 
         public void ChangeTeacher(int newTeacherId, int groupId) //teacher service or here?
@@ -108,16 +109,16 @@ namespace KidsManagement.Services.Groups
             this.db.SaveChanges();
         }
 
-        public bool GroupExists(int groupId)
+        public async Task<bool> GroupExists(int groupId)
         {
-            return this.db.Groups.Any(x => x.Id == groupId);
+            return await this.db.Groups.AnyAsync(x => x.Id == groupId);
         }
 
         public AllGroupsDetailsViewModel GetAll()
         {
             var groups = this.db.Groups
                 .Include(x => x.Level)
-                .Include(x=>x.Teacher)
+                .Include(x => x.Teacher)
                 .Select(x => new AllSinglegroupDetailsViewModel
                 {
                     Id = x.Id,
@@ -125,17 +126,25 @@ namespace KidsManagement.Services.Groups
                     DayOfWeek = x.DayOfWeek,
                     StartTime = x.StartTime,
                     LevelName = x.Level.Name,
-                    TeacherName=x.Teacher.FullName
+                    TeacherName = x.Teacher.FullName
                 })
                 .ToArray()
-                .OrderBy(x=>x.TeacherName);
+                .OrderBy(x => x.TeacherName);
 
 
             var groupsList = new List<AllSinglegroupDetailsViewModel>(groups);
 
-            var model = new AllGroupsDetailsViewModel(){ Groups = groupsList };
+            var model = new AllGroupsDetailsViewModel() { Groups = groupsList };
 
             return model;
+        }
+
+        public async Task<bool> GroupIsFull(int groupId)
+        {
+            var studentsCount = this.db.Students.Where(x => x.GroupId == groupId).Count();
+            var group = await this.db.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+
+            return studentsCount == group.MaxStudents;
         }
     }
 }

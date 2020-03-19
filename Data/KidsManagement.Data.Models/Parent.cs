@@ -13,6 +13,7 @@ namespace KidsManagement.Data.Models
     {
         public Parent()
         {
+            this.CreatedOn = DateTime.Now;
             this.IsDeleted = false;
         }
         [Key]

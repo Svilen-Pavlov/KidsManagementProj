@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KidsManagement.Services.Groups;
+using KidsManagement.Services.Students;
 
 namespace KidsManagementConsole
 {
@@ -13,24 +14,75 @@ namespace KidsManagementConsole
     {
         public static void Main()
         {
-            //var db = new KidsManagementDbContext();
+            var db = new KidsManagementDbContext();
             //var gs = new GroupsService(db);
             //var result = gs.GetAll();
             //Console.WriteLine(gs.GetAll().ToString());
 
             //db.Database.Migrate();
-            Console.WriteLine();
             //SeedParentsTeachersAdmins(parents, teachers, db);
             //SeedLevels(db);
             //SeedGroups(db);
+            //SeedStudents(db);
+           // AddStudentsToGroup(db);
 
+        }
 
+        private static void AddStudentsToGroup(KidsManagementDbContext db)
+        {
+            var students = db.Students.Take(10).ToArray();
+            var group1 = db.Groups.FirstOrDefault(x => x.Id == 11);
+            var group2 = db.Groups.FirstOrDefault(x => x.Id == 12);
+
+            for (int i = 0; i < 10; i++)
+            {
+                var student = students[i];
+                if (i<8)
+                {
+                    student.GroupId=group1.Id;
+                }
+                else
+                {
+                student.GroupId =group2.Id;
+                }
+            }
+            
+            db.SaveChanges();
+        }
+
+        private static void SeedStudents(KidsManagementDbContext db)
+        {
+            var students = new List<Student>();
+            var startDate = DateTime.Now.AddYears(-6);
+            var gender = Gender.Male;
+            for (int i = 0; i < 100; i++)
+            {
+
+                int ageCounter = 5;
+                var student = new Student
+                {
+                    FirstName = $"Student {i}",
+                    MiddleName = "Ivanov",
+                    LastName = "Petrov",
+                    Age = ageCounter,
+                    BirthDate = startDate,
+                    Gender = gender,
+                    Grade = i > 50 ? GradeLevel.FirstGroup : GradeLevel.GradeOne,
+                    Status=StudentStatus.Initial,
+                };
+                students.Add(student);
+               
+                ageCounter=ageCounter>= 10? 5:ageCounter++;
+                gender = gender == Gender.Male ? Gender.Female:Gender.Female;
+            }
+
+            db.Students.AddRange(students);
+            //db.SaveChanges();
         }
 
         private static void SeedGroups(KidsManagementDbContext db)
         {
             var groups = new List<Group>();
-            // var day = DayOfWeek.Monday;
             var startDate = DateTime.Now;
             var level = db.Levels.FirstOrDefault();
             var teachers = db.Teachers.Take(10).ToList();

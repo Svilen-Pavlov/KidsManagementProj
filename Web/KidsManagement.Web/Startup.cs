@@ -32,7 +32,7 @@ namespace KidsManagement.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IGroupsService, GroupsService>();
-            //services.AddTransient<IStudentsService, StudentsService>();
+            services.AddTransient<IStudentsService, StudentsService>();
             //services.AddTransient<ITeachersService, TeachersService>();
             //services.AddTransient<IParentsService, ParentsService>();
             //services.AddTransient<IPaymentsService, PaymentsService>();

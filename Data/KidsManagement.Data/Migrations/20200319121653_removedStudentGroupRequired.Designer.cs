@@ -4,14 +4,16 @@ using KidsManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KidsManagement.Data.Migrations
 {
     [DbContext(typeof(KidsManagementDbContext))]
-    partial class KidsManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200319121653_removedStudentGroupRequired")]
+    partial class removedStudentGroupRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,10 +119,7 @@ namespace KidsManagement.Data.Migrations
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("LevelId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MaxStudents")
+                    b.Property<int>("LevelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -134,7 +133,7 @@ namespace KidsManagement.Data.Migrations
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time(0)");
 
-                    b.Property<int?>("TeacherId")
+                    b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -337,7 +336,7 @@ namespace KidsManagement.Data.Migrations
                     b.Property<int>("Grade")
                         .HasColumnType("int");
 
-                    b.Property<int?>("GroupId")
+                    b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
@@ -435,12 +434,14 @@ namespace KidsManagement.Data.Migrations
                     b.HasOne("KidsManagement.Data.Models.Level", "Level")
                         .WithMany("Groups")
                         .HasForeignKey("LevelId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("KidsManagement.Data.Models.Teacher", "Teacher")
                         .WithMany("Groups")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KidsManagement.Data.Models.LevelTeacher", b =>
@@ -487,7 +488,8 @@ namespace KidsManagement.Data.Migrations
                     b.HasOne("KidsManagement.Data.Models.Group", "Group")
                         .WithMany("Students")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KidsManagement.Data.Models.StudentParent", b =>

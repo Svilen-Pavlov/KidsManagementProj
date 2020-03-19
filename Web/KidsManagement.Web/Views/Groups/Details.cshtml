@@ -1,5 +1,4 @@
 ﻿@using KidsManagement.ViewModels.Groups;
-@using KidsManagement.ViewModels.Students;
 
 @model GroupDetailsViewModel
 
@@ -17,7 +16,7 @@
             </div>
             <div class="form-group">
                 <label for="departureTime">AgeGroup</label>
-                <input type="text" readonly class="form-control" id="AgeGroup" value="@Model.AgeGroup">
+                <input type="text" readonly class="form-control" id="AgeGroup" name="AgeGroup" value="@Model.AgeGroup">
             </div>
             <div class="form-group">
                 <label for="seats">StartDate</label>
@@ -43,21 +42,22 @@
                 <label for="description">EndTime</label>
                 <input type="text" readonly class="form-control" id="EndTime" name="EndTime" value="@Model.EndTime">
             </div>
+
+            <label for="description">Students List</label>
             @foreach (var student in Model.Students)
             {
-                 <p>@student.FulLName</p>
-                 <p>@student.Age</p>
-                 <p>@student.Gender</p>
-                
-            }
-            @*@if (Model.Students.Count() < 8) //adding student to group
-            {
-            <div class="form-group text-center">
-                <div class="button-holder">
-                    <a href="/Groups/AddStudentToGroup?groupId=@Model.Id" class="btn btn-primary btn-block text-uppercase">Add Student</a>
+                <div class="form-group">
+                    <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age @student.Gender </a>
                 </div>
+            }
+            @if (Model.Students.Count() < Model.MaxStudents) //adding student to group
+        {
+        @*<div class="form-group text-center">
+            <div class="button-holder">
+                <a href="/Groups/AddStudentToGroup?groupId=@Model.Id" class="btn btn-primary btn-block text-uppercase">Add Student</a>
             </div>
-            }*@
+        </div>*@
+        }
         </div>
     </div>
 </section>

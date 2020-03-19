@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
 using KidsManagement.ViewModels.Students;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,10 +40,38 @@ namespace KidsManagement.Services.Students
             return student.Id;
         }
 
-
-        public bool StudentExists(int StudentId) // with or w/o deleted?
+        public async Task AssignStudentToGroup(int studentId, int groupId)
         {
-            return this.db.Students.Any(x => x.Id == StudentId);
+            var student=await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
+
+            student.GroupId = groupId;
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task<bool> StudentExists(int StudentId) // with or w/o deleted?
+        {
+            return await this.db.Students.AnyAsync(x => x.Id == StudentId);
+        }
+
+        public async Task<StudentDetailsViewModel> FindById(int studentId)
+        {
+            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
+
+            var model = new StudentDetailsViewModel
+            {
+                FirstName = student.FirstName,
+                MiddleName = student.MiddleName,
+                LastName = student.LastName,
+                Age = student.Age,
+                BirthDate = student.BirthDate,
+                Gender = student.Gender,
+                Grade = student.Grade,
+                GroupId = (int)student.GroupId,
+                Status = student.Status
+            };
+
+            return model;
         }
     }
 }
