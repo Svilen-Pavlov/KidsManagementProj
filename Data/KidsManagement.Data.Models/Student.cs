@@ -54,13 +54,13 @@ namespace KidsManagement.Data.Models
         public virtual Group Group { get; set; }
 
         //many to many
-        public virtual IEnumerable<StudentParent> Parents { get; set; }
+        public virtual ICollection<StudentParent> Parents { get; set; }
 
         //one to many
-        public virtual IEnumerable<Payment> Payments { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
 
         //many to many?? TODO
-        public virtual IEnumerable<Comment> TeacherComments { get; set; }
+        public virtual ICollection<Comment> TeacherComments { get; set; }
 
 
         [Required]

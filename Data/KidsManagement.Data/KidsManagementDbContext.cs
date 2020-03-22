@@ -1,13 +1,12 @@
 ﻿using KidsManagement.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace KidsManagement.Data
 {
-    public class KidsManagementDbContext : DbContext
+    public class KidsManagementDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,string>
     {
         public KidsManagementDbContext()
         {
@@ -45,7 +44,7 @@ namespace KidsManagement.Data
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
-
+            base.OnModelCreating(builder);
 
             builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
 

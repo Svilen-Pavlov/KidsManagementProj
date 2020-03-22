@@ -26,6 +26,6 @@ namespace KidsManagement.Data.Models
         public int TeacherId { get; set; }
         public Teacher Teacher { get; set; }
 
-        //middle table with 
+        //middle table between teachers and students 
     }
 }

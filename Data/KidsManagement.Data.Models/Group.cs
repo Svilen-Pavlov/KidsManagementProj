@@ -12,6 +12,7 @@ namespace KidsManagement.Data.Models
     {
         public Group()
         {
+            this.Students = new HashSet<Student>();
             this.CreatedOn = DateTime.Now;
             this.IsDeleted = false;
         }
@@ -56,7 +57,7 @@ namespace KidsManagement.Data.Models
         public int? LevelId { get; set; }
         public Level Level { get; set; }
 
-        public virtual IEnumerable<Student> Students { get; set; }
+        public virtual ICollection<Student> Students { get; set; }
 
         //attendance?
         //variant za vuzrast predu4/ u4ili6tna

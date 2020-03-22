@@ -13,6 +13,8 @@ namespace KidsManagement.Data.Models
     {
         public Parent()
         {
+            this.AdminNotes = new HashSet<Note>();
+            this.Children = new HashSet<StudentParent>();
             this.CreatedOn = DateTime.Now;
             this.IsDeleted = false;
         }
@@ -46,9 +48,9 @@ namespace KidsManagement.Data.Models
                                
 
         //many to many
-        public virtual IEnumerable<Note> AdminNotes { get; set; }
+        public virtual ICollection<Note> AdminNotes { get; set; }
 
-        public virtual IEnumerable<StudentParent> Children { get; set; }
+        public virtual ICollection<StudentParent> Children { get; set; }
 
         [Required]
         public DateTime CreatedOn { get; set; }

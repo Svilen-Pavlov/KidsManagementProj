@@ -12,6 +12,8 @@ using KidsManagement.Services.Teachers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,10 +39,19 @@ namespace KidsManagement.Web
             //services.AddTransient<IParentsService, ParentsService>();
             //services.AddTransient<IPaymentsService, PaymentsService>();
             
+
             services.AddDbContext<KidsManagementDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
+            services.AddDefaultIdentity<IdentityUser>
+                (options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<KidsManagementDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(configure=>
+            {
+                configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,10 +68,11 @@ namespace KidsManagement.Web
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(); //has todo with identity UI
 
             app.UseRouting();
 
+            app.UseAuthentication(); //IDENTITY
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

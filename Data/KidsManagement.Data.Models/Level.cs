@@ -6,6 +6,11 @@ namespace KidsManagement.Data.Models
 {
     public class Level
     {
+        public Level()
+        {
+            this.EligibleTeachers = new HashSet<LevelTeacher>();
+            this.Groups = new HashSet<Group>();
+        }
 
         [Key]
         public int Id { get; set; }
@@ -22,8 +27,8 @@ namespace KidsManagement.Data.Models
         public string StudyMaterialsDescription { get; set; }
 
         
-        public virtual IEnumerable<LevelTeacher> EligibleTeachers { get; set; }
-        public virtual IEnumerable<Group> Groups { get; set; }
+        public virtual ICollection<LevelTeacher> EligibleTeachers { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
 
 
 

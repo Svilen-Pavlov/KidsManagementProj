@@ -16,22 +16,23 @@ namespace KidsManagement.Web.Controllers.Groups
         {
             this.groupsService = groupsService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var model = this.groupsService.GetAll();
 
-            return this.View(model); 
+            return await Task.Run(() => View(model)); ; 
         }
 
-        public IActionResult Details(int groupId)
+        public async Task<IActionResult> Details(int groupId)
         {
             //todo: correct redirect
-            if (this.groupsService.GroupExists(groupId) ==false)
+            if (await this.groupsService.GroupExists(groupId) ==false)
             {
                 return this.Redirect("/");
             }
             var model = this.groupsService.FindById(groupId);
-            return this.View(model);
+
+            return await Task.Run(() => View());
         }
     }
 }

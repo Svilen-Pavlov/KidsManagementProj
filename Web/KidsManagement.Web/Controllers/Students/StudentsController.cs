@@ -1,4 +1,5 @@
 ﻿using KidsManagement.Services.Students;
+using KidsManagement.ViewModels.Students;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,8 @@ namespace KidsManagement.Web.Controllers.Students
 
         public async Task<IActionResult> Index()
         {
-            return this.Redirect("/");
+
+            return await Task.Run(() => View());
         }
         public async Task<IActionResult> Details(int studentId)
         {
@@ -29,6 +31,19 @@ namespace KidsManagement.Web.Controllers.Students
 
             var student = await this.studentsService.FindById(studentId);
             return this.View(student);
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            return await Task.Run(() => View());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateStudentInputModel input)
+        {
+            var studentId = await this.studentsService.CreateStudent(input);
+
+            return this.RedirectToAction("Details", studentId);
         }
     }
 }

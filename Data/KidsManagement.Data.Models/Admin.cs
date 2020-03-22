@@ -9,6 +9,10 @@ namespace KidsManagement.Data.Models
 {
     public class Admin
     {
+        public Admin()
+        {
+            this.AdminNotes = new HashSet<Note>();
+        }
         [Key]
         public int Id { get; set; }
 
@@ -27,12 +31,11 @@ namespace KidsManagement.Data.Models
 
         public DateTime? DismissalDate { get; set; }
 
-
         [Required]
         public decimal Salary { get; set; }
 
 
-        public virtual IEnumerable<Note> AdminNotes { get; set; }
+        public virtual ICollection<Note> AdminNotes { get; set; }
 
         //public DateTime/TimeSpan WorkingDays { get; set; }
     }

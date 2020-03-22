@@ -54,3 +54,8 @@ D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\net
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\KidsManagement.ViewModels.pdb
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\AutoMapper.dll
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\KidsConsole\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll

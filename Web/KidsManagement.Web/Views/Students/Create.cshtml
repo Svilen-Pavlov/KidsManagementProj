@@ -1,0 +1,44 @@
+﻿
+    <section class="py-5">
+        <div class="container">
+            <h1 style="margin: 2%; text-align: center;">Create Student</h1>
+            <div style="padding: 5%;">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="startPoint">FirstName</label>
+                        <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="FirstName...">
+                    </div>
+                    <div class="form-group">
+                        <label for="endPoint">MiddleName</label>
+                        <input type="text" class="form-control" id="MiddleName" name="MiddleName" placeholder="MiddleName...">
+                    </div>
+                    <div class="form-group">
+                        <label for="departureTime">LastName</label>
+                        <input type="text" class="form-control" id="departureTime" name="LastName" placeholder="LastName">
+                    </div>
+                    @*enum how to show optins?*@
+                    <div class="form-group">
+                        <label for="Gender">Seats</label>
+                        <input min="1" max="6" type="number" class="form-control" id="Gender" name="Gender" placeholder="Male/Female">
+                    </div>
+                    <div class="form-group">
+                        <label for="Gender">BirthDate</label>
+                        <input type="text" class="form-control" id="BirthDate" name="BirthDate" placeholder="dd/mm/yyyy...">
+                    </div>
+                    @*enum how to show optins?*@
+                    <div class="form-group">
+                        <label for="description">Grade</label>
+                        <input type="text" class="form-control" id="Grade" name="Grade" placeholder="...">
+                    </div>
+                    @*enum how to show optins?*@
+                    <div class="form-group">
+                        <label for="description">Status</label>
+                        <input type="text" class="form-control" id="Status" name="Status" placeholder="...">
+                    </div>
+                    @*moje tuka da zarejdam vsi4ki svobodni grupi + option prazna*@
+
+                    <button type="submit" class="btn btn-primary text-uppercase">Create</button>
+                </form>
+            </div>
+        </div>
+    </section>

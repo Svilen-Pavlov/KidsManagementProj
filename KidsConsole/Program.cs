@@ -25,6 +25,19 @@ namespace KidsManagementConsole
             //SeedGroups(db);
             //SeedStudents(db);
            // AddStudentsToGroup(db);
+           //SeedRoles(db);
+        }
+
+        private static void SeedRoles(KidsManagementDbContext db)
+        {
+            var roles = new List<ApplicationRole>()
+            { new ApplicationRole("Admin"),
+            new ApplicationRole("Teacher"),
+            new ApplicationRole("Student"),
+            new ApplicationRole("Manager")
+            };
+            db.Roles.AddRange(roles);
+            db.SaveChanges();
 
         }
 
