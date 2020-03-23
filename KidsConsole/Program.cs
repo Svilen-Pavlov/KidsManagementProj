@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KidsManagement.Services.Groups;
 using KidsManagement.Services.Students;
+using Microsoft.AspNetCore.Identity;
 
 namespace KidsManagementConsole
 {
@@ -24,9 +25,10 @@ namespace KidsManagementConsole
             //SeedLevels(db);
             //SeedGroups(db);
             //SeedStudents(db);
-           // AddStudentsToGroup(db);
-           //SeedRoles(db);
+            // AddStudentsToGroup(db);
+            //SeedRoles(db);
         }
+
 
         private static void SeedRoles(KidsManagementDbContext db)
         {

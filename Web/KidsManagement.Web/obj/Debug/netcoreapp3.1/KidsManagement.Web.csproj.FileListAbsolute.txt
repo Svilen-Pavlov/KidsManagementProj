@@ -170,3 +170,5 @@ D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\ob
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
 D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\obj\Debug\netcoreapp3.1\Razor\Views\Home\IndexLoggedIn.cshtml.g.cs
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\bin\Debug\netcoreapp3.1\Areas\Identity\Pages\Account\Login.cshtml
+D:\Documents\Svilen\Desktop\SoftUni\KidsManagementProj\Web\KidsManagement.Web\bin\Debug\netcoreapp3.1\Areas\Identity\Pages\Account\Register.cshtml
