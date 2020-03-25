@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KidsManagement.Web.Areas.Administration.Admins
 {
-    [Authorize(Roles ="Admin1")]
+    [Authorize(Roles ="Admin")]
     public class AdminsController:Controller
     {
         public IActionResult Index()

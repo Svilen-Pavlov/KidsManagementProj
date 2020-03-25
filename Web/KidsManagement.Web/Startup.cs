@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using CloudinaryDotNet;
 using KidsManagement.Data;
 using KidsManagement.Data.Models;
+using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.Services.Groups;
 using KidsManagement.Services.Parents;
 using KidsManagement.Services.Payments;
@@ -40,6 +42,8 @@ namespace KidsManagement.Web
             services.AddTransient<ITeachersService, TeachersService>();
             services.AddTransient<IParentsService, ParentsService>();
             services.AddTransient<IPaymentsService, PaymentsService>();
+            
+            services.AddTransient<ICloudinaryService, CloudinaryService>();
 
 
             services.AddDbContext<KidsManagementDbContext>(options =>
@@ -68,6 +72,16 @@ namespace KidsManagement.Web
             {
                 configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
+
+            //External Services
+
+            Account account = new Account(
+               this.Configuration["Cloudinary:Cloud_Name"],
+               this.Configuration["Cloudinary:API_Key"],
+               this.Configuration["Cloudinary:API_Secret"]);
+            
+            Cloudinary cloudinary = new Cloudinary(account);
+            services.AddSingleton(cloudinary);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
