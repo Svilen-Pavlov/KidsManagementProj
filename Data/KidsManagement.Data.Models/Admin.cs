@@ -34,9 +34,9 @@ namespace KidsManagement.Data.Models
         [Required]
         public decimal Salary { get; set; }
 
+        public string ProfilePicURI { get; set; }
 
         public virtual ICollection<Note> AdminNotes { get; set; }
 
-        //public DateTime/TimeSpan WorkingDays { get; set; }
     }
 }

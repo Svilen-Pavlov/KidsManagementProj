@@ -20,24 +20,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var group in Model.Groups.OrderBy(x=>x.Id))
+                    @foreach (var group in Model.Groups.OrderBy(x => x.Id))
                     {
-                    <tr>
-                        <th scope="row">@group.Id</th>
-                        <td>@group.Name</td>
-                        <td>@group.LevelName</td>
-                        <td>@group.DayOfWeek</td>
-                        <td>@group.StartTime</td>
-                        <td>@group.TeacherName</td>
-                        <td>
-                            <div class="button-holder">
-                                <a href="/Groups/Details?groupId=@group.Id" class="btn btn-info text-uppercase">Info</a>
-                            </div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th scope="row">@group.Id</th>
+                            <td>@group.Name</td>
+                            <td>@group.LevelName</td>
+                            <td>@group.DayOfWeek</td>
+                            <td>@group.StartTime</td>
+                            <td>@group.TeacherName</td>
+                            <td>
+                                <div class="button-holder">
+                                    <a href="/Groups/Details?groupId=@group.Id" class="btn btn-info text-uppercase">Info</a>
+                                </div>
+                            </td>
+                        </tr>
                     }
                 </tbody>
-                           
+
             </table>
         </div>
+    </div>
 </section>

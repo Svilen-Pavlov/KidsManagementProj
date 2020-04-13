@@ -117,7 +117,6 @@ namespace KidsManagementConsole
                     EndDate = startDate.AddDays(16 * 7),
                     EndTime = new TimeSpan(19, 00, 0),
                     Level = level,
-                    CreatedOn=DateTime.UtcNow,
                     
                 };
                 startDate.AddDays(1);

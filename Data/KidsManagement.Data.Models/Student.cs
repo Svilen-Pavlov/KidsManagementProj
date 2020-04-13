@@ -1,6 +1,5 @@
 ﻿using KidsManagement.Data.Models.Enums;
 using KidsManagement.Data;
-using KidsManagement.Data.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,8 +12,7 @@ namespace KidsManagement.Data.Models
     {
         public Student()
         {
-            this.CreatedOn = DateTime.Now;
-            this.IsDeleted = false;
+          
         }
         [Key]
         public int Id { get; set; }
@@ -49,7 +47,9 @@ namespace KidsManagement.Data.Models
         [Required]
         public StudentStatus Status { get; set; }
 
-        
+        public string ProfilePicURI { get; set; }
+
+
         public int? GroupId { get; set; }
         public virtual Group Group { get; set; }
 
@@ -63,15 +63,7 @@ namespace KidsManagement.Data.Models
         public virtual ICollection<Comment> TeacherComments { get; set; }
 
 
-        [Required]
-        public DateTime CreatedOn { get; set; }
-
-        public DateTime LastModified { get; set; }
-
-        [Required]
-        public bool IsDeleted { get; set; }
-
-        public override string ToString()
+              public override string ToString()
         {
             return this.FullName;
         }

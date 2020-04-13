@@ -12,15 +12,12 @@ namespace KidsManagement.Services.External.CloudinaryService
     public class CloudinaryService : ICloudinaryService
     {
         private readonly Cloudinary cloudinary;
-        private readonly string SaveURIpath = "KidsManagement/ProfilePics/";
-        //{0}=entityName, {1] =entityId
-
         public CloudinaryService(Cloudinary cloudinary)
         {
             this.cloudinary = cloudinary;
         }
 
-        public async Task<string> UploadProfilePicASync(IFormFile file, int entityId, string entityName)
+        public async Task<string> UploadProfilePicASync(IFormFile file)
         {
             byte[] destinationImg;
 
@@ -35,7 +32,6 @@ namespace KidsManagement.Services.External.CloudinaryService
                 var uploadParams = new ImageUploadParams()
                 {
                     File = new FileDescription(file.FileName, destinationStream),
-                    PublicId = $"{SaveURIpath}/{entityName}/{entityId}",
                     Overwrite = true,
                 };
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);

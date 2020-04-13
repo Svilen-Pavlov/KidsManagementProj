@@ -1,5 +1,6 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -27,9 +28,6 @@ namespace KidsManagement.ViewModels.Students
         public Gender Gender { get; set; }
 
         [Required]
-        public int Age { get; set; }
-
-        [Required]
         public DateTime BirthDate { get; set; }
 
         [Required]
@@ -37,7 +35,6 @@ namespace KidsManagement.ViewModels.Students
 
         [Required]
         public StudentStatus Status { get; set; }
-
 
         public int GroupId { get; set; }
     }

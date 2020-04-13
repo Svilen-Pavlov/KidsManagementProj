@@ -13,8 +13,6 @@ namespace KidsManagement.Data.Models
         public Group()
         {
             this.Students = new HashSet<Student>();
-            this.CreatedOn = DateTime.Now;
-            this.IsDeleted = false;
         }
         [Key]
         public int Id { get; set; }
@@ -62,14 +60,7 @@ namespace KidsManagement.Data.Models
         //attendance?
         //variant za vuzrast predu4/ u4ili6tna
 
-        [Required]
-        public DateTime CreatedOn { get; set; }
-
-        public DateTime LastModified { get; set; }
-
-        [Required]
-        public bool IsDeleted { get; set; }
-
+        
         public override string ToString()
         {
             return this.Name;

@@ -10,8 +10,8 @@ namespace KidsManagement.Data.Models
     {
         public Payment()
         {
-            this.CreatedOn = DateTime.Now;
-            this.IsDeleted = false;
+           
+         
         }
         [Key]
         public int Id { get; set; }
@@ -37,12 +37,5 @@ namespace KidsManagement.Data.Models
         public virtual Student Student { get; set; }
 
 
-        [Required]
-        public DateTime CreatedOn { get; set; }
-
-        public DateTime LastModified { get; set; }
-
-        [Required]
-        public bool IsDeleted { get; set; }
     }
 }

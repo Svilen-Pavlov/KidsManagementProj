@@ -15,8 +15,7 @@ namespace KidsManagement.Data.Models
         {
             this.AdminNotes = new HashSet<Note>();
             this.Children = new HashSet<StudentParent>();
-            this.CreatedOn = DateTime.Now;
-            this.IsDeleted = false;
+         
         }
         [Key]
         public int Id { get; set; }
@@ -52,12 +51,6 @@ namespace KidsManagement.Data.Models
 
         public virtual ICollection<StudentParent> Children { get; set; }
 
-        [Required]
-        public DateTime CreatedOn { get; set; }
-
-        public DateTime LastModified { get; set; }
-
-        [Required]
-        public bool IsDeleted { get; set; }
+      
     }
 }

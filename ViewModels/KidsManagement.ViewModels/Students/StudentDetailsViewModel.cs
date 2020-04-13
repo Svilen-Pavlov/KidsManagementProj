@@ -8,6 +8,7 @@ namespace KidsManagement.ViewModels.Students
 {
     public class StudentDetailsViewModel
     {
+        public int Id { get; set; }
         public string FirstName { get; set; }
 
         public string MiddleName { get; set; }
@@ -26,6 +27,7 @@ namespace KidsManagement.ViewModels.Students
 
         public StudentStatus Status { get; set; }
         public int GroupId { get; set; }
-      
+        public string ProfilePicURI { get; set; }
+
     }
 }

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using KidsManagement.Web.Models;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using KidsManagement.Services.External.CloudinaryService;
 
@@ -41,14 +35,6 @@ namespace KidsManagement.Web.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
-        {
-            var entityId = 5;
-            string entityName = "Students";
-            var picURI=await this.cloudinaryService.UploadProfilePicASync(file, entityId,entityName);
-
-            return this.Redirect("/");
-        }
+       
     }
 }

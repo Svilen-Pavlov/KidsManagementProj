@@ -28,6 +28,7 @@ namespace KidsManagement.Data.Models
         [Required]
         public DateTime HiringDate { get; set; }
         public DateTime? DismissalDate { get; set; }
+        public string ProfilePicURI { get; set; }
 
 
 

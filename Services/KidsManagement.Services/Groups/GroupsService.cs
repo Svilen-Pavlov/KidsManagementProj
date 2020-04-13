@@ -41,7 +41,6 @@ namespace KidsManagement.Services.Groups
                 EndDate = input.EndDate,
                 EndTime = input.EndTime,
                 Level = level,
-                CreatedOn = DateTime.UtcNow,
             };
 
             await this.db.Groups.AddAsync(group);
@@ -88,17 +87,15 @@ namespace KidsManagement.Services.Groups
         }
         public async Task AddStudent(int studentId, int groupId)
         {
-            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId && x.IsDeleted == false);
+            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
             student.GroupId = groupId;
-            student.LastModified = DateTime.UtcNow;
             await this.db.SaveChangesAsync();
         }
 
         public async Task RemoveStudent(int studentId, int groupId)
         {
-            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId && x.IsDeleted == false);
+            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
             student.GroupId = 0;
-            student.LastModified = DateTime.UtcNow;
             await this.db.SaveChangesAsync();
         }
 

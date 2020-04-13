@@ -5,51 +5,48 @@
 
 <section class="py-5">
     <div class="container">
-        <h1 style="margin: 2%; text-align: center;">Group</h1>
+        <h1 style="margin: 2%; text-align: center;">@Model.FullName</h1>
         <div>
-            <div class="form-group">
-                <label for="startPoint">Student Name</label>
-                <input type="text" readonly class="form-control" id="FirstName" name="FirstName" value="@Model.FirstName">
+            <div class="container-fluid">
+                <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="left" width="200" height="200">
             </div>
+            <div></div>
+            <span></span>
             <div class="form-group">
-                <label for="endPoint">MiddleName</label>
-                <input type="text" readonly class="form-control" id="MiddleName" name="MiddleName" value="@Model.MiddleName">
-            </div>
-            <div class="form-group">
-                <label for="departureTime">LastName</label>
-                <input type="text" readonly class="form-control" id="LastName" name="LastName" value="@Model.LastName">
-            </div>
-            <div class="form-group">
-                <label for="seats">Gender</label>
+                <label asp-for="@Model.Gender">Gender</label>
                 <input type="text" readonly class="form-control" id="Gender" name="Gender" value="@Model.Gender">
             </div>
             <div class="form-group">
-                <label for="description">Age</label>
+                <label asp-for="@Model.Age">Age</label>
                 <input type="text" readonly class="form-control" id="Age" name="Age" value="@Model.Age">
             </div>
             <div class="form-group">
-                <label for="description">BirthDate</label>
+                <label asp-for="@Model.BirthDate">BirthDate</label>
                 <input type="text" readonly class="form-control" id="BirthDate" name="BirthDate" value="@Model.BirthDate">
             </div>
             <div class="form-group">
-                <label for="description">Grade</label>
+                <label asp-for="@Model.Grade">Grade</label>
                 <input type="text" readonly class="form-control" id="Grade" name="Grade" value="@Model.Grade">
             </div>
             <div class="form-group">
-                <label for="description">Status</label>
+                <label asp-for="@Model.Status">Status</label>
                 <input type="text" readonly class="form-control" id="Status" name="Status" value="@Model.Status">
             </div>
-          
+
+            <label>Add/Change Profile Pic</label>
+            <form method="post" enctype="multipart/form-data"
+                  asp-controller="Students" asp-action="Upload" asp-route-studentId="@Model.Id?">
+                <input type="file" name="file">Submit <button type="submit" class="btn btn-primary btn-lg" value="Upload" />
+                
+            </form>
 
             @*<label for="description">Students List</label>
-            @foreach (var student in Model.Students)
-            {
-                <div class="form-group">
-                    <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age @student.Gender </a>
-                </div>
-            }*@
-
-            
+        @foreach (var student in Model.Students)
+        {
+            <div class="form-group">
+                <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age @student.Gender </a>
+            </div>
+        }*@
         </div>
     </div>
 </section>

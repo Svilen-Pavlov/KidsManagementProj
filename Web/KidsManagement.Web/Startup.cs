@@ -94,9 +94,9 @@ namespace KidsManagement.Web
                 if (env.IsDevelopment())
                 {
                     dbContext.Database.Migrate();
+                //var seeder = new IdentitySeeder(scopedService.ServiceProvider, dbContext); seeder.SeedAll().GetAwaiter().GetResult();
                 }
 
-                //var seeder = new IdentitySeeder(scopedService.ServiceProvider, dbContext); seeder.SeedAll().GetAwaiter().GetResult();
                 
             }
 
