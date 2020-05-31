@@ -84,5 +84,27 @@ namespace KidsManagement.Services.Students
 
             return model;
         }
+
+        public AllStudentsDetailsViewModel GetAll()
+        {
+            var students = this.db.Students
+               .Select(x => new AllSingleStudentsViewModel
+               {
+                   Id = x.Id,
+                   FulLName = x.FullName,
+                   Gender = x.Gender,
+                   Age = x.Age,
+                   GroupName = x.Group.Name,
+               })
+               .ToArray()
+               .OrderBy(x => x.FulLName);
+
+
+            var studentsList = new List<AllSingleStudentsViewModel>(students);
+
+            var model = new AllStudentsDetailsViewModel() {  Students= studentsList };
+
+            return model;
+        }
     }
 }

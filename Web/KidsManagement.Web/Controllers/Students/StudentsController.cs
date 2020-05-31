@@ -23,8 +23,9 @@ namespace KidsManagement.Web.Controllers.Students
 
         public async Task<IActionResult> Index()
         {
+            var model = this.studentsService.GetAll();
 
-            return await Task.Run(() => View());
+            return await Task.Run(() => View(model));
         }
         public async Task<IActionResult> Details(int studentId)
         {
@@ -63,7 +64,6 @@ namespace KidsManagement.Web.Controllers.Students
             }
             var a =this.RouteData.Values;
             var entityId = studentId;
-            string entityName = "Students";
             var picURI = await this.cloudinaryService.UploadProfilePicASync(file);
 
             return this.RedirectToAction("Details", entityId);

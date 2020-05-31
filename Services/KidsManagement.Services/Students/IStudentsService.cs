@@ -15,5 +15,8 @@ namespace KidsManagement.Services.Students
         Task AssignStudentToGroup(int studentId, int groupId);
 
         Task<StudentDetailsViewModel> FindById(int studentId);
+
+        AllStudentsDetailsViewModel GetAll();
+
     }
 }

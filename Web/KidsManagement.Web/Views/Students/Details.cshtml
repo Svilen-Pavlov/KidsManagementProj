@@ -6,44 +6,44 @@
 <section class="py-5">
     <div class="container">
         <h1 style="margin: 2%; text-align: center;">@Model.FullName</h1>
-        <div>
-            <div class="container-fluid">
-                <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="left" width="200" height="200">
-            </div>
-            <div></div>
-            <span></span>
-            <div class="form-group">
-                <label asp-for="@Model.Gender">Gender</label>
-                <input type="text" readonly class="form-control" id="Gender" name="Gender" value="@Model.Gender">
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Age">Age</label>
-                <input type="text" readonly class="form-control" id="Age" name="Age" value="@Model.Age">
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.BirthDate">BirthDate</label>
-                <input type="text" readonly class="form-control" id="BirthDate" name="BirthDate" value="@Model.BirthDate">
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Grade">Grade</label>
-                <input type="text" readonly class="form-control" id="Grade" name="Grade" value="@Model.Grade">
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Status">Status</label>
-                <input type="text" readonly class="form-control" id="Status" name="Status" value="@Model.Status">
-            </div>
+        <div class="form-row">
 
-            <label>Add/Change Profile Pic</label>
-            <form method="post" enctype="multipart/form-data"
-                  asp-controller="Students" asp-action="Upload" asp-route-studentId="@Model.Id?">
-                <input type="file" name="file">Submit <button type="submit" class="btn btn-primary btn-lg" value="Upload" />
-                
-            </form>
+            <div class="col-md-6">
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Gender">Gender</label>
+                    <input type="text" readonly class="form-control" id="Gender" name="Gender" value="@Model.Gender">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Age">Age</label>
+                    <input type="text" readonly class="form-control" id="Age" name="Age" value="@Model.Age">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.BirthDate">BirthDate</label>
+                    <input type="text" readonly class="form-control" id="BirthDate" name="BirthDate" value="@Model.BirthDate">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Grade">Grade</label>
+                    <input type="text" readonly class="form-control" id="Grade" name="Grade" value="@Model.Grade">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Status">Status</label>
+                    <input type="text" readonly class="form-control" id="Status" name="Status" value="@Model.Status">
+                </div>
 
+                <label>Add/Change Profile Pic</label>
+                <form method="post" enctype="multipart/form-data"
+                      asp-controller="Students" asp-action="Upload" asp-route-studentId="@Model.Id?">
+                    <input type="file" name="file">Submit <button type="submit" class="btn btn-primary btn-lg" value="Upload" />
+
+                </form>
+            </div>
+            <div class="col-md-6">
+                <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
+            </div>
             @*<label for="description">Students List</label>
         @foreach (var student in Model.Students)
         {
-            <div class="form-group">
+             <div class="form-group row-md-6">
                 <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age @student.Gender </a>
             </div>
         }*@

@@ -33,7 +33,8 @@ namespace KidsManagementConsole
         private static void SeedRoles(KidsManagementDbContext db)
         {
             var roles = new List<ApplicationRole>()
-            { new ApplicationRole("Admin"),
+            { 
+          //new ApplicationRole("Admin"),
             new ApplicationRole("Teacher"),
             new ApplicationRole("Student"),
             new ApplicationRole("Manager")

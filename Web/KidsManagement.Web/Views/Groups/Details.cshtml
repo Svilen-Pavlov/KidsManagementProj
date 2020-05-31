@@ -4,60 +4,65 @@
 
 <section class="py-5">
     <div class="container">
-        <h1 style="margin: 2%; text-align: center;">Group</h1>
-        <div>
-            <div class="form-group">
-                <label for="startPoint">Group Name</label>
-                <input type="text" readonly class="form-control" id="Name" name="Name" value="@Model.Name">
+        <h1 style="margin: 2%; text-align: center;">@Model.Name</h1>
+        <div class="form-row">
+            <div class="col">
+                <div class="form-group col-md-6">
+                    <label for="startPoint">Group Name</label>
+                    <input type="text" readonly class="form-control" id="Name" name="Name" value="@Model.Name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="endPoint">CurrentLessonNumber</label>
+                    <input type="text" readonly class="form-control" id="CurrentLessonNumber" name="CurrentLessonNumber" value="@Model.CurrentLessonNumber">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="departureTime">AgeGroup</label>
+                    <input type="text" readonly class="form-control" id="AgeGroup" name="AgeGroup" value="@Model.AgeGroup">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="seats">StartDate</label>
+                    <input type="text" readonly class="form-control" id="StartDate" name="StartDate" value="@Model.StartDate">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="description">EndDate</label>
+                    <input type="text" readonly class="form-control" id="EndDate" name="EndDate" value="@Model.EndDate">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="description">DayOfWeek</label>
+                    <input type="text" readonly class="form-control" id="DayOfWeek" name="DayOfWeek" value="@Model.DayOfWeek">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="description">Duration</label>
+                    <input type="text" readonly class="form-control" id="Duration" name="Duration" value="@Model.Duration">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="description">StartTime</label>
+                    <input type="text" readonly class="form-control" id="StartTime" name="StartTime" value="@Model.StartTime">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="description">EndTime</label>
+                    <input type="text" readonly class="form-control" id="EndTime" name="EndTime" value="@Model.EndTime">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="endPoint">CurrentLessonNumber</label>
-                <input type="text" readonly class="form-control" id="CurrentLessonNumber" name="CurrentLessonNumber" value="@Model.CurrentLessonNumber">
-            </div>
-            <div class="form-group">
-                <label for="departureTime">AgeGroup</label>
-                <input type="text" readonly class="form-control" id="AgeGroup" name="AgeGroup" value="@Model.AgeGroup">
-            </div>
-            <div class="form-group">
-                <label for="seats">StartDate</label>
-                <input type="text" readonly class="form-control" id="StartDate" name="StartDate" value="@Model.StartDate">
-            </div>
-            <div class="form-group">
-                <label for="description">EndDate</label>
-                <input type="text" readonly class="form-control" id="EndDate" name="EndDate" value="@Model.EndDate">
-            </div>
-            <div class="form-group">
-                <label for="description">DayOfWeek</label>
-                <input type="text" readonly class="form-control" id="DayOfWeek" name="DayOfWeek" value="@Model.DayOfWeek">
-            </div>
-            <div class="form-group">
-                <label for="description">Duration</label>
-                <input type="text" readonly class="form-control" id="Duration" name="Duration" value="@Model.Duration">
-            </div>
-            <div class="form-group">
-                <label for="description">StartTime</label>
-                <input type="text" readonly class="form-control" id="StartTime" name="StartTime" value="@Model.StartTime">
-            </div>
-            <div class="form-group">
-                <label for="description">EndTime</label>
-                <input type="text" readonly class="form-control" id="EndTime" name="EndTime" value="@Model.EndTime">
+            <div class="form-group col-md-6">
+                <label for="description">Students List</label>
+                @foreach (var student in Model.Students)
+                {
+                <div class"form row">
+                <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age @student.Gender </a>
+                </div>
+                }
             </div>
 
-            <label for="description">Students List</label>
-            @foreach (var student in Model.Students)
-            {
-                <div class="form-group">
-                    <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age @student.Gender </a>
-                </div>
-            }
             @if (Model.Students.Count() < Model.MaxStudents) //adding student to group
-        {
-        @*<div class="form-group text-center">
-            <div class="button-holder">
-                <a href="/Groups/AddStudentToGroup?groupId=@Model.Id" class="btn btn-primary btn-block text-uppercase">Add Student</a>
-            </div>
-        </div>*@
-        }
+            {
+                @*<div class="form-group text-center">
+                        <div class="button-holder">
+                            <a href="/Groups/AddStudentToGroup?groupId=@Model.Id" class="btn btn-primary btn-block text-uppercase">Add Student</a>
+                        </div>
+                    </div>*@
+            }
+
         </div>
     </div>
 </section>

@@ -1,0 +1,42 @@
+﻿@using KidsManagement.ViewModels.Students;
+
+@model AllStudentsDetailsViewModel;
+@{
+    ViewData["Title"] = "Details";
+}
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">All Groups</h1>
+        <div>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">FulLName</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">GroupName</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model.Students.OrderBy(x => x.Id))
+                    {
+                        <tr>
+                            <th scope="row">@student.Id</th>
+                            <td>@student.FulLName</td>
+                            <td>@student.Gender</td>
+                            <td>@student.Age</td>
+                            <td>@student.GroupName</td>
+                            <td>
+                                <div class="button-holder">
+                                    <a href="/Students/Details?studentId=@student.Id" class="btn btn-info text-uppercase">Info</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>

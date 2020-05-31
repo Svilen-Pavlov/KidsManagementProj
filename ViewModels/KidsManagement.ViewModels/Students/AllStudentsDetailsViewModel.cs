@@ -6,6 +6,6 @@ namespace KidsManagement.ViewModels.Students
 {
     public class AllStudentsDetailsViewModel
     {
-        IEnumerable<AllSingleStudentsViewModel> Students { get; set; }
+        public IEnumerable<AllSingleStudentsViewModel> Students { get; set; }
     }
 }

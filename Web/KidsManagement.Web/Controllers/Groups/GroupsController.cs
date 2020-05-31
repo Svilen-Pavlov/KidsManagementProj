@@ -32,7 +32,7 @@ namespace KidsManagement.Web.Controllers.Groups
             }
             var model = this.groupsService.FindById(groupId);
 
-            return await Task.Run(() => View());
+            return await Task.Run(() => View(model));
         }
     }
 }
