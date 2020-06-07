@@ -69,7 +69,7 @@ namespace KidsManagement.Services.Students
 
             var model = new StudentDetailsViewModel
             {
-                Id=student.Id,
+                Id = student.Id,
                 FirstName = student.FirstName,
                 MiddleName = student.MiddleName,
                 LastName = student.LastName,
@@ -77,7 +77,8 @@ namespace KidsManagement.Services.Students
                 BirthDate = student.BirthDate,
                 Gender = student.Gender,
                 Grade = student.Grade,
-                GroupId = (int)student.GroupId,
+                GroupId = (int?)student.GroupId == null ? 0 : student.GroupId,
+                GroupName = student.Group == null ? "Not in a group yet" : student.Group.Name,
                 Status = student.Status,
                 ProfilePicURI=student.ProfilePicURI
             };
@@ -88,13 +89,13 @@ namespace KidsManagement.Services.Students
         public AllStudentsDetailsViewModel GetAll()
         {
             var students = this.db.Students
-               .Select(x => new AllSingleStudentsViewModel
+               .Select(student => new AllSingleStudentsViewModel
                {
-                   Id = x.Id,
-                   FulLName = x.FullName,
-                   Gender = x.Gender,
-                   Age = x.Age,
-                   GroupName = x.Group.Name,
+                   Id = student.Id,
+                   FulLName = student.FullName,
+                   Gender = student.Gender,
+                   Age = student.Age,
+                   GroupName = student.Group == null ? "Not in a group yet" : student.Group.Name,
                })
                .ToArray()
                .OrderBy(x => x.FulLName);

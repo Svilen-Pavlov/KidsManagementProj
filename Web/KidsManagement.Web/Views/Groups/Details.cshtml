@@ -49,7 +49,7 @@
                 @foreach (var student in Model.Students)
                 {
                 <div class"form row">
-                <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age @student.Gender </a>
+                <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age (@student.Gender) </a>
                 </div>
                 }
             </div>
