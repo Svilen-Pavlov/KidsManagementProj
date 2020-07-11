@@ -10,6 +10,10 @@
     <Compile Remove="Migrations\20200118081050_initial.Designer.cs" />
     <Compile Remove="Migrations\20200322085502_testIdentity.cs" />
     <Compile Remove="Migrations\20200322085502_testIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200711111241_mandatoryMaxStudentsinGroups.cs" />
+    <Compile Remove="Migrations\20200711111241_mandatoryMaxStudentsinGroups.Designer.cs" />
+    <Compile Remove="Migrations\20200711111551_fixMaxStudents.cs" />
+    <Compile Remove="Migrations\20200711111551_fixMaxStudents.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

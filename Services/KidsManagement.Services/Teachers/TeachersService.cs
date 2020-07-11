@@ -21,7 +21,7 @@ namespace KidsManagement.Services.Teachers
         public int CreateTeacher(TeacherCreateInputModel model) //idk if this populates teacherlevels correctly
         {
             var levelNames = model.QualifiedLevels.ToArray();
-            var levelsIds = this.db.Levels.Where(x => levelNames.Contains(x.Name)).Select(x=>x.Id).ToArray();
+            var levelsIds = this.db.Levels.Where(x => levelNames.Contains(x.Name)).Select(x => x.Id).ToArray();
             var levelTeacherList = new List<LevelTeacher>();
             var teacher = new Teacher
             {
@@ -55,7 +55,7 @@ namespace KidsManagement.Services.Teachers
         public TeacherDetailsViewModel FindById(int teacherId)
         {
             var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == teacherId);
-            var levelsIds = this.db.LevelTeachers.Where(x => x.TeacherId == teacherId).Select(x=>x.LevelId).ToArray();
+            var levelsIds = this.db.LevelTeachers.Where(x => x.TeacherId == teacherId).Select(x => x.LevelId).ToArray();
             var levels = this.db.Levels.Where(x => levelsIds.Contains(x.Id)); //which one works ?
 
 
@@ -92,6 +92,18 @@ namespace KidsManagement.Services.Teachers
 
             var model = new AllTeachersListViewModel() { Teachers = teachers };
             return model;
+        }
+
+        public IEnumerable<TeacherDropDownViewModel> GetAllDropDown()
+        {
+            var list = this.db.Teachers.Select(x =>
+                new TeacherDropDownViewModel
+                {
+                    Id=x.Id,
+                    Name=x.FullName
+                }).ToArray();
+
+            return list;
         }
 
         public bool TeacherExists(int teacherId)

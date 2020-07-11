@@ -1,0 +1,53 @@
+﻿@using KidsManagement.ViewModels.Groups;
+
+@model AllGroupsOfTeacherViewModel;
+@{
+    ViewData["Title"] = "Details";
+}
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">@Model.TeacherName</h1>
+        <div>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">CurrentLessonNumber</th>
+                        <th scope="col">AgeGroup</th>
+                        <th scope="col">DayOfWeek</th>
+                        <th scope="col">StartTime</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col">Efficiency</th>
+                    </tr>
+                </thead>
+                 
+                <tbody>
+                    @foreach (var group in Model.Groups.OrderBy(x => x.Id))
+                    {
+                        <tr>
+                            <th scope="row">@group.Id</th>
+                            <td>@group.Name</td>
+                            <td>@group.CurrentLessonNumber</td>
+                            <td>@group.AgeGroup</td>
+                            <td>@group.DayOfWeek</td>
+                            <td>@group.StartTime</td>
+                            <td>@group.Duration</td>
+                            <td>Level is 0</td> @*<td>@group.Level</td> LINK TO ADMIN LEVEL PAGE*@
+                            <td>@group.Capacity</td>
+                            <td>@group.Efficiency %</td>
+                            @*<td>
+                                <div class="button-holder">
+                                    <a href="/Groups/Details?groupId=@group.Id" class="btn btn-info text-uppercase">Info</a>
+                                </div>
+                            </td>*@
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>

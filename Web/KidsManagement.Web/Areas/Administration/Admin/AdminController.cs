@@ -1,4 +1,6 @@
-﻿using KidsManagement.Services.Teachers;
+﻿using KidsManagement.Services.Groups;
+using KidsManagement.Services.Teachers;
+using KidsManagement.ViewModels.Groups;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,10 +14,12 @@ namespace KidsManagement.Web.Areas.Administration.Admin
     public class AdminController:Controller
     {
         private readonly ITeachersService teachersService;
+        private readonly IGroupsService groupsService;
 
-        public AdminController(ITeachersService teachersService)
+        public AdminController(ITeachersService teachersService, IGroupsService groupsService)
         {
             this.teachersService = teachersService;
+            this.groupsService = groupsService;
         }
         public IActionResult Index()
         {
@@ -27,6 +31,14 @@ namespace KidsManagement.Web.Areas.Administration.Admin
             var model=this.teachersService.GetAll();
             return this.View(model);
         }
+
+        public IActionResult AllGroupsOfTeacher(int teacherId)
+        {
+            var model = this.groupsService.GetAllByTeacher(teacherId);
+            return this.View(model);
+            
+        }
+
 
 
     }

@@ -1,0 +1,56 @@
+﻿@using KidsManagement.Data.Models.Enums;
+@using KidsManagement.ViewModels.Groups;
+
+@model GroupCreateInputModel;
+@{
+    ViewData["Title"] = "Details";
+}
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Create Group</h1>
+        <div style="padding: 5%;">
+            <form method="post" asp-action="Create">
+                <div class="form-group col-md-6">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Name..." />
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="AgeGroup"></label>
+                    <select asp-for="AgeGroup" asp-items="Html.GetEnumSelectList<AgeGroup>()" class="form-control"></select>
+                    @*<span asp-validation-for="CurrentLessonNumber" class="text-danger"></span>* libman jquery validation scripts v _Layour da aktiviram https://youtu.be/kQt1Iaab-kU?t=4070@*@
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="TeacherId"></label>
+                    <select asp-for="TeacherId" asp-items="Model.Teachers.Select(x => new SelectListItem (x.Name, x.Id.ToString())).OrderBy(x=>x.Text).ToArray()" class="form-control"></select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="LevelId"></label>
+                    <select asp-for="LevelId" asp-items="Model.Teachers.Select(x => new SelectListItem (x.Name, x.Id.ToString())).OrderBy(x=>x.Text).ToArray()" class="form-control"></select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="StartDate"></label>
+                    <input asp-for="StartDate" type="date" class="form-control" value="DateTime.Today" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="EndDate"></label>
+                    <input asp-for="EndDate" type="date" class="form-control" value="DateTime.Today" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="DayOfWeek"></label>
+                    <select asp-for="DayOfWeek" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
+                    @*<span asp-validation-for="CurrentLessonNumber" class="text-danger"></span>* libman jquery validation scripts v _Layour da aktiviram https://youtu.be/kQt1Iaab-kU?t=4070@*@
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="StartDate"></label>
+                    <input asp-for="EndTime" type="time" class="form-control" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="StartDate"></label>
+                    <input asp-for="EndTime" type="time" class="form-control" />
+                </div>
+                <hr />
+                <input type="submit" class="form-control button btn-info col-md-6" value="Create" />
+            </form>
+        </div>
+    </div>
+</section>

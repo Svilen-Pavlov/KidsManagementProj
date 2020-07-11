@@ -1,5 +1,4 @@
-﻿@using KidsManagement.ViewModels.Groups;
-@using KidsManagement.ViewModels.Teachers;
+﻿@using KidsManagement.ViewModels.Teachers;
 
 @model AllTeachersListViewModel;
 @{
@@ -29,14 +28,18 @@
                             <th scope="row">@teacher.Id</th>
                             <td>@teacher.FirstName</td>
                             <td>@teacher.LastName</td>
-                            <td>@teacher.GroupsCount</td>
+                            @if (teacher.GroupsCount == 0)
+                            {
+                                <td>0</td>
+                            }
+                            else
+                            {
+                                <td class="button-holder">
+                                    <a href="/Admin/AllGroupsOfTeacher?teacherId=@teacher.Id" class="btn btn-info">@teacher.GroupsCount</a>
+                                </td>
+                            }
                             <td>@teacher.Capacity</td>
                             <td>@teacher.Efficiency</td>
-                            <td>
-                                <div class="button-holder">
-                                    <a href="/Teacher/Details?groupId=@teacher.Id" class="btn btn-info text-uppercase">Info</a>
-                                </div>
-                            </td>
                         </tr>
                     }
                 </tbody>

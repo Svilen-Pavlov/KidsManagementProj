@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+using KidsManagement.ViewModels.Teachers;
 
 namespace KidsManagement.ViewModels.Groups
 {
@@ -16,7 +16,6 @@ namespace KidsManagement.ViewModels.Groups
         public string Name { get; set; }
 
         [Range(Const.entityMinCount, Const.entityMaxCount)]
-        public int CurrentLessonNumber { get; set; }
 
         [Required]
         public AgeGroup AgeGroup { get; set; } //AgeGroup enum
@@ -31,9 +30,6 @@ namespace KidsManagement.ViewModels.Groups
         public DayOfWeek DayOfWeek { get; set; } //DayOfWeek
 
         [Required]
-        public TimeSpan Duration { get; set; } //TimeSpan
-        
-        [Required]
         [Column(TypeName = "time(0)")]
         public TimeSpan StartTime { get; set; } //TimeSpan
       
@@ -41,12 +37,15 @@ namespace KidsManagement.ViewModels.Groups
         [Column(TypeName = "time(0)")]
         public TimeSpan EndTime { get; set; } //TimeSpan
 
-
+        [Display(Name="Teacher")]
         [Required]
         public int TeacherId { get; set; }
-    
+
+        [Display(Name = "Level")]
         [Required]
         public int LevelId { get; set; }
    
+        public IEnumerable<TeacherDropDownViewModel> Teachers { get; set; }
+
     }
 }

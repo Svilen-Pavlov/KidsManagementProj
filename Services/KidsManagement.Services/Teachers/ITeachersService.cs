@@ -14,5 +14,7 @@ namespace KidsManagement.Services.Teachers
         bool TeacherExists(int teacherId);
 
         AllTeachersListViewModel GetAll();
+
+        IEnumerable<TeacherDropDownViewModel> GetAllDropDown();
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace KidsManagement.ViewModels.Groups
 {
-    public class AllSinglegroupDetailsViewModel
+    public class SingleGroupDetailsViewModel
     {
         [DisplayName("Id")]
         public int Id { get; set; }

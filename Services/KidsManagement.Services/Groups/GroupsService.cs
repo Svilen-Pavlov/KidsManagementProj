@@ -1,5 +1,6 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
+using KidsManagement.Data.Models.Enums;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Students;
 using Microsoft.EntityFrameworkCore;
@@ -26,26 +27,27 @@ namespace KidsManagement.Services.Groups
         {
             var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == input.TeacherId);
             var level = this.db.Levels.FirstOrDefault(x => x.Id == input.LevelId);
-            string name = $"{teacher.FirstName} {input.DayOfWeek.ToString().ToUpper().Take(3)} {input.StartTime}";
+            //string name = $"{teacher.FirstName} {input.DayOfWeek.ToString().ToUpper().Take(3)} {input.StartTime}";
 
             var group = new Group
             {
-                Teacher = teacher,
+                TeacherId=input.TeacherId,
                 StartTime = input.StartTime,
-                Name = name,
+                Name = input.Name,
                 AgeGroup = input.AgeGroup,
                 CurrentLessonNumber = 1,
                 DayOfWeek = input.DayOfWeek,
-                Duration = input.Duration,
+                Duration = input.EndTime.Subtract(input.StartTime),
                 StartDate = input.StartDate,
                 EndDate = input.EndDate,
                 EndTime = input.EndTime,
-                Level = level,
+                LevelId = level.Id,
+
             };
 
             await this.db.Groups.AddAsync(group);
             await this.db.SaveChangesAsync();
-
+            
             return group.Id;
         }
 
@@ -116,7 +118,7 @@ namespace KidsManagement.Services.Groups
             var groups = this.db.Groups
                 .Include(x => x.Level)
                 .Include(x => x.Teacher)
-                .Select(x => new AllSinglegroupDetailsViewModel
+                .Select(x => new SingleGroupDetailsViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -129,7 +131,7 @@ namespace KidsManagement.Services.Groups
                 .OrderBy(x => x.TeacherName);
 
 
-            var groupsList = new List<AllSinglegroupDetailsViewModel>(groups);
+            var groupsList = new List<SingleGroupDetailsViewModel>(groups);
 
             var model = new AllGroupsDetailsViewModel() { Groups = groupsList };
 
@@ -143,5 +145,48 @@ namespace KidsManagement.Services.Groups
 
             return studentsCount == group.MaxStudents;
         }
+
+        public AllGroupsOfTeacherViewModel GetAllByTeacher(int teacherId)
+        {
+
+            var groups = this.db.Groups
+                .Where(g => g.TeacherId == teacherId)
+                //.Include(x=>x)
+                .Select(g => new SingleGroupOfTeacherDetailsViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    CurrentLessonNumber = g.CurrentLessonNumber,
+                    AgeGroup=g.AgeGroup,
+                    StartDate=g.StartDate,
+                    EndDate=g.EndDate,
+                    DayOfWeek = g.DayOfWeek,
+                    Duration = g.Duration,
+                    StartTime = g.StartTime,
+                    EndTime = g.EndTime,
+                    TeacherId=teacherId,
+                    LevelId=g.Level.Id,
+                    Capacity=g.MaxStudents,
+                    Efficiency=Math.Round((double)g.Students.Count()/g.MaxStudents*100,2)
+                    //TODO:
+                    //Teacher
+                    //Level
+                    //Students 
+
+                })
+                .ToArray()
+                .OrderBy(t => t.Name);
+
+
+            var teacherName = this.db.Teachers.FirstOrDefault(x => x.Id == teacherId).FullName;
+            var groupsList = new List<SingleGroupOfTeacherDetailsViewModel>(groups);
+
+            var model = new AllGroupsOfTeacherViewModel() { Groups = groupsList,TeacherName= teacherName };
+
+            return model;
+        }
+
+       
+
     }
 }

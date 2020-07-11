@@ -47,7 +47,7 @@ namespace KidsManagement.Data.Models
         [Column(TypeName = "time(0)")]
         public TimeSpan EndTime { get; set; }
 
-        public int? MaxStudents { get; set; }
+        public int MaxStudents { get; set; }
 
         public int? TeacherId { get; set; }
         public Teacher Teacher { get; set; }

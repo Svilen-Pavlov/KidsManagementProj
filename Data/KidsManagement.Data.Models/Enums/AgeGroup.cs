@@ -6,9 +6,9 @@ namespace KidsManagement.Data.Models.Enums
 {
     public enum AgeGroup
     {
-        Preschool=0,
-        Primary=1,
-        Secondary=2,
-        High=3
+        Preschool=6,
+        Primary=8,
+        Secondary=10,
+        High=16
     }
 }

@@ -1,4 +1,5 @@
 ﻿using KidsManagement.Data.Models;
+using KidsManagement.Data.Models.Enums;
 using KidsManagement.ViewModels.Groups;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,10 @@ namespace KidsManagement.Services.Groups
         Task<bool> GroupExists(int groupId);
 
         AllGroupsDetailsViewModel GetAll();
+        AllGroupsOfTeacherViewModel GetAllByTeacher(int teacherId);
 
         Task<bool> GroupIsFull(int groupId);
+
+
     }
 }
