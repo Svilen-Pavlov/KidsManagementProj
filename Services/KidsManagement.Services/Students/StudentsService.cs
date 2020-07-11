@@ -98,7 +98,8 @@ namespace KidsManagement.Services.Students
                    GroupName = student.Group == null ? "Not in a group yet" : student.Group.Name,
                })
                .ToArray()
-               .OrderBy(x => x.FulLName);
+               .OrderBy(x => x.FulLName)
+                .ToArray();
 
 
             var studentsList = new List<AllSingleStudentsViewModel>(students);

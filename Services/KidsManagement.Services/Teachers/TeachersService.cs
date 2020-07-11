@@ -1,5 +1,6 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
+using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
 using System;
 using System.Collections.Generic;
@@ -70,6 +71,26 @@ namespace KidsManagement.Services.Teachers
                 QualifiedLevels = levels
             };
 
+            return model;
+        }
+
+        public AllTeachersListViewModel GetAll()
+        {
+            var teachers = this.db.Teachers
+                          .Select(teacher => new TeachersListDetailsViewModel
+                          {
+                              Id = teacher.Id,
+                              FirstName = teacher.FirstName,
+                              LastName = teacher.LastName,
+                              Capacity = 0,
+                              Efficiency = 0,
+                              Groups = teacher.Groups.Select(x => x.Name).ToArray(),
+                          })
+                          .ToArray()
+                          .OrderBy(x => x.Id)
+                          .ToArray();
+
+            var model = new AllTeachersListViewModel() { Teachers = teachers };
             return model;
         }
 

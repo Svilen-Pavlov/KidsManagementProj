@@ -12,5 +12,7 @@ namespace KidsManagement.Services.Teachers
         int CreateTeacher(TeacherCreateInputModel model);
 
         bool TeacherExists(int teacherId);
+
+        AllTeachersListViewModel GetAll();
     }
 }
