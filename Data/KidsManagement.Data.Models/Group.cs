@@ -47,8 +47,13 @@ namespace KidsManagement.Data.Models
         [Column(TypeName = "time(0)")]
         public TimeSpan EndTime { get; set; }
 
+        //stats
         public int MaxStudents { get; set; }
 
+        //[Required] make it required tho
+        public GroupStatus Status { get;set; }
+
+        //links
         public int? TeacherId { get; set; }
         public Teacher Teacher { get; set; }
 

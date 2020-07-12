@@ -1,5 +1,6 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -33,5 +34,7 @@ namespace KidsManagement.ViewModels.Students
         public StudentStatus Status { get; set; }
 
         public int GroupId { get; set; }
+
+        public IFormFile ProfileImage { get; set; }
     }
 }

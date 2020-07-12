@@ -1,5 +1,6 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
+using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +15,19 @@ namespace KidsManagement.Services.Teachers
     public class TeachersService : ITeachersService
     {
         private readonly KidsManagementDbContext db;
+        private readonly ICloudinaryService cloudinaryService;
 
-        public TeachersService(KidsManagementDbContext db)
+        public TeachersService(KidsManagementDbContext db,ICloudinaryService cloudinaryService)
         {
             this.db = db;
+            this.cloudinaryService = cloudinaryService;
         }
 
-        public async Task<int> CreateTeacher(TeacherCreateInputModel model) //idk if this populates teacherlevels correctly
+        public async Task<int> CreateTeacher(CreateTeacherInputModel model) //idk if this populates teacherlevels correctly
         {
-          
+            var pic = model.ProfileImage;
+            string picURI = pic==null? string.Empty: await this.cloudinaryService.UploadProfilePicASync(pic);
+
             var teacher = new Teacher
             {
                 FirstName = model.FirstName,
@@ -31,10 +36,11 @@ namespace KidsManagement.Services.Teachers
                 HiringDate = model.HiringDate,
                 DismissalDate = model.DismissalDate,
                 Salary = model.Salary,
+                ProfilePicURI = picURI
             };
             await this.db.Teachers.AddAsync(teacher);
 
-            var levelIds = model.Levels.Select(x => x.Id).ToArray();
+            var levelIds = model.Levels.Where(x=>x.Selected).Select(x => x.Id).ToArray();
             var levelTeacherList = new List<LevelTeacher>();
             foreach (var levelId in levelIds)
             {
@@ -46,8 +52,16 @@ namespace KidsManagement.Services.Teachers
                 levelTeacherList.Add(levelTeacher);
 
             }
-
             await this.db.LevelTeachers.AddRangeAsync(levelTeacherList);
+
+            var groupIds = model.Groups.Where(x => x.Selected).Select(x => x.Id).ToArray();
+            var groupsToAssignToTeacher = this.db.Groups.Where(x => groupIds.Contains(x.Id)).ToArray(); //howtoasync?
+            foreach (var group in groupsToAssignToTeacher)
+            {
+                group.TeacherId = teacher.Id;
+            }
+
+
             await this.db.SaveChangesAsync();
 
             return teacher.Id;
@@ -70,7 +84,8 @@ namespace KidsManagement.Services.Teachers
                 Salary = teacher.Salary,
                 HiringDate = teacher.HiringDate,
                 DismissalDate = teacher.DismissalDate,
-                QualifiedLevels = levels
+                QualifiedLevels = levels,
+                
             };
 
             return model;
@@ -96,10 +111,10 @@ namespace KidsManagement.Services.Teachers
             return model;
         }
 
-        public IEnumerable<TeacherDropDownViewModel> GetAllDropDown()
+        public IEnumerable<TeacherSelectionViewModel> GetAllDropDown()
         {
             var list = this.db.Teachers.Select(x =>
-                new TeacherDropDownViewModel
+                new TeacherSelectionViewModel
                 {
                     Id=x.Id,
                     Name=x.FullName
@@ -112,5 +127,7 @@ namespace KidsManagement.Services.Teachers
         {
             return await this.db.Teachers.AnyAsync(x => x.Id == teacherId);
         }
+
+
     }
 }

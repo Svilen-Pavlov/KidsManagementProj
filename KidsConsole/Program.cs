@@ -27,8 +27,40 @@ namespace KidsManagementConsole
             //SeedStudents(db);
             // AddStudentsToGroup(db);
             //SeedRoles(db);
+            //UpdateGroupStatuses(db);
         }
 
+        private static void UpdateGroupStatuses(KidsManagementDbContext db)
+        {
+            var groups = db.Groups
+                .Include(x=>x.Students)
+                .ToArray();
+
+            foreach (var grp in groups)
+            {
+                int count = grp.Students.Count();
+                int max = grp.MaxStudents;
+                if (count == 0)
+                {
+                    grp.Status = GroupStatus.Empty;
+                }
+                else if (count< max)
+                {
+                    grp.Status = GroupStatus.NotFull;
+                }
+                else if(count==max)
+                {
+                    grp.Status = GroupStatus.Full;
+                }
+                else if (count > max)
+                {
+                    grp.Status = GroupStatus.OverLimit;
+                }
+            }
+
+            db.SaveChanges();
+            
+        }
 
         private static void SeedRoles(KidsManagementDbContext db)
         {

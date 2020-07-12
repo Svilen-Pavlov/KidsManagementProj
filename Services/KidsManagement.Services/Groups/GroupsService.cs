@@ -25,10 +25,6 @@ namespace KidsManagement.Services.Groups
 
         public async Task<int> CreateGroup(GroupCreateInputModel input)
         {
-            //var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == input.TeacherId);
-            //var level = this.db.Levels.FirstOrDefault(x => x.Id == input.LevelId);
-            //string name = $"{teacher.FirstName} {input.DayOfWeek.ToString().ToUpper().Take(3)} {input.StartTime}";
-
             var group = new Group
             {
                 TeacherId=input.TeacherId,
@@ -42,7 +38,8 @@ namespace KidsManagement.Services.Groups
                 EndDate = input.EndDate,
                 EndTime = input.EndTime,
                 LevelId = input.LevelId,
-
+                Status=GroupStatus.Empty,
+                MaxStudents=(int)input.AgeGroup
             };
 
             await this.db.Groups.AddAsync(group);
@@ -101,7 +98,7 @@ namespace KidsManagement.Services.Groups
             await this.db.SaveChangesAsync();
         }
 
-        public void ChangeTeacher(int newTeacherId, int groupId) //teacher service or here?
+        public void ChangeTeacher(int newTeacherId, int groupId) 
         {
             var group = this.db.Groups.FirstOrDefault(x => x.Id == groupId);
             group.TeacherId = newTeacherId;
@@ -186,7 +183,14 @@ namespace KidsManagement.Services.Groups
             return model;
         }
 
-       
-
+        public IEnumerable<GroupSelectionViewModel> GetAllForSelection(int? teacherId)
+        {
+            var groups = this.db.Groups.Where(g => g.TeacherId == teacherId).Select(g => new GroupSelectionViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                }).ToList();
+            return groups;
+        }
     }
 }

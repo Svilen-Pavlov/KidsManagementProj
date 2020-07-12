@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KidsManagement.Services.Teachers
 {
@@ -9,12 +10,12 @@ namespace KidsManagement.Services.Teachers
     {
         TeacherDetailsViewModel FindById (int teacherId);
 
-        int CreateTeacher(TeacherCreateInputModel model);
+        Task<int> CreateTeacher(CreateTeacherInputModel model);
 
-        bool TeacherExists(int teacherId);
+        Task<bool> TeacherExists(int teacherId);
 
         AllTeachersListViewModel GetAll();
 
-        IEnumerable<TeacherDropDownViewModel> GetAllDropDown();
+        IEnumerable<TeacherSelectionViewModel> GetAllDropDown();
     }
 }

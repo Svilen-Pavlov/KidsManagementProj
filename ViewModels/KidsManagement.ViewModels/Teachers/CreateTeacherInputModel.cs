@@ -1,16 +1,15 @@
 ﻿using KidsManagement.Data;
-using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Enums;
+using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Levels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace KidsManagement.ViewModels.Teachers
 {
-    public class TeacherCreateInputModel
+    public class CreateTeacherInputModel
     {
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
@@ -25,9 +24,10 @@ namespace KidsManagement.ViewModels.Teachers
         [Required]
         public DateTime HiringDate { get; set; }
         public DateTime? DismissalDate { get; set; }
+
+        public IFormFile ProfileImage { get; set; }
         public List<LevelSelectionViewModel> Levels { get; set; } = new List<LevelSelectionViewModel>();
-
-
+        public List<GroupSelectionViewModel> Groups { get; set; } = new List<GroupSelectionViewModel>();
 
     }
 }

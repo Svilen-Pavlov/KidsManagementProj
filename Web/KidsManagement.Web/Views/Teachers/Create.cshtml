@@ -1,7 +1,7 @@
 ﻿@using KidsManagement.ViewModels.Teachers;
 @using KidsManagement.Data.Models.Enums;
 
-@model TeacherCreateInputModel;
+@model CreateTeacherInputModel;
 @{
     ViewData["Title"] = "Details";
 }
@@ -9,7 +9,8 @@
     <div class="container">
         <h1 style="margin: 2%; text-align: center;">Add Teacher</h1>
         <div style="padding: 5%;">
-            <form method="post" asp-action="Create">
+
+            <form enctype="multipart/form-data" method="post" asp-action="Create">
                 <div class="form-group col-md-6">
                     <label asp-for="FirstName"></label>
                     <input asp-for="FirstName" class="form-control" placeholder="FirstName..." />
@@ -46,6 +47,30 @@
                         <input asp-for="Levels[i].Selected" />
                     </div>
                 }
+
+                @for (var i = 0; i < Model.Groups.Count(); i++)
+                {
+
+                    <div class="custom-control custom-checkbox">
+                        <input type="hidden" asp-for="Groups[i].Id" />
+                        @Model.Groups[i].Id
+                        @Model.Groups[i].Name
+                        <input asp-for="Groups[i].Selected" />
+                    </div>
+                }
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ProfileImage" class="control-label"></label>
+                        <div class="custom-file">
+                            <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                        @*<span asp-validation-for="ProfileImage" class="text-danger"></span>* apply this@
+                @*this indian guy carried me https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/*@
+                    </div>
+                </div>
                 <hr />
                 <input type="submit" class="form-control button btn-info col-md-6" value="Create" />
             </form>

@@ -25,6 +25,8 @@ namespace KidsManagement.Services.Groups
 
         Task<bool> GroupIsFull(int groupId);
 
+        IEnumerable<GroupSelectionViewModel> GetAllForSelection(int? teacherId);
 
+        void ChangeTeacher(int newTeacherId, int groupId);  //teacher service or here?
     }
 }

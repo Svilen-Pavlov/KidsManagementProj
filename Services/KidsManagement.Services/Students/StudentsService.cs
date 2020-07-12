@@ -80,7 +80,7 @@ namespace KidsManagement.Services.Students
                 GroupId = (int?)student.GroupId == null ? 0 : student.GroupId,
                 GroupName = student.Group == null ? "Not in a group yet" : student.Group.Name,
                 Status = student.Status,
-                ProfilePicURI=student.ProfilePicURI
+                //ProfilePicURI=student.ProfilePicURI  vizualize pic from URI
             };
 
             return model;

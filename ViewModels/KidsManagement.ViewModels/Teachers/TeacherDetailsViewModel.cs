@@ -16,6 +16,7 @@ namespace KidsManagement.ViewModels.Teachers
         public DateTime HiringDate { get; set; }
         public DateTime? DismissalDate { get; set; }
 
+        public string ProfilePicURI { get; set; }
         public IEnumerable<Level> QualifiedLevels { get; set; }
 
     }

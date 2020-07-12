@@ -46,7 +46,7 @@ namespace KidsManagement.ViewModels.Groups
         [Required]
         public int LevelId { get; set; }
    
-        public IEnumerable<TeacherDropDownViewModel> Teachers { get; set; }
+        public IEnumerable<TeacherSelectionViewModel> Teachers { get; set; }
         public IEnumerable<LevelSelectionViewModel> Levels { get; set; }
 
 
