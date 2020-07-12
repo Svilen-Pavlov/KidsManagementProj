@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using KidsManagement.ViewModels.Teachers;
+using KidsManagement.ViewModels.Levels;
 
 namespace KidsManagement.ViewModels.Groups
 {
@@ -46,6 +47,8 @@ namespace KidsManagement.ViewModels.Groups
         public int LevelId { get; set; }
    
         public IEnumerable<TeacherDropDownViewModel> Teachers { get; set; }
+        public IEnumerable<LevelSelectionViewModel> Levels { get; set; }
+
 
     }
 }

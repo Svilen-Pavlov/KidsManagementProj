@@ -1,4 +1,5 @@
 ﻿using KidsManagement.Services.Groups;
+using KidsManagement.Services.Levels;
 using KidsManagement.Services.Teachers;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
@@ -15,11 +16,13 @@ namespace KidsManagement.Web.Controllers.Groups
     {
         private readonly IGroupsService groupsService;
         private readonly ITeachersService teachersService;
+        private readonly ILevelsService levelsService;
 
-        public GroupsController(IGroupsService groupsService, ITeachersService teachersService)
+        public GroupsController(IGroupsService groupsService, ITeachersService teachersService, ILevelsService levelsService)
         {
             this.groupsService = groupsService;
             this.teachersService = teachersService;
+            this.levelsService = levelsService;
         }
         public async Task<IActionResult> Index()
         {
@@ -44,10 +47,11 @@ namespace KidsManagement.Web.Controllers.Groups
         public IActionResult Create()
         {
             var teachersList = this.teachersService.GetAllDropDown();
-           // var levelsList = this.levelService.GetAllDropDown();
+            var levelsList = this.levelsService.GetAllForSelection();
             var model = new GroupCreateInputModel()
             {
-                Teachers = teachersList
+                Teachers = teachersList,
+                Levels = levelsList
             };
             return this.View(model);
         }
@@ -62,8 +66,7 @@ namespace KidsManagement.Web.Controllers.Groups
                 return this.Redirect("/"); //todo error page
             }
             var groupId = await this.groupsService.CreateGroup(model);  //todo ASYNC
-
-            return await Task.Run(() => this.Details(groupId));
+            return RedirectToAction("Details", new { groupId = groupId });
         }
     }
 }

@@ -25,8 +25,8 @@ namespace KidsManagement.Services.Groups
 
         public async Task<int> CreateGroup(GroupCreateInputModel input)
         {
-            var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == input.TeacherId);
-            var level = this.db.Levels.FirstOrDefault(x => x.Id == input.LevelId);
+            //var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == input.TeacherId);
+            //var level = this.db.Levels.FirstOrDefault(x => x.Id == input.LevelId);
             //string name = $"{teacher.FirstName} {input.DayOfWeek.ToString().ToUpper().Take(3)} {input.StartTime}";
 
             var group = new Group
@@ -41,7 +41,7 @@ namespace KidsManagement.Services.Groups
                 StartDate = input.StartDate,
                 EndDate = input.EndDate,
                 EndTime = input.EndTime,
-                LevelId = level.Id,
+                LevelId = input.LevelId,
 
             };
 
