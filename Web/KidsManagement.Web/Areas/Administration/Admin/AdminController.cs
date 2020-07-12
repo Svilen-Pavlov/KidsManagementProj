@@ -31,14 +31,16 @@ namespace KidsManagement.Web.Areas.Administration.Admin
             var model=this.teachersService.GetAll();
             return this.View(model);
         }
-
         public IActionResult AllGroupsOfTeacher(int teacherId)
         {
             var model = this.groupsService.GetAllByTeacher(teacherId);
-            return this.View(model);
-            
+            return this.View(model);   
         }
 
+        public IActionResult AddTeacher()
+        {
+            return this.View();
+        }
 
 
     }

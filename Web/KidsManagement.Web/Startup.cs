@@ -8,6 +8,7 @@ using KidsManagement.Data;
 using KidsManagement.Data.Models;
 using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.Services.Groups;
+using KidsManagement.Services.Levels;
 using KidsManagement.Services.Parents;
 using KidsManagement.Services.Payments;
 using KidsManagement.Services.Students;
@@ -42,6 +43,7 @@ namespace KidsManagement.Web
             services.AddTransient<ITeachersService, TeachersService>();
             services.AddTransient<IParentsService, ParentsService>();
             services.AddTransient<IPaymentsService, PaymentsService>();
+            services.AddTransient<ILevelsService, LevelsService>();
             
             services.AddTransient<ICloudinaryService, CloudinaryService>();
 

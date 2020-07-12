@@ -2,10 +2,12 @@
 using KidsManagement.Data.Models;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KidsManagement.Services.Teachers
 {
@@ -18,11 +20,9 @@ namespace KidsManagement.Services.Teachers
             this.db = db;
         }
 
-        public int CreateTeacher(TeacherCreateInputModel model) //idk if this populates teacherlevels correctly
+        public async Task<int> CreateTeacher(TeacherCreateInputModel model) //idk if this populates teacherlevels correctly
         {
-            var levelNames = model.QualifiedLevels.ToArray();
-            var levelsIds = this.db.Levels.Where(x => levelNames.Contains(x.Name)).Select(x => x.Id).ToArray();
-            var levelTeacherList = new List<LevelTeacher>();
+          
             var teacher = new Teacher
             {
                 FirstName = model.FirstName,
@@ -32,9 +32,11 @@ namespace KidsManagement.Services.Teachers
                 DismissalDate = model.DismissalDate,
                 Salary = model.Salary,
             };
-            this.db.Teachers.Add(teacher);
+            await this.db.Teachers.AddAsync(teacher);
 
-            foreach (var levelId in levelsIds)
+            var levelIds = model.Levels.Select(x => x.Id).ToArray();
+            var levelTeacherList = new List<LevelTeacher>();
+            foreach (var levelId in levelIds)
             {
                 var levelTeacher = new LevelTeacher
                 {
@@ -45,8 +47,8 @@ namespace KidsManagement.Services.Teachers
 
             }
 
-            this.db.LevelTeachers.AddRange(levelTeacherList);
-            this.db.SaveChanges();
+            await this.db.LevelTeachers.AddRangeAsync(levelTeacherList);
+            await this.db.SaveChangesAsync();
 
             return teacher.Id;
         }
@@ -106,9 +108,9 @@ namespace KidsManagement.Services.Teachers
             return list;
         }
 
-        public bool TeacherExists(int teacherId)
+        public async Task<bool> TeacherExists(int teacherId)
         {
-            return this.db.Teachers.Any(x => x.Id == teacherId);
+            return await this.db.Teachers.AnyAsync(x => x.Id == teacherId);
         }
     }
 }

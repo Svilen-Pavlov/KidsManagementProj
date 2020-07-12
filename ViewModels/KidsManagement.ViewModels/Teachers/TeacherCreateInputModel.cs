@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Enums;
+using KidsManagement.ViewModels.Levels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,10 +25,9 @@ namespace KidsManagement.ViewModels.Teachers
         [Required]
         public DateTime HiringDate { get; set; }
         public DateTime? DismissalDate { get; set; }
+        public List<LevelSelectionViewModel> Levels { get; set; } = new List<LevelSelectionViewModel>();
 
-        public IEnumerable<string> QualifiedLevels { get; set; }
 
-      
 
     }
 }
