@@ -1,1 +1,55 @@
-﻿
+﻿@using KidsManagement.ViewModels.Teachers;
+
+@model TeacherDetailsViewModel
+
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">@Model.FullName</h1>
+        <div class="form-row">
+
+            <div class="col-md-6">
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Gender"></label>
+                    <input asp-for="@Model.Gender" type="text" readonly class="form-control" name="Gender" value="@Model.Gender">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Salary"></label>
+                    <input asp-for="@Model.Salary" readonly class="form-control" name="Salary" value="@Model.Salary">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.HiringDate"></label>
+                    <input asp-for="@Model.HiringDate" readonly class="form-control" type="datetime" name="@Model.HiringDate" value="@Model.HiringDate">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.DismissalDate"></label>
+                    <input asp-for="@Model.DismissalDate" readonly class="form-control" type="datetime" name="DismissalDate" value="@Model.DismissalDate">
+                </div>
+                <hr />
+                <label asp-for="@Model.QualifiedLevels"></label>
+                @foreach (var level in Model.QualifiedLevels)
+                {
+                    <div class="form-group row-md-6">
+
+                        <input asp-for="QualifiedLevels" type="text" readonly class="form-control" name="Level" value="@level.Name">
+                    </div>
+                }
+                <hr />
+                <label asp-for="@Model.Groups"></label>
+                <hr />
+                @foreach (var group in Model.Groups)
+                {
+                    <div class="form-group row-md-6">
+                        <a asp-controller="Groups"
+                           asp-action="Details"
+                           asp-route-groupId="@group.Id">@group.Name</a>
+                    </div>
+                }
+                <hr />
+                <div class="col-md-6">
+                    <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Enums;
 using KidsManagement.Data;
+using KidsManagement.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace KidsManagementConsole
             // AddStudentsToGroup(db);
             //SeedRoles(db);
             //UpdateGroupStatuses(db);
+            
         }
 
         private static void UpdateGroupStatuses(KidsManagementDbContext db)

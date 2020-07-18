@@ -27,7 +27,7 @@ namespace KidsManagement.Services.Groups
         {
             var group = new Group
             {
-                TeacherId=input.TeacherId,
+                TeacherId = input.TeacherId,
                 StartTime = input.StartTime,
                 Name = input.Name,
                 AgeGroup = input.AgeGroup,
@@ -38,13 +38,13 @@ namespace KidsManagement.Services.Groups
                 EndDate = input.EndDate,
                 EndTime = input.EndTime,
                 LevelId = input.LevelId,
-                Status=GroupStatus.Empty,
-                MaxStudents=(int)input.AgeGroup
+                Status = GroupStatus.Empty,
+                MaxStudents = (int)input.AgeGroup
             };
 
             await this.db.Groups.AddAsync(group);
             await this.db.SaveChangesAsync();
-            
+
             return group.Id;
         }
 
@@ -70,7 +70,7 @@ namespace KidsManagement.Services.Groups
                 LevelName = level.Name,
                 TeacherId = (int)group.TeacherId,
                 TeacherName = teacher.FullName,
-                MaxStudents=(int)group.MaxStudents,
+                MaxStudents = (int)group.MaxStudents,
                 Students = students.Select(s => new AllSingleStudentsViewModel()
                 {
                     FulLName = s.FullName,
@@ -98,7 +98,7 @@ namespace KidsManagement.Services.Groups
             await this.db.SaveChangesAsync();
         }
 
-        public void ChangeTeacher(int newTeacherId, int groupId) 
+        public void ChangeTeacher(int newTeacherId, int groupId)
         {
             var group = this.db.Groups.FirstOrDefault(x => x.Id == groupId);
             group.TeacherId = newTeacherId;
@@ -154,17 +154,17 @@ namespace KidsManagement.Services.Groups
                     Id = g.Id,
                     Name = g.Name,
                     CurrentLessonNumber = g.CurrentLessonNumber,
-                    AgeGroup=g.AgeGroup,
-                    StartDate=g.StartDate,
-                    EndDate=g.EndDate,
+                    AgeGroup = g.AgeGroup,
+                    StartDate = g.StartDate,
+                    EndDate = g.EndDate,
                     DayOfWeek = g.DayOfWeek,
                     Duration = g.Duration,
                     StartTime = g.StartTime,
                     EndTime = g.EndTime,
-                    TeacherId=teacherId,
-                    LevelId=g.Level.Id,
-                    Capacity=g.MaxStudents,
-                    Efficiency=Math.Round((double)g.Students.Count()/g.MaxStudents*100,2)
+                    TeacherId = teacherId,
+                    LevelId = g.Level.Id,
+                    Capacity = g.MaxStudents,
+                    Efficiency = Math.Round((double)g.Students.Count() / g.MaxStudents * 100, 2)
                     //TODO:
                     //Teacher
                     //Level
@@ -178,7 +178,7 @@ namespace KidsManagement.Services.Groups
             var teacherName = this.db.Teachers.FirstOrDefault(x => x.Id == teacherId).FullName;
             var groupsList = new List<SingleGroupOfTeacherDetailsViewModel>(groups);
 
-            var model = new AllGroupsOfTeacherViewModel() { Groups = groupsList,TeacherName= teacherName };
+            var model = new AllGroupsOfTeacherViewModel() { Groups = groupsList, TeacherName = teacherName };
 
             return model;
         }
@@ -186,10 +186,10 @@ namespace KidsManagement.Services.Groups
         public IEnumerable<GroupSelectionViewModel> GetAllForSelection(int? teacherId)
         {
             var groups = this.db.Groups.Where(g => g.TeacherId == teacherId).Select(g => new GroupSelectionViewModel
-                {
-                    Id = g.Id,
-                    Name = g.Name
-                }).ToList();
+            {
+                Id = g.Id,
+                Name = g.Name
+            }).ToList();
             return groups;
         }
     }

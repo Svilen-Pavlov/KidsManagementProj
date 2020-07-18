@@ -27,6 +27,10 @@ namespace KidsManagement.Services.Teachers
         {
             var pic = model.ProfileImage;
             string picURI = pic==null? string.Empty: await this.cloudinaryService.UploadProfilePicASync(pic);
+            var groupIds = model.Groups.Where(x => x.Selected).Select(x => x.Id).ToArray();
+            var groupsToAssignToTeacher = this.db.Groups.Where(x => groupIds.Contains(x.Id)).ToArray(); //howtoasync?
+            var levelsIds = model.Levels.Where(x => x.Selected).Select(x => x.Id).ToArray();
+            var qualifiedLevels = this.db.Levels.Where(x => levelsIds.Contains(x.Id)).ToArray();
 
             var teacher = new Teacher
             {
@@ -36,31 +40,11 @@ namespace KidsManagement.Services.Teachers
                 HiringDate = model.HiringDate,
                 DismissalDate = model.DismissalDate,
                 Salary = model.Salary,
-                ProfilePicURI = picURI
+                ProfilePicURI = picURI,
+                Groups = groupsToAssignToTeacher,
+                QualifiedLevels = qualifiedLevels.Select(ql => new LevelTeacher { Level=ql}).ToArray()
             };
             await this.db.Teachers.AddAsync(teacher);
-
-            var levelIds = model.Levels.Where(x=>x.Selected).Select(x => x.Id).ToArray();
-            var levelTeacherList = new List<LevelTeacher>();
-            foreach (var levelId in levelIds)
-            {
-                var levelTeacher = new LevelTeacher
-                {
-                    LevelId = levelId,
-                    TeacherId = teacher.Id
-                };
-                levelTeacherList.Add(levelTeacher);
-
-            }
-            await this.db.LevelTeachers.AddRangeAsync(levelTeacherList);
-
-            var groupIds = model.Groups.Where(x => x.Selected).Select(x => x.Id).ToArray();
-            var groupsToAssignToTeacher = this.db.Groups.Where(x => groupIds.Contains(x.Id)).ToArray(); //howtoasync?
-            foreach (var group in groupsToAssignToTeacher)
-            {
-                group.TeacherId = teacher.Id;
-            }
-
 
             await this.db.SaveChangesAsync();
 
@@ -73,7 +57,11 @@ namespace KidsManagement.Services.Teachers
             var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == teacherId);
             var levelsIds = this.db.LevelTeachers.Where(x => x.TeacherId == teacherId).Select(x => x.LevelId).ToArray();
             var levels = this.db.Levels.Where(x => levelsIds.Contains(x.Id)); //which one works ?
-
+            var groups = this.db.Groups.Where(g=>g.TeacherId==teacher.Id).Select(g => new GroupSelectionViewModel
+            {
+                Id = g.Id,
+                Name = g.Name,
+            }).ToList();
 
             var model = new TeacherDetailsViewModel
             {
@@ -85,7 +73,8 @@ namespace KidsManagement.Services.Teachers
                 HiringDate = teacher.HiringDate,
                 DismissalDate = teacher.DismissalDate,
                 QualifiedLevels = levels,
-                
+                ProfilePicURI=teacher.ProfilePicURI,
+                Groups=groups
             };
 
             return model;

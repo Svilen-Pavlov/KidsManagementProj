@@ -14,20 +14,22 @@
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Id</th>
-                        <th scope="col">FirstName</th>
-                        <th scope="col">LastName</th>
+                        <th scope="col">Full Name</th>
                         <th scope="col">GroupsCount</th>
                         <th scope="col">Capacity</th>
                         <th scope="col">Efficiency</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var teacher in Model.Teachers.OrderBy(x => x.Id))
+                    @foreach (var teacher in Model.Teachers)
                     {
                         <tr>
                             <th scope="row">@teacher.Id</th>
-                            <td>@teacher.FirstName</td>
-                            <td>@teacher.LastName</td>
+                            <td>
+                                <a asp-controller="Teachers"
+                                   asp-action="Details"
+                                   asp-route-teacherId="@teacher.Id">@teacher.FullName</a>
+                            </td>
                             @if (teacher.GroupsCount == 0)
                             {
                                 <td>0</td>

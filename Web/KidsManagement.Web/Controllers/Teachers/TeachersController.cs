@@ -49,8 +49,8 @@ namespace KidsManagement.Web.Controllers.Teachers
             {
                 return this.Redirect("/"); //todo error page
             }
-            var teacherId = await this.teachersService.CreateTeacher(model);  //todo ASYNC
-            return RedirectToAction("Details", new { groupId = teacherId });
+            var newTeacherId = await this.teachersService.CreateTeacher(model);  //todo ASYNC
+            return RedirectToAction("Details", new { teacherId = newTeacherId });
         }
 
         public async Task<IActionResult> Details(int teacherId)

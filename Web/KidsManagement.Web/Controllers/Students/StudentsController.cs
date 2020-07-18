@@ -27,16 +27,7 @@ namespace KidsManagement.Web.Controllers.Students
 
             return await Task.Run(() => View(model));
         }
-        public async Task<IActionResult> Details(int studentId)
-        {
-            if (await this.studentsService.StudentExists(studentId)==false)
-            {
-                this.Redirect("/");
-            }
-
-            var studentModel = await this.studentsService.FindById(studentId);
-            return this.View(studentModel);
-        }
+      
 
         public async Task<IActionResult> Create()
         {
@@ -54,7 +45,16 @@ namespace KidsManagement.Web.Controllers.Students
 
             return this.RedirectToAction("Details", studentId);
         }
+        public async Task<IActionResult> Details(int studentId)
+        {
+            if (await this.studentsService.StudentExists(studentId) == false)
+            {
+                this.Redirect("/");
+            }
 
+            var studentModel = await this.studentsService.FindById(studentId);
+            return this.View(studentModel);
+        }
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file, int studentId)
         {

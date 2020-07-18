@@ -25,5 +25,7 @@ namespace KidsManagement.ViewModels.Teachers
         public IEnumerable<string> Groups { get; set; }
 
         //public IEnumerable<Level> QualifiedLevels { get; set; }
+
+        public string FullName => string.Format("{0} {1}", this.FirstName, this.LastName);
     }
 }

@@ -37,10 +37,7 @@ namespace KidsManagement.Web.Areas.Administration.Admin
             return this.View(model);   
         }
 
-        public IActionResult AddTeacher()
-        {
-            return this.View();
-        }
+       
 
 
     }
