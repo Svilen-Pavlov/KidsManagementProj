@@ -1,14 +1,19 @@
-﻿using KidsManagement.Data;
+﻿using KidsManagement.Data.Models.Constants;
 using KidsManagement.Data.Models.Enums;
+using KidsManagement.ViewModels.Parents;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KidsManagement.ViewModels.Students
 {
     public class CreateStudentInputModel
     {
-
+        public CreateStudentInputModel()
+        {
+            Parents = new List<ParentsSelectionViewModel>();
+        }
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string FirstName { get; set; }
@@ -25,6 +30,7 @@ namespace KidsManagement.ViewModels.Students
         public Gender Gender { get; set; }
 
         [Required]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy HH:MM}")]
         public DateTime BirthDate { get; set; }
 
         [Required]
@@ -36,5 +42,7 @@ namespace KidsManagement.ViewModels.Students
         public int GroupId { get; set; }
 
         public IFormFile ProfileImage { get; set; }
+
+        public List<ParentsSelectionViewModel> Parents { get; set; }
     }
 }

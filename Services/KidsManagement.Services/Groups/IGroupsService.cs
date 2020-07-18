@@ -10,7 +10,7 @@ namespace KidsManagement.Services.Groups
 {
     public interface IGroupsService
     {
-        Task<int> CreateGroup(GroupCreateInputModel model);
+        Task<int> CreateGroup(CreateGroupInputModel model);
 
         GroupDetailsViewModel FindById(int id);
 

@@ -1,0 +1,29 @@
+﻿@using KidsManagement.ViewModels.Students;
+@using KidsManagement.Data.Models.Enums;
+
+@model CreateStudentInputModel;
+@{
+    ViewData["Title"] = "Details";
+}
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Select Parents</h1>
+        <div style="padding: 5%;">
+
+            <form enctype="multipart/form-data" method="post" asp-action="CreateSelectParents">
+                @for (var i = 0; i < Model.Parents.Count(); i++)
+                {
+
+                    <div class="custom-control custom-checkbox">
+                        <input type="hidden" asp-for="@Model.Parents[i].Id" />
+                        @Model.Parents[i].Id
+                        @Model.Parents[i].Name
+                        <input asp-for="Parents[i].Selected" />
+                    </div>
+                }
+                <input type="submit" class="form-control button btn-info col-md-6" value="Add Parents" />
+            </form>
+        </div>
+    </div>
+</section>

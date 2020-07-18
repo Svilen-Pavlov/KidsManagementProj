@@ -1,5 +1,6 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
+using KidsManagement.Data.Models.Constants;
 using KidsManagement.Data.Models.Enums;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Students;
@@ -23,7 +24,7 @@ namespace KidsManagement.Services.Groups
         }
 
 
-        public async Task<int> CreateGroup(GroupCreateInputModel input)
+        public async Task<int> CreateGroup(CreateGroupInputModel input)
         {
             var group = new Group
             {
@@ -59,13 +60,13 @@ namespace KidsManagement.Services.Groups
                 Id = group.Id,
                 Name = group.Name,
                 CurrentLessonNumber = group.CurrentLessonNumber,
-                AgeGroup = group.AgeGroup,
+                AgeGroup = group.AgeGroup==0? InfoStrings.GeneralNotSpecified:group.AgeGroup.ToString(),
                 DayOfWeek = group.DayOfWeek,
-                Duration = group.Duration.ToString(@"hh\:mm"),
-                StartDate = group.StartDate.ToString("d"),
-                EndDate = group.EndDate.ToString("d"),
-                StartTime = group.StartTime.ToString(@"hh\:mm"),
-                EndTime = group.EndTime.ToString(@"hh\:mm"),
+                Duration = group.Duration.ToString(Const.hourMinutesFormat),
+                StartDate = group.StartDate.ToString(Const.dateOnlyFormat),
+                EndDate = group.EndDate.ToString(Const.dateOnlyFormat),
+                StartTime = group.StartTime.ToString(Const.hourMinutesFormat),
+                EndTime = group.EndTime.ToString(Const.hourMinutesFormat),
                 LevelId = (int)group.LevelId,
                 LevelName = level.Name,
                 TeacherId = (int)group.TeacherId,
@@ -120,12 +121,12 @@ namespace KidsManagement.Services.Groups
                     Id = x.Id,
                     Name = x.Name,
                     DayOfWeek = x.DayOfWeek,
-                    StartTime = x.StartTime,
+                    StartTime = x.StartTime.ToString(Const.hourMinutesFormat),
                     LevelName = x.Level.Name,
                     TeacherName = x.Teacher.FullName
                 })
                 .ToArray()
-                .OrderBy(x => x.TeacherName);
+                .OrderBy(x => x.Name);
 
 
             var groupsList = new List<SingleGroupDetailsViewModel>(groups);

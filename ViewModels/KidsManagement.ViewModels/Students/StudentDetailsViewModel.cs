@@ -21,7 +21,7 @@ namespace KidsManagement.ViewModels.Students
 
         public int Age { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public string BirthDate { get; set; }
 
         public GradeLevel Grade { get; set; }
 

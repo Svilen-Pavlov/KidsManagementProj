@@ -1,39 +1,28 @@
-﻿
-using KidsManagement.Data;
+﻿using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Constants;
 using KidsManagement.Data.Models.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace KidsManagement.Data.Models
+namespace KidsManagement.ViewModels.Parents
 {
-    public class Parent
+    public class CreateParentInputModel
     {
-        public Parent()
-        {
-            this.AdminNotes = new HashSet<Note>();
-            this.Children = new HashSet<StudentParent>();
-         
-        }
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string FirstName { get; set; }
-        
+
+        [Required]
+        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        public string MiddleName { get; set; }
+
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string LastName { get; set; }
 
-        [NotMapped]
-        public string FullName => string.Format("{0} {1}", FirstName, LastName);
-
-        [Required]
-        public Gender Gender { get; set; }
 
         [Required]
         public string PhoneNumber { get; set; }
@@ -45,13 +34,16 @@ namespace KidsManagement.Data.Models
 
         [EmailAddress]
         public string AlternativeEmail { get; set; }
-                               
 
-        //many to many
-        public virtual ICollection<Note> AdminNotes { get; set; }
 
-        public virtual ICollection<StudentParent> Children { get; set; }
+        [Required]
+        public Gender Gender { get; set; }
 
-      
+        [Required]
+        public IFormFile ProfileImage { get; set; }
+
+        public IEnumerable<Student> Children { get; set; }
+
+        public string InitialAdminNote { get; set; }
     }
 }

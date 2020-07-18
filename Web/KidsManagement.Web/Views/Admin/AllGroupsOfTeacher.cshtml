@@ -25,7 +25,7 @@
                 </thead>
                  
                 <tbody>
-                    @foreach (var group in Model.Groups.OrderBy(x => x.Id))
+                    @foreach (var group in Model.Groups)
                     {
                         <tr>
                             <th scope="row">@group.Id</th>

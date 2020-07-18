@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using KidsManagement.Data.Models.Constants;
 
 namespace KidsManagement.Data.Models
 {

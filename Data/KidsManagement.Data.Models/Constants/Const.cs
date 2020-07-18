@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KidsManagement.Data
+namespace KidsManagement.Data.Models.Constants
 {
     //toq klas trqa li mi vub6te?
     public static class Const
@@ -14,6 +14,9 @@ namespace KidsManagement.Data
         public const int entityMinCount = 1;
         public const int entityMaxCount = 256;
         public const int textMaxLen= 256;
-        
+
+        public const string dateOnlyFormat = "d";
+        public const string hourMinutesFormat = @"h\:mm";
+
     }
 }

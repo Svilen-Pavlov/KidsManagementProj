@@ -16,7 +16,7 @@ namespace KidsManagement.ViewModels.Groups
         public string LevelName { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
 
-        public TimeSpan StartTime { get; set; }
+        public string StartTime { get; set; }
 
         public string TeacherName { get; set; }
 

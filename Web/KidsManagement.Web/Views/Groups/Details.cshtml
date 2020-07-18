@@ -5,52 +5,52 @@
 <section class="py-5">
     <div class="container">
         <h1 style="margin: 2%; text-align: center;">@Model.Name</h1>
+       
         <div class="form-row">
             <div class="col">
                 <div class="form-group col-md-6">
-                    <label for="startPoint">Group Name</label>
-                    <input type="text" readonly class="form-control" id="Name" name="Name" value="@Model.Name">
+                    <label asp-for="@Model.CurrentLessonNumber"></label>
+                    <input asp-for="@Model.CurrentLessonNumber" type="text" readonly class="form-control" name="CurrentLessonNumber" value="@Model.CurrentLessonNumber">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="endPoint">CurrentLessonNumber</label>
-                    <input type="text" readonly class="form-control" id="CurrentLessonNumber" name="CurrentLessonNumber" value="@Model.CurrentLessonNumber">
+                    <label asp-for="@Model.AgeGroup"></label>
+                    <input asp-for="@Model.AgeGroup" type="text" readonly class="form-control" name="AgeGroup" value="@Model.AgeGroup">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="departureTime">AgeGroup</label>
-                    <input type="text" readonly class="form-control" id="AgeGroup" name="AgeGroup" value="@Model.AgeGroup">
+                    <label asp-for="@Model.StartDate"></label>
+                    <input asp-for="@Model.StartDate" type="text" readonly class="form-control" name="StartDate" value="@Model.StartDate">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="seats">StartDate</label>
-                    <input type="text" readonly class="form-control" id="StartDate" name="StartDate" value="@Model.StartDate">
+                    <label asp-for="@Model.EndDate"></label>
+                    <input asp-for="@Model.EndDate" type="text" readonly class="form-control"  name="EndDate" value="@Model.EndDate">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="description">EndDate</label>
-                    <input type="text" readonly class="form-control" id="EndDate" name="EndDate" value="@Model.EndDate">
+                    <label asp-for="@Model.DayOfWeek"></label>
+                    <input asp-for="@Model.DayOfWeek" type="text" readonly class="form-control" name="DayOfWeek" value="@Model.DayOfWeek">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="description">DayOfWeek</label>
-                    <input type="text" readonly class="form-control" id="DayOfWeek" name="DayOfWeek" value="@Model.DayOfWeek">
+                    <label asp-for="@Model.Duration"></label>
+                    <input asp-for="@Model.Duration" type="text" readonly class="form-control"  name="Duration" value="@Model.Duration">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="description">Duration</label>
-                    <input type="text" readonly class="form-control" id="Duration" name="Duration" value="@Model.Duration">
+                    <label asp-for="@Model.StartTime"></label>
+                    <input asp-for="@Model.StartTime" type="text" readonly class="form-control" name="StartTime" value="@Model.StartTime">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="description">StartTime</label>
-                    <input type="text" readonly class="form-control" id="StartTime" name="StartTime" value="@Model.StartTime">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="description">EndTime</label>
-                    <input type="text" readonly class="form-control" id="EndTime" name="EndTime" value="@Model.EndTime">
+                    <label asp-for="@Model.EndTime"></label>
+                    <input asp-for="@Model.EndTime" type="text" readonly class="form-control" name="EndTime" value="@Model.EndTime">
                 </div>
             </div>
             <div class="form-group col-md-6">
-                <label for="description">Students List</label>
+                <label asp-for="@Model.Students"></label>
+                <hr />
                 @foreach (var student in Model.Students)
                 {
-                <div class"form row">
-                <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age (@student.Gender) </a>
-                </div>
+                    <div class="form-group row-md-6">
+                        <a asp-controller="Students"
+                           asp-action="Details"
+                           asp-route-studentId="@student.Id">@student.FulLName  @student.Age (@student.Gender)</a>
+                    </div>
                 }
             </div>
 

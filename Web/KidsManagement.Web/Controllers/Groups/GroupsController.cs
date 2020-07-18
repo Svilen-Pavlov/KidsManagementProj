@@ -48,7 +48,7 @@ namespace KidsManagement.Web.Controllers.Groups
         {
             var teachersList = this.teachersService.GetAllDropDown();
             var levelsList = this.levelsService.GetAllForSelection();
-            var model = new GroupCreateInputModel()
+            var model = new CreateGroupInputModel()
             {
                 Teachers = teachersList,
                 Levels = levelsList
@@ -59,7 +59,7 @@ namespace KidsManagement.Web.Controllers.Groups
         [Authorize(Roles = "Admin")]
 
         [HttpPost]
-        public async Task<IActionResult> Create(GroupCreateInputModel model)
+        public async Task<IActionResult> Create(CreateGroupInputModel model)
         {
             if (this.ModelState.IsValid==false)
             {

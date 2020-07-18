@@ -19,7 +19,7 @@ namespace KidsManagement.ViewModels.Groups
 
         public int CurrentLessonNumber { get; set; }
 
-        public AgeGroup AgeGroup { get; set; }
+        public string AgeGroup { get; set; }
 
         public string StartDate { get; set; }
 
@@ -40,6 +40,8 @@ namespace KidsManagement.ViewModels.Groups
 
         public int MaxStudents { get; set; }
         public IEnumerable<AllSingleStudentsViewModel> Students { get; set; }
+
+        public List<StudentSelectionViewModel> StudentsForSelection { get; set; }
 
     }
 }

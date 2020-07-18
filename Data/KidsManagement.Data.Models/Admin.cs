@@ -1,9 +1,8 @@
-﻿using KidsManagement.Data;
+﻿using KidsManagement.Data.Models.Constants;
 using KidsManagement.Data.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace KidsManagement.Data.Models
 {

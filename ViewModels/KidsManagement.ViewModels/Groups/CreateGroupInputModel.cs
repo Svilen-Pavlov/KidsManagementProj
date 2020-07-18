@@ -1,4 +1,4 @@
-﻿using KidsManagement.Data.Models;
+﻿using KidsManagement.Data.Models.Constants;
 using KidsManagement.Data.Models.Enums;
 using KidsManagement.Data;
 using System;
@@ -10,7 +10,7 @@ using KidsManagement.ViewModels.Levels;
 
 namespace KidsManagement.ViewModels.Groups
 {
-    public class GroupCreateInputModel
+    public class CreateGroupInputModel
     {
         [Required]
         [MaxLength(Const.entityNameMaxLen)]

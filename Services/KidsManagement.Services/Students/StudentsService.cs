@@ -1,5 +1,6 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
+using KidsManagement.Data.Models.Constants;
 using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.ViewModels.Students;
 using Microsoft.EntityFrameworkCore;
@@ -23,14 +24,13 @@ namespace KidsManagement.Services.Students
         }
         public async Task<int> CreateStudent(CreateStudentInputModel model)
         {
-            //var pic = model.ProfilePic;
-            //var picURI=await this.cloudinaryService.UploadProfilePicASync(pic);
-
-            //how to fill parents
-
+            var pic = model.ProfileImage;
+            var picURI= pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
             var age = DateTime.Today.Year - model.BirthDate.Year;
-            if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; // Go back to the year the person was born in case of a leap year
+            if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
 
+            var parentIds = model.Parents.Where(x => x.Selected).Select(x => x.Id).ToArray();
+            var parentsForStudent = this.db.Parents.Where(x => parentIds.Contains(x.Id)).ToArray();
 
             var student = new Student
             {
@@ -42,10 +42,11 @@ namespace KidsManagement.Services.Students
                 BirthDate = model.BirthDate,
                 Grade = model.Grade,
                 Status = model.Status,
+                Parents= parentsForStudent.Select(p => new StudentParent { Parent = p }).ToArray(),
             };
 
             await this.db.Students.AddAsync(student);
-            await this.db.SaveChangesAsync();
+            //await this.db.SaveChangesAsync();
             return student.Id;
         }
 
@@ -74,13 +75,13 @@ namespace KidsManagement.Services.Students
                 MiddleName = student.MiddleName,
                 LastName = student.LastName,
                 Age = student.Age,
-                BirthDate = student.BirthDate,
+                BirthDate = student.BirthDate.ToString(Const.dateOnlyFormat),
                 Gender = student.Gender,
                 Grade = student.Grade,
                 GroupId = (int?)student.GroupId == null ? 0 : student.GroupId,
-                GroupName = student.Group == null ? "Not in a group yet" : student.Group.Name,
+                GroupName = student.Group == null ? InfoStrings.StudentNotInAGroupYet : student.Group.Name,
                 Status = student.Status,
-                //ProfilePicURI=student.ProfilePicURI  vizualize pic from URI
+                ProfilePicURI=student.ProfilePicURI
             };
 
             return model;
