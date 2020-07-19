@@ -1,4 +1,5 @@
-﻿using KidsManagement.ViewModels.Students;
+﻿using KidsManagement.ViewModels.Parents;
+using KidsManagement.ViewModels.Students;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +18,8 @@ namespace KidsManagement.Services.Students
         Task<StudentDetailsViewModel> FindById(int studentId);
 
         AllStudentsDetailsViewModel GetAll();
+
+        Task EditParents(EditParentsInputModel model);
 
     }
 }

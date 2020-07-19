@@ -2,6 +2,7 @@
 using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Constants;
 using KidsManagement.Services.External.CloudinaryService;
+using KidsManagement.ViewModels.Parents;
 using KidsManagement.ViewModels.Students;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,8 +30,8 @@ namespace KidsManagement.Services.Students
             var age = DateTime.Today.Year - model.BirthDate.Year;
             if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
 
-            var parentIds = model.Parents.Where(x => x.Selected).Select(x => x.Id).ToArray();
-            var parentsForStudent = this.db.Parents.Where(x => parentIds.Contains(x.Id)).ToArray();
+           // var parentIds = model.Parents.Where(x => x.Selected).Select(x => x.Id).ToArray();
+           // var parentsForStudent = this.db.Parents.Where(x => parentIds.Contains(x.Id)).ToArray();
 
             var student = new Student
             {
@@ -42,11 +43,11 @@ namespace KidsManagement.Services.Students
                 BirthDate = model.BirthDate,
                 Grade = model.Grade,
                 Status = model.Status,
-                Parents= parentsForStudent.Select(p => new StudentParent { Parent = p }).ToArray(),
+                //Parents= parentsForStudent.Select(p => new StudentParent { Parent = p }).ToArray(),
             };
 
             await this.db.Students.AddAsync(student);
-            //await this.db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
             return student.Id;
         }
 
@@ -81,7 +82,12 @@ namespace KidsManagement.Services.Students
                 GroupId = (int?)student.GroupId == null ? 0 : student.GroupId,
                 GroupName = student.Group == null ? InfoStrings.StudentNotInAGroupYet : student.Group.Name,
                 Status = student.Status,
-                ProfilePicURI=student.ProfilePicURI
+                ProfilePicURI=student.ProfilePicURI,
+                Parents=student.Parents.Select(p=> new ParentsSelectionViewModel
+                {
+                    Id=p.ParentId,
+                    Name=p.Parent.FullName
+                }).ToList()
             };
 
             return model;
@@ -108,6 +114,24 @@ namespace KidsManagement.Services.Students
             var model = new AllStudentsDetailsViewModel() {  Students= studentsList };
 
             return model;
+        }
+
+        public async Task EditParents(EditParentsInputModel model)
+        {
+            var student = this.db.Students.FirstOrDefaultAsync(x => x.Id == model.StudentId).Result;
+
+            var parentIds = model.Parents.Where(x => x.Selected).Select(x => x.Id).ToArray();
+            var parentsForStudent = this.db.Parents.Where(x => parentIds.Contains(x.Id)).ToArray();
+
+            foreach (var parent in parentsForStudent)
+            {
+                var link = new StudentParent { ParentId = parent.Id };
+                //var link = new StudentParent { ParentId = parent.Id, StudentId=student.Id };
+                student.Parents.Add(link);
+            }
+
+            await this.db.SaveChangesAsync();
+
         }
     }
 }

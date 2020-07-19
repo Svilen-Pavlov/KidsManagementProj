@@ -31,17 +31,7 @@ namespace KidsManagement.Web.Controllers.Groups
             return await Task.Run(() => View(model)); ; 
         }
 
-        public async Task<IActionResult> Details(int groupId)
-        {
-            //todo: correct redirect
-            if (await this.groupsService.GroupExists(groupId) ==false)
-            {
-                return this.Redirect("/");
-            }
-            var model = this.groupsService.FindById(groupId); //todo ASYNC
-
-            return await Task.Run(() => View(model));
-        }
+       
 
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
@@ -57,7 +47,6 @@ namespace KidsManagement.Web.Controllers.Groups
         }
 
         [Authorize(Roles = "Admin")]
-
         [HttpPost]
         public async Task<IActionResult> Create(CreateGroupInputModel model)
         {
@@ -67,6 +56,18 @@ namespace KidsManagement.Web.Controllers.Groups
             }
             var groupId = await this.groupsService.CreateGroup(model);  //todo ASYNC
             return RedirectToAction("Details", new { groupId = groupId });
+        }
+
+        public async Task<IActionResult> Details(int groupId)
+        {
+            //todo: correct redirect
+            if (await this.groupsService.GroupExists(groupId) == false)
+            {
+                return this.Redirect("/");
+            }
+            var model = this.groupsService.FindById(groupId); //todo ASYNC
+
+            return await Task.Run(() => View(model));
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿@using KidsManagement.ViewModels.Students;
-@using KidsManagement.Data.Models.Enums;
+﻿@using KidsManagement.ViewModels.Parents;
 
-@model CreateStudentInputModel;
+@model EditParentsInputModel;
 @{
     ViewData["Title"] = "Details";
 }
@@ -11,10 +10,9 @@
         <h1 style="margin: 2%; text-align: center;">Select Parents</h1>
         <div style="padding: 5%;">
 
-            <form enctype="multipart/form-data" method="post" asp-action="CreateSelectParents">
+            <form enctype="multipart/form-data" method="post" asp-action="EditStudentParents">
                 @for (var i = 0; i < Model.Parents.Count(); i++)
                 {
-
                     <div class="custom-control custom-checkbox">
                         <input type="hidden" asp-for="@Model.Parents[i].Id" />
                         @Model.Parents[i].Id
@@ -22,7 +20,11 @@
                         <input asp-for="Parents[i].Selected" />
                     </div>
                 }
-                <input type="submit" class="form-control button btn-info col-md-6" value="Add Parents" />
+                <div class="form-group col-md-6">
+                    <label asp-for="@Model.StudentId"></label>
+                    <input asp-for="@Model.StudentId" type="number" class="form-control" value="@Model.StudentId" />
+                </div>
+                <input type="submit" class="form-control button btn-info col-md-6" value="Confirm" />
             </form>
         </div>
     </div>

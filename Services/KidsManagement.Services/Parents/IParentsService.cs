@@ -7,6 +7,7 @@ namespace KidsManagement.Services.Parents
 {
     public interface IParentsService
     {
-        IEnumerable<ParentsSelectionViewModel> GetAllForSelection();
+        IEnumerable<ParentsSelectionViewModel> GetAllForSelection(int studentId);
+
     }
 }

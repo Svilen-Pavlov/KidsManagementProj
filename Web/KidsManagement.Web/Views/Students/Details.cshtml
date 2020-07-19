@@ -45,13 +45,17 @@
             <div class="col-md-6">
                 <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
             </div>
-            @*<label for="description">Students List</label>
-        @foreach (var student in Model.Students)
-        {
-             <div class="form-group row-md-6">
-                <a href="/Students/Details?studentId=@student.Id" class="alert-info">@student.FulLName @student.Age @student.Gender </a>
+            <div>
+                <label asp-for="@Model.Parents"></label>
             </div>
-        }*@
+            @foreach (var parent in Model.Parents)
+            {
+                <div class="col-md-6">
+                    <a asp-controller="Parents"
+                       asp-action="Details"
+                       asp-route-Id="@parent.Id">@parent.Name class="btn btn-info</a>
+                </div>
+            }
         </div>
     </div>
 </section>

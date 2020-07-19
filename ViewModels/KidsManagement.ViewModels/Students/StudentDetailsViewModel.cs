@@ -1,4 +1,5 @@
 ﻿using KidsManagement.Data.Models.Enums;
+using KidsManagement.ViewModels.Parents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -31,5 +32,6 @@ namespace KidsManagement.ViewModels.Students
         public string GroupName { get; set; }
         public string ProfilePicURI { get; set; }
 
+        public IEnumerable<ParentsSelectionViewModel> Parents { get; set; }
     }
 }

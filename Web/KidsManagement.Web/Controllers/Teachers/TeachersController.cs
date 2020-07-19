@@ -28,8 +28,6 @@ namespace KidsManagement.Web.Controllers.Teachers
             this.levelsService = levelsService;
         }
 
-
-
         public IActionResult Create()
         {
             var levelsList = this.levelsService.GetAllForSelection();

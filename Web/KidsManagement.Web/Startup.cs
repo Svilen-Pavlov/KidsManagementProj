@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,13 +39,14 @@ namespace KidsManagement.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+
             services.AddTransient<IGroupsService, GroupsService>();
             services.AddTransient<IStudentsService, StudentsService>();
             services.AddTransient<ITeachersService, TeachersService>();
             services.AddTransient<IParentsService, ParentsService>();
             services.AddTransient<IPaymentsService, PaymentsService>();
             services.AddTransient<ILevelsService, LevelsService>();
-            
             services.AddTransient<ICloudinaryService, CloudinaryService>();
 
 
@@ -69,11 +71,15 @@ namespace KidsManagement.Web
                 .AddDefaultTokenProviders();
 
             services.AddRazorPages();
+            services.AddRazorPages().AddSessionStateTempDataProvider();
 
             services.AddControllersWithViews(configure =>
             {
                 configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
+            services.AddControllersWithViews().AddSessionStateTempDataProvider();
+            services.AddSession();
+
 
             //External Services
 
@@ -81,7 +87,7 @@ namespace KidsManagement.Web
                this.Configuration["Cloudinary:Cloud_Name"],
                this.Configuration["Cloudinary:API_Key"],
                this.Configuration["Cloudinary:API_Secret"]);
-            
+
             Cloudinary cloudinary = new Cloudinary(account);
             services.AddSingleton(cloudinary);
         }
@@ -96,10 +102,10 @@ namespace KidsManagement.Web
                 if (env.IsDevelopment())
                 {
                     dbContext.Database.Migrate();
-                //var seeder = new IdentitySeeder(scopedService.ServiceProvider, dbContext); seeder.SeedAll().GetAwaiter().GetResult();
+                    //var seeder = new IdentitySeeder(scopedService.ServiceProvider, dbContext); seeder.SeedAll().GetAwaiter().GetResult();
                 }
 
-                
+
             }
 
 
@@ -116,6 +122,7 @@ namespace KidsManagement.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles(); //has todo with identity UI
 
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication(); //IDENTITY

@@ -23,26 +23,31 @@
                 <tbody>
                     @foreach (var teacher in Model.Teachers)
                     {
-                        <tr>
-                            <th scope="row">@teacher.Id</th>
+                    <tr>
+                        <th scope="row">@teacher.Id</th>
+                        <td>
+                            <a asp-controller="Teachers"
+                               asp-action="Details"
+                               asp-route-teacherId="@teacher.Id">@teacher.FullName</a>
+                        </td>
+                        @if (teacher.GroupsCount == 0)
+                        {
+                            <td>0</td>
+                        }
+                        else
+                        {
                             <td>
-                                <a asp-controller="Teachers"
-                                   asp-action="Details"
-                                   asp-route-teacherId="@teacher.Id">@teacher.FullName</a>
+                                <a asp-controller="Admin"
+                                   asp-action="AllGroupsOfTeacher"
+                                   asp-route-teacherId="@teacher.Id">@teacher.GroupsCount class="btn btn-info</a>
                             </td>
-                            @if (teacher.GroupsCount == 0)
-                            {
-                                <td>0</td>
-                            }
-                            else
-                            {
-                                <td class="button-holder">
-                                    <a href="/Admin/AllGroupsOfTeacher?teacherId=@teacher.Id" class="btn btn-info">@teacher.GroupsCount</a>
-                                </td>
-                            }
-                            <td>@teacher.Capacity</td>
-                            <td>@teacher.Efficiency</td>
-                        </tr>
+                            @*<td class="button-holder">
+                                <a href="/Admin/AllGroupsOfTeacher?teacherId=@teacher.Id" class="btn btn-info">@teacher.GroupsCount</a>
+                            </td>*@
+                        }
+                        <td>@teacher.Capacity</td>
+                        <td>@teacher.Efficiency</td>
+                    </tr>
                     }
                 </tbody>
 

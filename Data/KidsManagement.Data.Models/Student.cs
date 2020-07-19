@@ -13,7 +13,9 @@ namespace KidsManagement.Data.Models
     {
         public Student()
         {
-          
+            this.Parents = new HashSet<StudentParent>();
+            this.Payments = new HashSet<Payment>();
+            this.TeacherComments = new HashSet<Comment>();
         }
         [Key]
         public int Id { get; set; }
