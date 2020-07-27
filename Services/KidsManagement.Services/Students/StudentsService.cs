@@ -67,7 +67,11 @@ namespace KidsManagement.Services.Students
 
         public async Task<StudentDetailsViewModel> FindById(int studentId)
         {
-            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
+            var student = await this.db.Students
+                //.Include(s=>s.Parents)
+                //.ThenInclude(x=>x.Select(y=>y.Parent))
+                .FirstOrDefaultAsync(x => x.Id == studentId);
+            var parents = this.db.Parents.Where(p => p.Children.Any(sp => sp.StudentId == student.Id)).ToArray();
 
             var model = new StudentDetailsViewModel
             {
@@ -83,10 +87,10 @@ namespace KidsManagement.Services.Students
                 GroupName = student.Group == null ? InfoStrings.StudentNotInAGroupYet : student.Group.Name,
                 Status = student.Status,
                 ProfilePicURI=student.ProfilePicURI,
-                Parents=student.Parents.Select(p=> new ParentsSelectionViewModel
+                Parents=parents.Select(p=> new ParentsSelectionViewModel
                 {
-                    Id=p.ParentId,
-                    Name=p.Parent.FullName
+                    Id=p.Id,
+                    Name=p.FullName
                 }).ToList()
             };
 
@@ -126,7 +130,6 @@ namespace KidsManagement.Services.Students
             foreach (var parent in parentsForStudent)
             {
                 var link = new StudentParent { ParentId = parent.Id };
-                //var link = new StudentParent { ParentId = parent.Id, StudentId=student.Id };
                 student.Parents.Add(link);
             }
 

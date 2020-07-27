@@ -33,7 +33,6 @@ namespace KidsManagement.Web.Controllers.Students
 
         public async Task<IActionResult> Create()
         {
-            //var model = new CreateStudentInputModel();
             return await Task.Run(() => View());
         }
 
@@ -46,9 +45,10 @@ namespace KidsManagement.Web.Controllers.Students
             }
 
             var studentId = await this.studentsService.CreateStudent(model);
+            this.TempData["studentId"] = studentId;
             var parents = this.parentsService.GetAllForSelection(studentId).ToList();
-            var outputModel = new EditParentsInputModel() { StudentId = studentId, Parents=parents };
-           //to use ViewMabg instead of ID
+            var outputModel = new EditParentsInputModel() {/* StudentId = studentId,*/ Parents=parents };
+
             return await Task.Run(()=>this.View("EditParents", outputModel));
         }
 
@@ -62,6 +62,11 @@ namespace KidsManagement.Web.Controllers.Students
         [HttpPost]
         public async Task<IActionResult> EditStudentParents(EditParentsInputModel model)
         {
+            var studentId = this.TempData["studentId"];
+            if (studentId == null || (studentId is int)==false) 
+                return this.Redirect("/"); //invalid student create ERROR
+
+            model.StudentId = (int)studentId;
             await this.studentsService.EditParents(model);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = model.StudentId }));

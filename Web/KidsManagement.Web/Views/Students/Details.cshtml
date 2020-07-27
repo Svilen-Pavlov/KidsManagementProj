@@ -6,6 +6,7 @@
 <section class="py-5">
     <div class="container">
         <h1 style="margin: 2%; text-align: center;">@Model.FullName</h1>
+
         <div class="form-row">
 
             <div class="col-md-6">
@@ -33,29 +34,23 @@
                     <label asp-for="@Model.GroupName">Current Group</label>
                     <input type="text" readonly class="form-control" id="Status" name="Status" value="@Model.GroupName">
                 </div>
-
-                <label>Add/Change Profile Pic</label>
-                <form method="post" enctype="multipart/form-data"
-                      asp-controller="Students" asp-action="Upload">
-                    @*asp-route-studentId=" @Model.Id?"*@
-                    <input type="file" name="file">Submit <button type="submit" class="btn btn-primary btn-lg" value="Upload" />
-
-                </form>
             </div>
             <div class="col-md-6">
                 <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
             </div>
-            <div>
+
+            <div class="col-md-6">
                 <label asp-for="@Model.Parents"></label>
+                <br />
+                @foreach (var parent in Model.Parents)
+                {
+                    <div class="form-group row-md-6">
+                        <a asp-controller="Parents"
+                           asp-action="Details"
+                           asp-route-Id="@parent.Id"> @parent.Name</a>
+                    </div>
+                }
             </div>
-            @foreach (var parent in Model.Parents)
-            {
-                <div class="col-md-6">
-                    <a asp-controller="Parents"
-                       asp-action="Details"
-                       asp-route-Id="@parent.Id">@parent.Name class="btn btn-info</a>
-                </div>
-            }
         </div>
     </div>
 </section>
