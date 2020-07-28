@@ -1,0 +1,56 @@
+﻿@using KidsManagement.ViewModels.Parents;
+
+@model ParentsDetailsViewModel
+
+
+
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">@Model.FullName</h1>
+
+        <div class="form-row">
+
+            <div class="col-md-6">
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Gender">Gender</label>
+                    <input type="text" readonly class="form-control" id="Gender" name="Gender" value="@Model.Gender">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.PhoneNumber">PhoneNumber</label>
+                    <input type="text" readonly class="form-control" id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.AlternativePhoneNumber">Alternative PhoneNumber</label>
+                    <input type="text" readonly class="form-control" id="BirthDate" name="BirthDate" value="@Model.AlternativePhoneNumber">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Email">Email</label>
+                    <input type="text" readonly class="form-control" id="Email" name="Email" value="@Model.Email">
+                </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.AlternativeEmail">AlternativeEmail</label>
+                    <input type="text" readonly class="form-control" id="AlternativeEmail" name="AlternativeEmail" value="@Model.AlternativeEmail">
+                </div>
+              
+            </div>
+
+            <div class="col-md-6">
+                <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="@Model.Children"></label>
+                <br />
+                @foreach (var student in Model.Children)
+                {
+                    <div class="form-group row-md-6">
+                        <a asp-controller="Children"
+                           asp-action="Details"
+                           asp-route-Id="@student.Id"> @student.Name</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

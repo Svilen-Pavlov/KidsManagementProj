@@ -11,7 +11,7 @@ namespace KidsManagement.Services.Students
     {
         Task<int> CreateStudent(CreateStudentInputModel model);
 
-        Task<bool> StudentExists(int studentId);
+        Task<bool> Exists(int studentId);
 
         Task AssignStudentToGroup(int studentId, int groupId);
 

@@ -17,12 +17,11 @@ namespace KidsManagement.ViewModels.Parents
 
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
-        public string MiddleName { get; set; }
-
-        [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string LastName { get; set; }
 
+
+        [Required]
+        public Gender Gender { get; set; }
 
         [Required]
         public string PhoneNumber { get; set; }
@@ -36,8 +35,6 @@ namespace KidsManagement.ViewModels.Parents
         public string AlternativeEmail { get; set; }
 
 
-        [Required]
-        public Gender Gender { get; set; }
 
         [Required]
         public IFormFile ProfileImage { get; set; }

@@ -20,7 +20,7 @@ namespace KidsManagement.Data.Models
         public DateTime Date { get; set; }
 
         [Required]
-        public int AdminId { get; set; }
+        public int  AdminId { get; set; } 
         public virtual Admin Admin { get; set; }
         
         [Required]

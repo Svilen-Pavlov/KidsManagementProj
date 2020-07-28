@@ -14,6 +14,8 @@
     <Compile Remove="Migrations\20200711111241_mandatoryMaxStudentsinGroups.Designer.cs" />
     <Compile Remove="Migrations\20200711111551_fixMaxStudents.cs" />
     <Compile Remove="Migrations\20200711111551_fixMaxStudents.Designer.cs" />
+    <Compile Remove="Migrations\20200728110418_noteAdminIdChangedToString.cs" />
+    <Compile Remove="Migrations\20200728110418_noteAdminIdChangedToString.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

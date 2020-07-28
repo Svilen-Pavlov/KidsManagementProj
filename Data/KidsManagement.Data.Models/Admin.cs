@@ -10,6 +10,7 @@ namespace KidsManagement.Data.Models
     {
         public Admin()
         {
+            //this.Id = Guid.NewGuid().ToString();
             this.AdminNotes = new HashSet<Note>();
         }
         [Key]

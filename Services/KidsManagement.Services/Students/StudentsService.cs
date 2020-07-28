@@ -43,7 +43,7 @@ namespace KidsManagement.Services.Students
                 BirthDate = model.BirthDate,
                 Grade = model.Grade,
                 Status = model.Status,
-                //Parents= parentsForStudent.Select(p => new StudentParent { Parent = p }).ToArray(),
+                ProfilePicURI=picURI
             };
 
             await this.db.Students.AddAsync(student);
@@ -60,7 +60,7 @@ namespace KidsManagement.Services.Students
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<bool> StudentExists(int StudentId) // with or w/o deleted?
+        public async Task<bool> Exists(int StudentId) // with or w/o deleted?
         {
             return await this.db.Students.AnyAsync(x => x.Id == StudentId);
         }
@@ -106,7 +106,7 @@ namespace KidsManagement.Services.Students
                    FulLName = student.FullName,
                    Gender = student.Gender,
                    Age = student.Age,
-                   GroupName = student.Group == null ? "Not in a group yet" : student.Group.Name,
+                   GroupName = student.Group == null ? InfoStrings.StudentNotInAGroupYet : student.Group.Name,
                })
                .ToArray()
                .OrderBy(x => x.FulLName)

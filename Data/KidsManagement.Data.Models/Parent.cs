@@ -45,7 +45,8 @@ namespace KidsManagement.Data.Models
 
         [EmailAddress]
         public string AlternativeEmail { get; set; }
-                               
+
+        public string ProfilePicURI { get; set; }
 
         //many to many
         public virtual ICollection<Note> AdminNotes { get; set; }

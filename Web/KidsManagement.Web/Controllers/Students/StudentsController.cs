@@ -52,12 +52,7 @@ namespace KidsManagement.Web.Controllers.Students
             return await Task.Run(()=>this.View("EditParents", outputModel));
         }
 
-        //public async Task<IActionResult> EditStudentParents(EditParentsInputModel model)
-        //{
-        //    var outputModel = new EditParentsInputModel() { StudentId = model.StudentId, Parents = model.Parents };
-
-        //    return await Task.Run(() => View(outputModel));
-        //}
+        
 
         [HttpPost]
         public async Task<IActionResult> EditStudentParents(EditParentsInputModel model)
@@ -71,22 +66,18 @@ namespace KidsManagement.Web.Controllers.Students
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = model.StudentId }));
         }
-
-
-
-
-
-
+                              
         public async Task<IActionResult> Details(int studentId)
         {
-            if (await this.studentsService.StudentExists(studentId) == false)
+            if (await this.studentsService.Exists(studentId) == false)
             {
                 this.Redirect("/");
             }
 
-            var studentModel = await this.studentsService.FindById(studentId);
-            return this.View(studentModel);
+            var model = await this.studentsService.FindById(studentId);
+            return this.View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file, int studentId)
         {
