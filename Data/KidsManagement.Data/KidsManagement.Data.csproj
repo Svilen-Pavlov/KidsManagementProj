@@ -16,6 +16,18 @@
     <Compile Remove="Migrations\20200711111551_fixMaxStudents.Designer.cs" />
     <Compile Remove="Migrations\20200728110418_noteAdminIdChangedToString.cs" />
     <Compile Remove="Migrations\20200728110418_noteAdminIdChangedToString.Designer.cs" />
+    <Compile Remove="Migrations\20200728110526_noteAdminIdChangedToString.cs" />
+    <Compile Remove="Migrations\20200728110526_noteAdminIdChangedToString.Designer.cs" />
+    <Compile Remove="Migrations\20200729105428_AdminUserRoleTry1.cs" />
+    <Compile Remove="Migrations\20200729105428_AdminUserRoleTry1.Designer.cs" />
+    <Compile Remove="Migrations\20200729112006_AdminKeyString.cs" />
+    <Compile Remove="Migrations\20200729112006_AdminKeyString.Designer.cs" />
+    <Compile Remove="Migrations\20200729113242_AdminKeyString2.cs" />
+    <Compile Remove="Migrations\20200729113242_AdminKeyString2.Designer.cs" />
+    <Compile Remove="Migrations\20200730120319_test.cs" />
+    <Compile Remove="Migrations\20200730120319_test.Designer.cs" />
+    <Compile Remove="Migrations\20200730120844_test.cs" />
+    <Compile Remove="Migrations\20200730120844_test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

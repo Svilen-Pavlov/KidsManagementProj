@@ -52,8 +52,8 @@ namespace KidsManagement.Web.Controllers.Parents
                 return this.Redirect("/"); //invalid student create ERROR
             }
 
-            var adminId = this.User.FindFirstValue(ClaimTypes.NameIdentifier); // from https://stackoverflow.com/questions/30701006/how-to-get-the-current-logged-in-user-id-in-asp-net-core
-            var parentId = await this.parentsService.CreateParent(model,adminId);
+            var userAdminId = this.User.FindFirstValue(ClaimTypes.NameIdentifier); // from https://stackoverflow.com/questions/30701006/how-to-get-the-current-logged-in-user-id-in-asp-net-core
+            var parentId = await this.parentsService.CreateParent(model, userAdminId);
             this.TempData["studentId"] = parentId;
             var parents = this.parentsService.GetAllForSelection(parentId).ToList();
             var outputModel = new EditParentsInputModel() {/* StudentId = studentId,*/ Parents = parents };

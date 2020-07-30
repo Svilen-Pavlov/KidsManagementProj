@@ -10,19 +10,20 @@ namespace KidsManagement.Data.Models
     {
         public Admin()
         {
-            //this.Id = Guid.NewGuid().ToString();
             this.AdminNotes = new HashSet<Note>();
         }
+
+
         [Key]
         public int Id { get; set; }
 
         [Required]
-        [MinLength(Const.humanNameMinLen),MaxLength(Const.humanNameMaxLen)]
+        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string FirstName { get; set; }
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string LastName { get; set; }
-        
+
         [Required]
         public Gender Gender { get; set; }
 
@@ -37,6 +38,11 @@ namespace KidsManagement.Data.Models
         public string ProfilePicURI { get; set; }
 
         public virtual ICollection<Note> AdminNotes { get; set; }
+
+
+        public virtual string ApplicationUserId { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
+
 
     }
 }

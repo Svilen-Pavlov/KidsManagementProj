@@ -14,6 +14,9 @@ namespace KidsManagement.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
 
+
+        public virtual Admin Admin { get; set; }
+
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }

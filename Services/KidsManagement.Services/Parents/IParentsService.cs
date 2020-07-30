@@ -12,6 +12,6 @@ namespace KidsManagement.Services.Parents
 
         Task<bool> Exists(int parentId);
 
-        Task<int> CreateParent(CreateParentInputModel model, string adminId);
+        Task<int> CreateParent(CreateParentInputModel model, string userAdminId);
     }
 }

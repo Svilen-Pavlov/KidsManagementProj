@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KidsManagement.Data.Migrations
 {
     [DbContext(typeof(KidsManagementDbContext))]
-    [Migration("20200728110526_noteAdminIdChangedToString")]
-    partial class noteAdminIdChangedToString
+    [Migration("20200730121038_AdminApplUserOneToOne")]
+    partial class AdminApplUserOneToOne
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,12 @@ namespace KidsManagement.Data.Migrations
 
             modelBuilder.Entity("KidsManagement.Data.Models.Admin", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("DismissalDate")
@@ -52,6 +57,10 @@ namespace KidsManagement.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
                     b.ToTable("Admins");
                 });
@@ -284,9 +293,8 @@ namespace KidsManagement.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AdminId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("AdminId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -608,6 +616,14 @@ namespace KidsManagement.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("KidsManagement.Data.Models.Admin", b =>
+                {
+                    b.HasOne("KidsManagement.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithOne("Admin")
+                        .HasForeignKey("KidsManagement.Data.Models.Admin", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("KidsManagement.Data.Models.Comment", b =>

@@ -28,13 +28,12 @@ namespace KidsManagement.Services.Parents
             return await this.db.Parents.AnyAsync(x => x.Id == parentId);
         }
 
-        public async Task<int> CreateParent(CreateParentInputModel model, string adminId)
+        public async Task<int> CreateParent(CreateParentInputModel model, string userAdminId)
         {
             var pic = model.ProfileImage;
             var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
-            //var age = DateTime.Today.Year - model.BirthDate.Year;
-            //if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
-            
+
+            var adminId = db.Admins.FirstOrDefault(a => a.ApplicationUserId == userAdminId).Id;
 
             var parent = new Parent
             {
@@ -50,7 +49,7 @@ namespace KidsManagement.Services.Parents
             };
             var initialNote = new Note()
             {
-                AdminId = int.Parse(adminId), //change to string
+                AdminId = adminId, 
                 Content = model.InitialAdminNote,
                 Date = DateTime.Now,
             };
