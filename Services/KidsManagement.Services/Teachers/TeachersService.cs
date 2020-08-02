@@ -29,6 +29,7 @@ namespace KidsManagement.Services.Teachers
             this.userManager = userManager;
         }
 
+       
         public async Task<int> CreateTeacher(CreateTeacherInputModel model) //idk if this populates teacherlevels correctly
         {
             var pic = model.ProfileImage;
@@ -85,7 +86,9 @@ namespace KidsManagement.Services.Teachers
 
         public TeacherDetailsViewModel FindById(int teacherId)
         {
-            var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == teacherId);
+            var teacher = this.db.Teachers
+                .Include(t=>t.ApplicationUser)
+                .FirstOrDefault(x => x.Id == teacherId);
             var levelsIds = this.db.LevelTeachers.Where(x => x.TeacherId == teacherId).Select(x => x.LevelId).ToArray();
             var levels = this.db.Levels.Where(x => levelsIds.Contains(x.Id));
             var groups = this.db.Groups.Where(g => g.TeacherId == teacher.Id).Select(g => new GroupSelectionViewModel
@@ -94,9 +97,9 @@ namespace KidsManagement.Services.Teachers
                 Name = g.Name,
             }).ToList();
 
-            //addign user info for admin?
 
             string dissmissalDate = teacher.DismissalDate == null ? InfoStrings.GeneralNotSpecified : teacher.DismissalDate.Value.ToString(Const.dateOnlyFormat);
+            string phoneNumber = teacher.ApplicationUser.PhoneNumber == null ? InfoStrings.GeneralNotSpecified : teacher.ApplicationUser.PhoneNumber;
 
             var model = new TeacherDetailsViewModel
             {
@@ -109,7 +112,10 @@ namespace KidsManagement.Services.Teachers
                 DismissalDate = dissmissalDate,
                 QualifiedLevels = levels,
                 ProfilePicURI = teacher.ProfilePicURI,
-                Groups = groups
+                Groups = groups,
+                Username=teacher.ApplicationUser.UserName,
+                Email = teacher.ApplicationUser.Email,
+                PhoneNumber= phoneNumber
             };
 
             return model;
@@ -135,7 +141,7 @@ namespace KidsManagement.Services.Teachers
             return model;
         }
 
-        public IEnumerable<TeacherSelectionViewModel> GetAllDropDown()
+        public IEnumerable<TeacherSelectionViewModel> GetAllForSelection()
         {
             var list = this.db.Teachers.Select(x =>
                 new TeacherSelectionViewModel
@@ -152,6 +158,20 @@ namespace KidsManagement.Services.Teachers
             return await this.db.Teachers.AnyAsync(x => x.Id == teacherId);
         }
 
-       
+        public async Task<int> AddGroups(AddGroupsToTeacherViewModel model)
+        {
+            var teacher = this.db.Teachers.FirstOrDefaultAsync(x => x.Id == model.TeacherId).Result;
+
+            var groupsIds = model.Groups.Where(x => x.Selected).Select(x => x.Id).ToArray();
+            var groupsForTeacher = this.db.Groups.Where(x => groupsIds.Contains(x.Id)).ToArray();
+
+            foreach (var group in groupsForTeacher)
+            {
+                teacher.Groups.Add(group);
+            }
+
+            return await this.db.SaveChangesAsync();
+        }
+
     }
 }

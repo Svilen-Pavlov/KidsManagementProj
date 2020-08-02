@@ -1,4 +1,5 @@
-﻿using KidsManagement.ViewModels.Teachers;
+﻿using KidsManagement.ViewModels.Groups;
+using KidsManagement.ViewModels.Teachers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,8 +17,10 @@ namespace KidsManagement.Services.Teachers
 
         AllTeachersListViewModel GetAll();
 
-        IEnumerable<TeacherSelectionViewModel> GetAllDropDown();
+        IEnumerable<TeacherSelectionViewModel> GetAllForSelection();
 
         Task<bool> UserExists(string username);
+
+        Task<int> AddGroups(AddGroupsToTeacherViewModel model);
     }
 }

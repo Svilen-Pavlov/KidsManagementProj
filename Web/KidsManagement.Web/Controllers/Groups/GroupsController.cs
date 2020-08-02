@@ -36,7 +36,7 @@ namespace KidsManagement.Web.Controllers.Groups
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            var teachersList = this.teachersService.GetAllDropDown();
+            var teachersList = this.teachersService.GetAllForSelection();
             var levelsList = this.levelsService.GetAllForSelection();
             var model = new CreateGroupInputModel()
             {
@@ -50,7 +50,7 @@ namespace KidsManagement.Web.Controllers.Groups
         [HttpPost]
         public async Task<IActionResult> Create(CreateGroupInputModel model)
         {
-            if (this.ModelState.IsValid==false)
+            if (this.ModelState.IsValid == false)
             {
                 return this.Redirect("/"); //todo error page
             }

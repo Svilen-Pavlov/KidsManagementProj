@@ -15,7 +15,9 @@
                 <div class="form-row">
 
                     <div class="col-md-6">
-                        <label class="table-info">Bussiness Info</label>
+                        <div class="container-fluid text-center">
+                            <label class="table-info">Bussiness Info</label>
+                        </div>
                         <hr />
                         <div class="form-group row-md-6">
                             <label asp-for="FirstName"></label>
@@ -42,42 +44,41 @@
                             <label asp-for="DismissalDate"></label>
                             <input asp-for="DismissalDate" type="date" class="form-control" value="DateTime.Today" />
                         </div>
-
-
-
                     </div>
 
-
-                    <div class="col-md-6">
-                        <label class="table-warning">Account Info </label>
-                        <hr />
-
-                        <div class="form-group row-md-6">
-                            <label asp-for="Username"></label>
-                            <input asp-for="Username" type="text" class="form-control" placeholder="Account Username.." />
-                        </div>
-                        <div class="form-group row-md-6">
-                            <label asp-for="Email"></label>
-                            <input asp-for="Email" type="email" class="form-control" placeholder="Account Email.." />
-                        </div>
-                        <div class="form-group row-md-6">
-                            <label asp-for="Password"></label>
-                            <input asp-for="Password" type="password" class="form-control" placeholder="Password..." />
-                        </div>
-                        <div class="form-group row-md-6">
-                            <label asp-for="ConfirmPassword"></label>
-                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password..." />
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="ProfileImage" class="control-label"></label>
-                            <div class="custom-file">
-                                <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
-                                <label class="custom-file-label" for="customFile">Choose file</label>
+                    <div class="container-fluid">
+                        <div class="col-md-6">
+                            <div class="container-fluid text-center">
+                                <label class="table-warning">Account Info </label>
                             </div>
-                            @*<span asp-validation-for="ProfileImage" class="text-danger"></span>* apply this@
-                                @*this indian guy carried me https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/*@
-                        </div>
+                            <hr />
 
+                            <div class="form-group row-md-6">
+                                <label asp-for="Username"></label>
+                                <input asp-for="Username" type="text" class="form-control" placeholder="Account Username.." />
+                            </div>
+                            <div class="form-group row-md-6">
+                                <label asp-for="Email"></label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="Account Email.." />
+                            </div>
+                            <div class="form-group row-md-6">
+                                <label asp-for="Password"></label>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="Password..." />
+                            </div>
+                            <div class="form-group row-md-6">
+                                <label asp-for="ConfirmPassword"></label>
+                                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password..." />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ProfileImage" class="control-label"></label>
+                                <div class="custom-file">
+                                    <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                                @*<span asp-validation-for="ProfileImage" class="text-danger"></span>* apply this@
+                                    @*this indian guy carried me https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/*@
+                            </div>
+                        </div>
                     </div>
                 </div>
 

@@ -66,7 +66,7 @@ namespace KidsManagement.Data.Models
         public virtual ICollection<Comment> TeacherComments { get; set; }
 
 
-              public override string ToString()
+        public override string ToString()
         {
             return this.FullName;
         }

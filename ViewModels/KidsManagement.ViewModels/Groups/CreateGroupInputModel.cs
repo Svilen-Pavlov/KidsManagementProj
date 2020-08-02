@@ -16,7 +16,7 @@ namespace KidsManagement.ViewModels.Groups
         [MaxLength(Const.entityNameMaxLen)]
         public string Name { get; set; }
 
-        [Range(Const.entityMinCount, Const.entityMaxCount)]
+        //[Range(Const.entityMinCount, Const.entityMaxCount)]
 
         [Required]
         public AgeGroup AgeGroup { get; set; } //AgeGroup enum
@@ -39,11 +39,10 @@ namespace KidsManagement.ViewModels.Groups
         public TimeSpan EndTime { get; set; } //TimeSpan
 
         [Display(Name="Teacher")]
-        [Required]
         public int TeacherId { get; set; }
 
-        [Display(Name = "Level")]
         [Required]
+        [Display(Name = "Level")]
         public int LevelId { get; set; }
    
         public IEnumerable<TeacherSelectionViewModel> Teachers { get; set; }

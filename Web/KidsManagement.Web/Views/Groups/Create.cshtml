@@ -17,11 +17,15 @@
                 <div class="form-group col-md-6">
                     <label asp-for="AgeGroup"></label>
                     <select asp-for="AgeGroup" asp-items="Html.GetEnumSelectList<AgeGroup>()" class="form-control"></select>
+                    
+                   
                     @*<span asp-validation-for="CurrentLessonNumber" class="text-danger"></span>* libman jquery validation scripts v _Layour da aktiviram https://youtu.be/kQt1Iaab-kU?t=4070@*@
                 </div>
                 <div class="form-group col-md-6">
                     <label asp-for="TeacherId"></label>
-                    <select asp-for="TeacherId" asp-items="Model.Teachers.Select(x => new SelectListItem (x.Name, x.Id.ToString())).OrderBy(x=>x.Text).ToArray()" class="form-control"></select>
+                    <select asp-for="TeacherId" asp-items="Model.Teachers.Select(x => new SelectListItem (x.Name, x.Id.ToString())).OrderBy(x=>x.Text).ToArray()" class="form-control">
+                        <option value="0" selected>Create without assigning a Teacher</option>
+                    </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label asp-for="LevelId"></label>
@@ -41,11 +45,11 @@
                     @*<span asp-validation-for="CurrentLessonNumber" class="text-danger"></span>* libman jquery validation scripts v _Layour da aktiviram https://youtu.be/kQt1Iaab-kU?t=4070@*@
                 </div>
                 <div class="form-group col-md-6">
-                    <label asp-for="StartDate"></label>
-                    <input asp-for="EndTime" type="time" class="form-control" />
+                    <label asp-for="StartTime"></label>
+                    <input asp-for="StartTime" type="time" class="form-control" />
                 </div>
                 <div class="form-group col-md-6">
-                    <label asp-for="StartDate"></label>
+                    <label asp-for="EndTime"></label>
                     <input asp-for="EndTime" type="time" class="form-control" />
                 </div>
                 <hr />

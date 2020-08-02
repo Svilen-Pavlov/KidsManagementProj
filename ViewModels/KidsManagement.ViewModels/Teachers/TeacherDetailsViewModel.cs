@@ -23,8 +23,12 @@ namespace KidsManagement.ViewModels.Teachers
 
         public List<GroupSelectionViewModel> Groups { get; set; }
 
-
         public string FullName => string.Format("{0} {1}", FirstName,  LastName);
+
+        //user properties
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
 
     }
 }

@@ -1,0 +1,27 @@
+﻿@using KidsManagement.ViewModels.Groups;
+
+@model AddGroupsToTeacherViewModel;
+@{
+    ViewData["Title"] = "Details";
+}
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Select Groups</h1>
+        <div style="padding: 5%;">
+
+            <form enctype="multipart/form-data" method="post" asp-action="AddGroups">
+                @for (var i = 0; i < Model.Groups.Count(); i++)
+                {
+                    <div class="custom-control custom-checkbox">
+                        <input type="hidden" asp-for="@Model.Groups[i].Id" />
+                        <input asp-for="Groups[i].Selected" />
+                        @Model.Groups[i].Name
+                    </div>
+                }
+
+                <input type="submit" class="form-control button btn-info col-md-6" value="Confirm" />
+            </form>
+        </div>
+    </div>
+</section>

@@ -31,13 +31,13 @@ namespace KidsManagement.Data.Models
         public DateTime? DismissalDate { get; set; }
         public string ProfilePicURI { get; set; }
 
-
+        //[Required] this will break old teachers
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-        public virtual IEnumerable<Group> Groups { get; set; }
-        public virtual IEnumerable<Comment> StudentComments { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
+        public virtual ICollection<Comment> StudentComments { get; set; }
         //many to many
-        public virtual IEnumerable<LevelTeacher> QualifiedLevels { get; set; }
+        public virtual ICollection<LevelTeacher> QualifiedLevels { get; set; }
 
         //public IEnumerable<DayOfWeek> WorkDays { get; set; }
         //[Required]

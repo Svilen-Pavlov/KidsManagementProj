@@ -28,6 +28,8 @@
     <Compile Remove="Migrations\20200730120319_test.Designer.cs" />
     <Compile Remove="Migrations\20200730120844_test.cs" />
     <Compile Remove="Migrations\20200730120844_test.Designer.cs" />
+    <Compile Remove="Migrations\20200802113045_removeNullableFromNonRequiredProperties.cs" />
+    <Compile Remove="Migrations\20200802113045_removeNullableFromNonRequiredProperties.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

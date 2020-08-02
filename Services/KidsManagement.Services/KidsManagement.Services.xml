@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>KidsManagement.Services</name>
+    </assembly>
+    <members>
+        <member name="M:KidsManagement.Services.Groups.GroupsService.GetAllForSelection(System.Int32)">
+            <summary>
+            Gets all groups that are assigned to a specific teacher by teacherId
+            </summary>
+        </member>
+        <member name="M:KidsManagement.Services.Groups.GroupsService.GetAllForSelection(System.Boolean)">
+            <summary>
+            Gets all groups including those with an already assigned teacher(true) or only thse without one (false)
+            </summary>
+        </member>
+    </members>
+</doc>

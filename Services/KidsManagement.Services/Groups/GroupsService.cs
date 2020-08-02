@@ -24,24 +24,29 @@ namespace KidsManagement.Services.Groups
         }
 
 
-        public async Task<int> CreateGroup(CreateGroupInputModel input)
+        public async Task<int> CreateGroup(CreateGroupInputModel model)
         {
+            //a new non teacher group
+
             var group = new Group
             {
-                TeacherId = input.TeacherId,
-                StartTime = input.StartTime,
-                Name = input.Name,
-                AgeGroup = input.AgeGroup,
+                StartTime = model.StartTime,
+                Name = model.Name,
+                AgeGroup = model.AgeGroup,
                 CurrentLessonNumber = 1,
-                DayOfWeek = input.DayOfWeek,
-                Duration = input.EndTime.Subtract(input.StartTime),
-                StartDate = input.StartDate,
-                EndDate = input.EndDate,
-                EndTime = input.EndTime,
-                LevelId = input.LevelId,
+                DayOfWeek = model.DayOfWeek,
+                Duration = model.EndTime.Subtract(model.StartTime),
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                EndTime = model.EndTime,
+                LevelId = model.LevelId,
                 Status = GroupStatus.Empty,
-                MaxStudents = (int)input.AgeGroup
+                MaxStudents = (int)model.AgeGroup
             };
+
+            if(model.TeacherId!=0)
+                group.TeacherId = model.TeacherId;
+            
 
             await this.db.Groups.AddAsync(group);
             await this.db.SaveChangesAsync();
@@ -53,7 +58,6 @@ namespace KidsManagement.Services.Groups
         {
             var group = this.db.Groups.FirstOrDefault(x => x.Id == groupId);
             var level = this.db.Levels.FirstOrDefault(x => x.Id == group.LevelId); //dali 6e go nameri
-            var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == group.TeacherId); //dali 6e go nameri
             var students = this.db.Students.Where(x => x.GroupId == group.Id).ToArray();
             var model = new GroupDetailsViewModel
             {
@@ -69,8 +73,6 @@ namespace KidsManagement.Services.Groups
                 EndTime = group.EndTime.ToString(Const.hourMinutesFormat),
                 LevelId = (int)group.LevelId,
                 LevelName = level.Name,
-                TeacherId = (int)group.TeacherId,
-                TeacherName = teacher.FullName,
                 MaxStudents = (int)group.MaxStudents,
                 Students = students.Select(s => new AllSingleStudentsViewModel()
                 {
@@ -82,6 +84,15 @@ namespace KidsManagement.Services.Groups
                 }
                 ).ToArray()
             };
+
+            var teacher = this.db.Teachers.FirstOrDefault(x => x.Id == group.TeacherId); //dali 6e go nameri
+            if ((teacher==null)==false)
+            {
+                model.TeacherId = teacher.Id;
+                model.TeacherName = teacher.FullName;
+            }
+
+
 
             return model;
         }
@@ -123,7 +134,7 @@ namespace KidsManagement.Services.Groups
                     DayOfWeek = x.DayOfWeek,
                     StartTime = x.StartTime.ToString(Const.hourMinutesFormat),
                     LevelName = x.Level.Name,
-                    TeacherName = x.Teacher.FullName
+                    TeacherName = x.Teacher==null? InfoStrings.GeneralNotSpecified : x.Teacher.FullName
                 })
                 .ToArray()
                 .OrderBy(x => x.Name);
@@ -149,7 +160,7 @@ namespace KidsManagement.Services.Groups
 
             var groups = this.db.Groups
                 .Where(g => g.TeacherId == teacherId)
-                //.Include(x=>x)
+                .Include(g=>g.Students)
                 .Select(g => new SingleGroupOfTeacherDetailsViewModel
                 {
                     Id = g.Id,
@@ -184,14 +195,48 @@ namespace KidsManagement.Services.Groups
             return model;
         }
 
-        public IEnumerable<GroupSelectionViewModel> GetAllForSelection(int? teacherId)
+        /// <summary>
+        /// Gets all groups that are assigned to a specific teacher by teacherId
+        /// </summary>
+        public IEnumerable<GroupSelectionViewModel> GetAllForSelection(int teacherId) 
         {
-            var groups = this.db.Groups.Where(g => g.TeacherId == teacherId).Select(g => new GroupSelectionViewModel
-            {
-                Id = g.Id,
-                Name = g.Name
-            }).ToList();
+                var groups = this.db.Groups.Where(g => g.TeacherId == teacherId).Select(g => new GroupSelectionViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                }).ToList();
+
             return groups;
         }
+
+        /// <summary>
+        /// Gets all groups including those with an already assigned teacher (true) or only those without one (false)
+        /// </summary>
+        public IEnumerable<GroupSelectionViewModel> GetAllForSelection(bool includingGroupsWithAssignedTeacher)
+        {
+
+            List<GroupSelectionViewModel> groups = new List<GroupSelectionViewModel>();
+            if (includingGroupsWithAssignedTeacher)
+            {
+                groups = this.db.Groups.Select(g => new GroupSelectionViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                }).ToList();
+            }
+            else
+            {
+                groups = this.db.Groups.Where(g => g.TeacherId == null)
+                    .Select(g => new GroupSelectionViewModel
+                    {
+                        Id = g.Id,
+                        Name = g.Name
+                    })
+                    .ToList();
+            }
+
+            return groups;
+        }
+
     }
 }

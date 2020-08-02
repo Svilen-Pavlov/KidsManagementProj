@@ -2,6 +2,7 @@
 using KidsManagement.Services.Groups;
 using KidsManagement.Services.Levels;
 using KidsManagement.Services.Teachers;
+using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         public IActionResult Create()
         {
             var levelsList = this.levelsService.GetAllForSelection();
-            var groupsList = this.groupsService.GetAllForSelection(null); //the int? argument is when wanting to add only empty groups to the teacher or other teacher's groups
+            var groupsList = this.groupsService.GetAllForSelection(false); //the int? argument is when wanting to add only empty groups to the teacher or other teacher's groups
             var model = new CreateTeacherInputModel()
             {
                 Levels = levelsList.ToList(),
@@ -60,14 +61,46 @@ namespace KidsManagement.Web.Controllers.Teachers
 
         public async Task<IActionResult> Details(int teacherId)
         {
-            //todo: correct redirect
+            
             if (await this.teachersService.TeacherExists(teacherId) == false)
             {
-                return this.Redirect("/");
+                return this.Redirect("/"); //todo: error page
             }
             var model = this.teachersService.FindById(teacherId); //todo ASYNC
 
             return await Task.Run(() => View(model));
+        }
+
+        public async Task<IActionResult> AddGroups(int teacherId)
+        {
+            if (await this.teachersService.TeacherExists(teacherId)==false)
+            {
+                return this.Redirect("/"); //invalid teacher ERROR
+            }
+            this.TempData["teacherId"] = teacherId;
+            var groupsList = this.groupsService.GetAllForSelection(false).ToList();
+
+            var outputModel = new AddGroupsToTeacherViewModel() { Groups = groupsList};
+            return await Task.Run(() => this.View("AddGroups", outputModel));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddGroups(AddGroupsToTeacherViewModel model)
+        {
+            var teacherId = this.TempData["teacherId"];
+            if (teacherId == null || (teacherId is int) == false)
+                return this.Redirect("/"); //invalid teacher ERROR
+            
+            model.TeacherId = (int)teacherId;
+
+            if (await this.teachersService.TeacherExists(model.TeacherId) == false)
+            {
+                return this.Redirect("/"); //invalid teacher ERROR
+            }
+
+            await this.teachersService.AddGroups(model);
+
+            return await Task.Run(()=>RedirectToAction("Details", new { teacherId = model.TeacherId }));
         }
     }
 }
