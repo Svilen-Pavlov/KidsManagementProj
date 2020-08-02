@@ -11,64 +11,102 @@
         <div style="padding: 5%;">
 
             <form enctype="multipart/form-data" method="post" asp-action="Create">
-                <div class="form-group col-md-6">
-                    <label asp-for="FirstName"></label>
-                    <input asp-for="FirstName" class="form-control" placeholder="FirstName..." />
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="LastName"></label>
-                    <input asp-for="LastName" class="form-control" placeholder="LastName..." />
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="Gender"></label>
-                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control"></select>
-                    @*<span asp-validation-for="CurrentLessonNumber" class="text-danger"></span>* libman jquery validation scripts v _Layour da aktiviram https://youtu.be/kQt1Iaab-kU?t=4070@*@
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="Salary"></label>
-                    <input asp-for="Salary" type="number" class="form-control" />
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="HiringDate"></label>
-                    <input asp-for="HiringDate" type="date" class="form-control" value="DateTime.Today" />
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="DismissalDate"></label>
-                    <input asp-for="DismissalDate" type="date" class="form-control" value="DateTime.Today" />
-                </div>
 
-                @for (var i = 0; i < Model.Levels.Count(); i++)
-                {
+                <div class="form-row">
 
-                    <div class="custom-control custom-checkbox">
-                        <input type="hidden" asp-for="Levels[i].Id" />
-                        @Model.Levels[i].Id
-                        @Model.Levels[i].Name
-                        <input asp-for="Levels[i].Selected" />
-                    </div>
-                }
-
-                @for (var i = 0; i < Model.Groups.Count(); i++)
-                {
-
-                    <div class="custom-control custom-checkbox">
-                        <input type="hidden" asp-for="Groups[i].Id" />
-                        @Model.Groups[i].Id
-                        @Model.Groups[i].Name
-                        <input asp-for="Groups[i].Selected" />
-                    </div>
-                }
-
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="ProfileImage" class="control-label"></label>
-                        <div class="custom-file">
-                            <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
+                    <div class="col-md-6">
+                        <label class="table-info">Bussiness Info</label>
+                        <hr />
+                        <div class="form-group row-md-6">
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" class="form-control" placeholder="First Name..." />
                         </div>
-                        @*<span asp-validation-for="ProfileImage" class="text-danger"></span>* apply this@
-                @*this indian guy carried me https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/*@
+                        <div class="form-group row-md-6">
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" class="form-control" placeholder="Last Name..." />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="Gender"></label>
+                            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control"></select>
+                            @*<span asp-validation-for="CurrentLessonNumber" class="text-danger"></span>* libman jquery validation scripts v _Layour da aktiviram https://youtu.be/kQt1Iaab-kU?t=4070@*@
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="Salary"></label>
+                            <input asp-for="Salary" type="number" class="form-control" />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="HiringDate"></label>
+                            <input asp-for="HiringDate" type="date" class="form-control" value="DateTime.Today" />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="DismissalDate"></label>
+                            <input asp-for="DismissalDate" type="date" class="form-control" value="DateTime.Today" />
+                        </div>
+
+
+
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label class="table-warning">Account Info </label>
+                        <hr />
+
+                        <div class="form-group row-md-6">
+                            <label asp-for="Username"></label>
+                            <input asp-for="Username" type="text" class="form-control" placeholder="Account Username.." />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="Account Email.." />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password..." />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="ConfirmPassword"></label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password..." />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProfileImage" class="control-label"></label>
+                            <div class="custom-file">
+                                <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                            @*<span asp-validation-for="ProfileImage" class="text-danger"></span>* apply this@
+                                @*this indian guy carried me https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/*@
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label> Choose levels: </label>
+                        <hr />
+                        @for (var i = 0; i < Model.Levels.Count(); i++)
+                        {
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="hidden" asp-for="Levels[i].Id" />
+                                <input asp-for="Levels[i].Selected" />
+                                @Model.Levels[i].Name
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <label> Choose groups: </label>
+                        <hr />
+                        @for (var i = 0; i < Model.Groups.Count(); i++)
+                        {
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="hidden" asp-for="Groups[i].Id" />
+                                <input asp-for="Groups[i].Selected" />
+                                @Model.Groups[i].Name
+                            </div>
+                        }
                     </div>
                 </div>
                 <hr />

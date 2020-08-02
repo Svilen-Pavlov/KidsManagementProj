@@ -39,11 +39,9 @@
                             <td>
                                 <a asp-controller="Admin"
                                    asp-action="AllGroupsOfTeacher"
-                                   asp-route-teacherId="@teacher.Id">@teacher.GroupsCount class="btn btn-info</a>
+                                   asp-route-teacherId="@teacher.Id">@teacher.GroupsCount</a>
                             </td>
-                            @*<td class="button-holder">
-                                <a href="/Admin/AllGroupsOfTeacher?teacherId=@teacher.Id" class="btn btn-info">@teacher.GroupsCount</a>
-                            </td>*@
+                            
                         }
                         <td>@teacher.Capacity</td>
                         <td>@teacher.Efficiency</td>

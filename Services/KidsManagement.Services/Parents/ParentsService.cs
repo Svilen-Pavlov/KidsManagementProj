@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
 using KidsManagement.Services.External.CloudinaryService;
+using KidsManagement.ViewModels.Notes;
 using KidsManagement.ViewModels.Parents;
 using KidsManagement.ViewModels.Students;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +70,9 @@ namespace KidsManagement.Services.Parents
                 //.ThenInclude(x=>x.Select(y=>y.Student))
                 .FirstOrDefaultAsync(x => x.Id == parentId);
             var children = this.db.Students.Where(p => p.Parents.Any(sp => sp.ParentId == parent.Id)).ToArray();
+            var notes = this.db.Notes
+                .Include(n=>n.Admin)
+                .Where(n => n.ParentId == parent.Id).ToArray();
 
             var model = new ParentsDetailsViewModel
             {
@@ -82,11 +86,18 @@ namespace KidsManagement.Services.Parents
                 AlternativeEmail=parent.AlternativeEmail,
                 ProfilePicURI = parent.ProfilePicURI,
                 Children = children.Select(p => new StudentSelectionViewModel
-                //Notes!
                 {
                     Id = p.Id,
                     Name = p.FullName
+                }).ToList(),
+                AdminNotes= notes.Select(n=>new NotesSelectionViewModel
+                {
+                    AdminName=n.Admin.FullName,
+                    Content=n.Content,
+                    Date=n.Date,
+                    Id=n.Id
                 }).ToList()
+
             };
 
             return model;

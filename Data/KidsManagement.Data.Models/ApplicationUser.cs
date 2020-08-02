@@ -17,6 +17,8 @@ namespace KidsManagement.Data.Models
 
         public virtual Admin Admin { get; set; }
 
+        public virtual Teacher Teacher { get; set; }
+
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }

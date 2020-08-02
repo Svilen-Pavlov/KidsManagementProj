@@ -12,6 +12,8 @@ namespace KidsManagement.Services.Parents
 
         Task<bool> Exists(int parentId);
 
+        Task<ParentsDetailsViewModel> FindById(int parentId);
+
         Task<int> CreateParent(CreateParentInputModel model, string userAdminId);
     }
 }

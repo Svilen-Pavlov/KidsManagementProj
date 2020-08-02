@@ -28,16 +28,7 @@ namespace KidsManagement.Web.Controllers.Parents
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> Details(int parentId)
-        {
-            if (await this.parentsService.Exists(parentId) == false)
-            {
-                this.Redirect("/");
-            }
-
-            var parent = await this.studentsService.FindById(parentId);
-            return this.View(parent);
-        }
+        
 
         public async Task<IActionResult> Create()
         {
@@ -54,12 +45,32 @@ namespace KidsManagement.Web.Controllers.Parents
 
             var userAdminId = this.User.FindFirstValue(ClaimTypes.NameIdentifier); // from https://stackoverflow.com/questions/30701006/how-to-get-the-current-logged-in-user-id-in-asp-net-core
             var parentId = await this.parentsService.CreateParent(model, userAdminId);
-            this.TempData["studentId"] = parentId;
-            var parents = this.parentsService.GetAllForSelection(parentId).ToList();
-            var outputModel = new EditParentsInputModel() {/* StudentId = studentId,*/ Parents = parents };
 
-            return await Task.Run(() => this.View("EditParents", outputModel));
+
+            return await Task.Run(() => RedirectToAction("Details", new { parentId = parentId }));
         }
+
+        public async Task<IActionResult> Details(int parentId)
+        {
+            if (await this.parentsService.Exists(parentId) == false)
+            {
+                this.Redirect("/");
+            }
+
+            var parent = await this.parentsService.FindById(parentId);
+            return this.View(parent);
+        }
+        public async Task<IActionResult> AddStudents(int parentId)
+        {
+            if (await this.parentsService.Exists(parentId) == false)
+            {
+                this.Redirect("/");
+            }
+            //TODO
+            var parent = await this.parentsService.FindById(parentId);
+            return this.View(parent);
+        }
+        
 
     }
 }

@@ -47,7 +47,7 @@ namespace KidsManagement.Web.Controllers.Students
             var studentId = await this.studentsService.CreateStudent(model);
             this.TempData["studentId"] = studentId;
             var parents = this.parentsService.GetAllForSelection(studentId).ToList();
-            var outputModel = new EditParentsInputModel() {/* StudentId = studentId,*/ Parents=parents };
+            var outputModel = new EditParentsInputModel() {Parents=parents };
 
             return await Task.Run(()=>this.View("EditParents", outputModel));
         }

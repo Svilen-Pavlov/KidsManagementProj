@@ -28,10 +28,11 @@ namespace KidsManagement.Web.Controllers.Teachers
             this.levelsService = levelsService;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             var levelsList = this.levelsService.GetAllForSelection();
-            var groupsList = this.groupsService.GetAllForSelection(null); //this is when wanting to add only empty groups to the teacher
+            var groupsList = this.groupsService.GetAllForSelection(null); //the int? argument is when wanting to add only empty groups to the teacher or other teacher's groups
             var model = new CreateTeacherInputModel()
             {
                 Levels = levelsList.ToList(),
@@ -47,6 +48,12 @@ namespace KidsManagement.Web.Controllers.Teachers
             {
                 return this.Redirect("/"); //todo error page
             }
+
+            if (await this.teachersService.UserExists(model.Username))
+            {
+                return this.Redirect("/"); //todo error page User Exists
+            }
+
             var newTeacherId = await this.teachersService.CreateTeacher(model);  //todo ASYNC
             return RedirectToAction("Details", new { teacherId = newTeacherId });
         }

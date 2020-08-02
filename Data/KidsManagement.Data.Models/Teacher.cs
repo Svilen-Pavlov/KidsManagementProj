@@ -32,6 +32,8 @@ namespace KidsManagement.Data.Models
         public string ProfilePicURI { get; set; }
 
 
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
         public virtual IEnumerable<Group> Groups { get; set; }
         public virtual IEnumerable<Comment> StudentComments { get; set; }
         //many to many

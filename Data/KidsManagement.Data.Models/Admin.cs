@@ -3,6 +3,7 @@ using KidsManagement.Data.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KidsManagement.Data.Models
 {
@@ -23,6 +24,10 @@ namespace KidsManagement.Data.Models
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string LastName { get; set; }
+
+        [NotMapped]
+        public string FullName => string.Format("{0} {1}", FirstName, LastName);
+
 
         [Required]
         public Gender Gender { get; set; }

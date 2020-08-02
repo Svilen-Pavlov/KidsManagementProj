@@ -6,6 +6,7 @@ using AutoMapper;
 using CloudinaryDotNet;
 using KidsManagement.Data;
 using KidsManagement.Data.Models;
+using KidsManagement.Services;
 using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.Services.Groups;
 using KidsManagement.Services.Levels;
@@ -48,6 +49,7 @@ namespace KidsManagement.Web
             services.AddTransient<IPaymentsService, PaymentsService>();
             services.AddTransient<ILevelsService, LevelsService>();
             services.AddTransient<ICloudinaryService, CloudinaryService>();
+            services.AddTransient<IApplicationUserService, ApplicationUserService>();
 
 
             services.AddDbContext<KidsManagementDbContext>(options =>
@@ -66,7 +68,7 @@ namespace KidsManagement.Web
                 })
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<KidsManagementDbContext>()
-                //.AddUserStore<KidsManagementDbContext>()
+                //.AddUserStore<KidsManagementDbContext>() the above statement adds them both i think
                 //.AddRoleStore<KidsManagementDbContext>()
                 .AddDefaultTokenProviders();
 

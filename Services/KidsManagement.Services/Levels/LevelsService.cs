@@ -24,7 +24,7 @@ namespace KidsManagement.Services.Levels
             {
                 Id = l.Id,
                 Name = l.Name,
-            }).OrderBy(x => x.Name)
+            }).OrderBy(x => x.Id)
             .ToArray(); 
 
             var list = new List<LevelSelectionViewModel>(levels);

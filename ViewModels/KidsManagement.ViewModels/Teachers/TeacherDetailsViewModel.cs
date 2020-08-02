@@ -15,8 +15,8 @@ namespace KidsManagement.ViewModels.Teachers
         public string LastName { get; set; }
         public Gender Gender { get; set; }
         public decimal Salary { get; set; }
-        public DateTime HiringDate { get; set; }
-        public DateTime? DismissalDate { get; set; } //da ne pokazva null a smislen string
+        public string HiringDate { get; set; }
+        public string DismissalDate { get; set; } 
 
         public string ProfilePicURI { get; set; }
         public IEnumerable<Level> QualifiedLevels { get; set; }

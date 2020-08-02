@@ -27,7 +27,7 @@ namespace KidsManagementConsole
             //SeedGroups(db);
             //SeedStudents(db);
             // AddStudentsToGroup(db);
-            //SeedRoles(db);
+           //SeedRoles(db);
             //UpdateGroupStatuses(db);
             
         }

@@ -1,4 +1,6 @@
-﻿using KidsManagement.Data.Models.Enums;
+﻿using KidsManagement.Data.Models;
+using KidsManagement.Data.Models.Enums;
+using KidsManagement.ViewModels.Notes;
 using KidsManagement.ViewModels.Students;
 using System;
 using System.Collections.Generic;
@@ -30,7 +32,7 @@ namespace KidsManagement.ViewModels.Parents
 
         public string ProfilePicURI { get; set; }
 
-        //public IEnumerable<Note> AdminNotes { get; set; } TODO
+        public IEnumerable<NotesSelectionViewModel> AdminNotes { get; set; } 
 
         public IEnumerable<StudentSelectionViewModel> Children { get; set; } 
     }
