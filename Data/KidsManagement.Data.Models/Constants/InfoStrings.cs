@@ -8,5 +8,6 @@ namespace KidsManagement.Data.Models.Constants
     {
         public const string StudentNotInAGroupYet = "Not in a group yet";
         public const string GeneralNotSpecified = "Not specified";
+        public const string GroupHasNoTeacherYet = "No teacher selected yet";
     }
 }

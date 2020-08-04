@@ -99,7 +99,17 @@ namespace KidsManagement.Services.Teachers
 
 
             string dissmissalDate = teacher.DismissalDate == null ? InfoStrings.GeneralNotSpecified : teacher.DismissalDate.Value.ToString(Const.dateOnlyFormat);
-            string phoneNumber = teacher.ApplicationUser.PhoneNumber == null ? InfoStrings.GeneralNotSpecified : teacher.ApplicationUser.PhoneNumber;
+            
+            string phoneNumber =InfoStrings.GeneralNotSpecified;
+            string email = InfoStrings.GeneralNotSpecified;
+            string username= InfoStrings.GeneralNotSpecified;
+
+            if (string.IsNullOrEmpty(teacher.ApplicationUserId)==false)
+            {
+                phoneNumber = teacher.ApplicationUser.PhoneNumber;
+                email = teacher.ApplicationUser.Email;
+                username = teacher.ApplicationUser.UserName;
+            }
 
             var model = new TeacherDetailsViewModel
             {
@@ -113,8 +123,8 @@ namespace KidsManagement.Services.Teachers
                 QualifiedLevels = levels,
                 ProfilePicURI = teacher.ProfilePicURI,
                 Groups = groups,
-                Username=teacher.ApplicationUser.UserName,
-                Email = teacher.ApplicationUser.Email,
+                Username= username,
+                Email = email,
                 PhoneNumber= phoneNumber
             };
 
@@ -167,7 +177,7 @@ namespace KidsManagement.Services.Teachers
 
             foreach (var group in groupsForTeacher)
             {
-                teacher.Groups.Add(group);
+                group.TeacherId = teacher.Id;
             }
 
             return await this.db.SaveChangesAsync();

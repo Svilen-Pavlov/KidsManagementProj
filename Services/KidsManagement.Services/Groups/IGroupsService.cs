@@ -23,11 +23,13 @@ namespace KidsManagement.Services.Groups
         AllGroupsDetailsViewModel GetAll();
         AllGroupsOfTeacherViewModel GetAllByTeacher(int teacherId);
 
-        Task<bool> GroupIsFull(int groupId);
+        //Task<bool> GroupIsFull(int groupId);
+
+        Task<IEnumerable<SingleGroupDetailsViewModel>> GetVacantGroupsWithProperAge(int studentId);
 
         IEnumerable<GroupSelectionViewModel> GetAllForSelection(int teacherId);
 
         IEnumerable<GroupSelectionViewModel> GetAllForSelection(bool includingGroupsWithAssignedTeacher);
-        void ChangeTeacher(int newTeacherId, int groupId);  //teacher service or here?
+        void ChangeTeacher(int newTeacherId, int groupId);  
     }
 }

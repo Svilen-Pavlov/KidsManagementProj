@@ -34,23 +34,38 @@
                     <label asp-for="@Model.GroupName">Current Group</label>
                     <input type="text" readonly class="form-control" id="Status" name="Status" value="@Model.GroupName">
                 </div>
-            </div>
-            <div class="col-md-6">
-                <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
-            </div>
+                <hr />
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Parents"></label>
+                    <br />
+                    @if (@Model.Parents.Count() == 0)
+                    {
+                        <input type="text" readonly class="form-control" id="Status" name="Status" value="No parents chosen yet">
+                    }
+                    else
+                    {
 
-            <div class="col-md-6">
-                <label asp-for="@Model.Parents"></label>
-                <br />
-                @foreach (var parent in Model.Parents)
-                {
-                    <div class="form-group row-md-6">
-                        <a asp-controller="Parents"
-                           asp-action="Details"
-                           asp-route-Id="@parent.Id"> @parent.Name</a>
-                    </div>
-                }
+                        @foreach (var parent in Model.Parents)
+                        {
+                            <div class="form-group row-md-6">
+                                <a asp-controller="Parents"
+                                   asp-action="Details"
+                                   asp-route-Id="@parent.Id" class="accordion"> @parent.Name</a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="container-fluid col-md-6">
+                <div class="form-group row-md-6">
+                    <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
+                </div>
+                <div class="form-group row-md-6">
+                    <a asp-action="EditParents" asp-route-studentId="@Model.Id" class="btn btn-info">Add & edit parents</a> @*TODO: fill in entire EdParentsModel somehow*@
+                </div>
+                <div class="form-group row-md-6">
+                    <a asp-action="AddToGroup" asp-route-studentId="@Model.Id" class="btn btn-info">Add to group</a>
+                </div>
             </div>
         </div>
-    </div>
 </section>

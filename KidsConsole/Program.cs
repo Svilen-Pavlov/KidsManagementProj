@@ -9,6 +9,7 @@ using System.Linq;
 using KidsManagement.Services.Groups;
 using KidsManagement.Services.Students;
 using Microsoft.AspNetCore.Identity;
+using System.Globalization;
 
 namespace KidsManagementConsole
 {
@@ -27,15 +28,69 @@ namespace KidsManagementConsole
             //SeedGroups(db);
             //SeedStudents(db);
             // AddStudentsToGroup(db);
-           //SeedRoles(db);
+            //SeedRoles(db);
             //UpdateGroupStatuses(db);
-            
+            //UpdateGroupAgeGroups(db);
+            //UpdateStudentStatuses(db);
+            //UpdateStudentGrades(db);
+
         }
+
+       
+
+        private static void UpdateStudentGrades(KidsManagementDbContext db)
+        {
+            var students = db.Students
+               .ToArray();
+
+            foreach (var student in students)
+            {
+                var age = student.Age;
+                if (age >= 3 && age <= 19) student.Grade = (GradeLevel)(age - 3);
+                else student.Grade = GradeLevel.Other;
+            }
+
+            db.SaveChanges();
+        }
+
+        private static void UpdateStudentStatuses(KidsManagementDbContext db)
+        {
+            var students = db.Students
+               .ToArray();
+
+            foreach (var student in students)
+            {
+                if (student.GroupId == null)
+                {
+                    student.Status = StudentStatus.Waiting;
+                }
+                else
+                {
+                    student.Status = StudentStatus.Active;
+                }
+
+            }
+
+            db.SaveChanges();
+        }
+        private static void UpdateGroupAgeGroups(KidsManagementDbContext db)
+        {
+            var groups = db.Groups
+                            .ToArray();
+
+            foreach (var grp in groups)
+            {
+                grp.AgeGroup = AgeGroup.Preschool;
+            }
+
+            db.SaveChanges();
+        }
+
 
         private static void UpdateGroupStatuses(KidsManagementDbContext db)
         {
             var groups = db.Groups
-                .Include(x=>x.Students)
+                .Include(x => x.Students)
                 .ToArray();
 
             foreach (var grp in groups)
@@ -46,11 +101,11 @@ namespace KidsManagementConsole
                 {
                     grp.Status = GroupStatus.Empty;
                 }
-                else if (count< max)
+                else if (count < max)
                 {
                     grp.Status = GroupStatus.NotFull;
                 }
-                else if(count==max)
+                else if (count == max)
                 {
                     grp.Status = GroupStatus.Full;
                 }
@@ -61,7 +116,7 @@ namespace KidsManagementConsole
             }
 
             db.SaveChanges();
-            
+
         }
 
         private static void SeedRoles(KidsManagementDbContext db)
@@ -87,16 +142,16 @@ namespace KidsManagementConsole
             for (int i = 0; i < 10; i++)
             {
                 var student = students[i];
-                if (i<8)
+                if (i < 8)
                 {
-                    student.GroupId=group1.Id;
+                    student.GroupId = group1.Id;
                 }
                 else
                 {
-                student.GroupId =group2.Id;
+                    student.GroupId = group2.Id;
                 }
             }
-            
+
             db.SaveChanges();
         }
 
@@ -118,12 +173,12 @@ namespace KidsManagementConsole
                     BirthDate = startDate,
                     Gender = gender,
                     Grade = i > 50 ? GradeLevel.FirstGroup : GradeLevel.GradeOne,
-                    Status=StudentStatus.Initial,
+                    Status = StudentStatus.Initial,
                 };
                 students.Add(student);
-               
-                ageCounter=ageCounter>= 10? 5:ageCounter++;
-                gender = gender == Gender.Male ? Gender.Female:Gender.Female;
+
+                ageCounter = ageCounter >= 10 ? 5 : ageCounter++;
+                gender = gender == Gender.Male ? Gender.Female : Gender.Female;
             }
 
             db.Students.AddRange(students);
@@ -152,7 +207,7 @@ namespace KidsManagementConsole
                     EndDate = startDate.AddDays(16 * 7),
                     EndTime = new TimeSpan(19, 00, 0),
                     Level = level,
-                    
+
                 };
                 startDate.AddDays(1);
 
@@ -217,7 +272,7 @@ namespace KidsManagementConsole
                 };
                 teachers.Add(teacher);
             }
-            
+
             db.Admins.Add(admin);
             db.Parents.AddRange(parents);
             db.Teachers.AddRange(teachers);

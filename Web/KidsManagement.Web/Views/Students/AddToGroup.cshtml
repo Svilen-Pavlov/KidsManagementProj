@@ -1,0 +1,48 @@
+﻿@using KidsManagement.ViewModels.Students;
+
+@model AddStudentToGroupInputModel;
+@{
+    ViewData["Title"] = "Details";
+}
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Add to Group</h1>
+        <div style="padding: 5%;">
+
+            <div>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Age Group</th>
+                            <th scope="col">Weekday</th>
+                            <th scope="col">Start Time</th>
+                            <th scope="col">Level</th>
+                            <th scope="col">Teacher</th>
+                            <th scope="col">Student Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var group in Model.Groups)
+                        {
+                        <tr>
+                            <th scope="row">@group.Id</th>
+                            <td>@group.Name</td>
+                            <td>@group.AgeGroup</td>
+                            <td>@group.DayOfWeek</td>
+                            <td>@group.StartTime</td>
+                            <td>@group.LevelName</td>
+                            <td>@group.TeacherName</td>
+                            <td>@group.StudentsCount / @group.MaxStudentsCount</td>
+                            <td>@*@group.Comaptibility*@</td>
+                            
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

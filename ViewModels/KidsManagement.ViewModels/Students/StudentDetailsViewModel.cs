@@ -25,6 +25,7 @@ namespace KidsManagement.ViewModels.Students
         public string BirthDate { get; set; }
 
         public GradeLevel Grade { get; set; }
+        public AgeGroup AgeGroup { get; set; }
 
         public StudentStatus Status { get; set; }
         public int? GroupId { get; set; }

@@ -16,9 +16,14 @@ namespace KidsManagement.ViewModels.Groups
         public string LevelName { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
 
+        public AgeGroup AgeGroup { get; set; }
         public string StartTime { get; set; }
 
         public string TeacherName { get; set; }
+
+        public int StudentsCount { get; set; }
+        public int MaxStudentsCount { get; set; }
+        //public double Compatibility { get; set; }
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Constants;
+using KidsManagement.Data.Models.Enums;
 using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.ViewModels.Parents;
 using KidsManagement.ViewModels.Students;
@@ -56,6 +57,7 @@ namespace KidsManagement.Services.Students
             var student=await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
 
             student.GroupId = groupId;
+            student.Status = StudentStatus.Active;
 
             await this.db.SaveChangesAsync();
         }
@@ -70,6 +72,7 @@ namespace KidsManagement.Services.Students
             var student = await this.db.Students
                 //.Include(s=>s.Parents)
                 //.ThenInclude(x=>x.Select(y=>y.Parent))
+                .Include(s=>s.Group)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             var parents = this.db.Parents.Where(p => p.Children.Any(sp => sp.StudentId == student.Id)).ToArray();
 

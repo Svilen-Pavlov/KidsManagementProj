@@ -1,4 +1,5 @@
 ﻿using KidsManagement.Services.External.CloudinaryService;
+using KidsManagement.Services.Groups;
 using KidsManagement.Services.Parents;
 using KidsManagement.Services.Students;
 using KidsManagement.ViewModels.Parents;
@@ -16,12 +17,14 @@ namespace KidsManagement.Web.Controllers.Students
         private readonly IStudentsService studentsService;
         private readonly ICloudinaryService cloudinaryService;
         private readonly IParentsService parentsService;
+        private readonly IGroupsService groupsService;
 
-        public StudentsController(IStudentsService studentsService, ICloudinaryService cloudinaryService, IParentsService parentsService)
+        public StudentsController(IStudentsService studentsService, ICloudinaryService cloudinaryService, IParentsService parentsService, IGroupsService groupsService)
         {
             this.studentsService = studentsService;
             this.cloudinaryService = cloudinaryService;
             this.parentsService = parentsService;
+            this.groupsService = groupsService;
         }
 
         public async Task<IActionResult> Index()
@@ -47,7 +50,7 @@ namespace KidsManagement.Web.Controllers.Students
             var studentId = await this.studentsService.CreateStudent(model);
             this.TempData["studentId"] = studentId;
             var parents = this.parentsService.GetAllForSelection(studentId).ToList();
-            var outputModel = new EditParentsInputModel() {Parents=parents };
+            var outputModel = new EditParentsInputModel() {Parents=parents};
 
             return await Task.Run(()=>this.View("EditParents", outputModel));
         }
@@ -76,6 +79,35 @@ namespace KidsManagement.Web.Controllers.Students
 
             var model = await this.studentsService.FindById(studentId);
             return this.View(model);
+        }
+
+        public async Task<IActionResult> AddToGroup (int studentId)
+        {
+            if(await this.studentsService.Exists(studentId) == false)
+            {
+                this.Redirect("/");
+            }
+
+            var groupsList = await this.groupsService.GetVacantGroupsWithProperAge(studentId);
+
+            var outputModel = new AddStudentToGroupInputModel() { StudentId = studentId, Groups=groupsList.ToList() };
+            this.TempData["studentId"] = studentId;
+
+
+            return await Task.Run(() => this.View(outputModel));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToGroup(AddStudentToGroupInputModel model)
+        {
+            var studentId = this.TempData["studentId"];
+            if (studentId == null || (studentId is int) == false)
+                return this.Redirect("/");
+
+            //add/change student's group
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
+
         }
 
         [HttpPost]
