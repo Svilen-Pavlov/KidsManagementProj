@@ -60,12 +60,23 @@
                 <div class="form-group row-md-6">
                     <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
                 </div>
-                <div class="form-group row-md-6">
-                    <a asp-action="EditParents" asp-route-studentId="@Model.Id" class="btn btn-info">Add & edit parents</a> @*TODO: fill in entire EdParentsModel somehow*@
-                </div>
-                <div class="form-group row-md-6">
-                    <a asp-action="AddToGroup" asp-route-studentId="@Model.Id" class="btn btn-info">Add to group</a>
+                <hr />
+                @if (@Model.GroupId == 0)
+                {
+                    <div class="form-group row-md-6">
+                        <a asp-action="AddToGroup" asp-route-studentId="@Model.Id" class="btn btn-info">Add to group</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group row-md-6" align="center">
+                        <a asp-action="AddToGroup" asp-route-studentId="@Model.Id" class="btn btn-info">Change group</a>
+                    </div>
+                }
+                <div class="form-group row-md-6" align="center">
+                    <a asp-action="EditParents" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle">Add & edit parents</a> @*TODO: fill in entire EditParentsModel somehow*@
                 </div>
             </div>
         </div>
+    </div>
 </section>

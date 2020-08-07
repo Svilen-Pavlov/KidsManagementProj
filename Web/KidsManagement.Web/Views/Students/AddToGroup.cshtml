@@ -7,41 +7,56 @@
 
 <section class="py-5">
     <div class="container">
-        <h1 style="margin: 2%; text-align: center;">Add to Group</h1>
+        <h1 style="margin: 2%; text-align: center;">Choose a Group</h1>
         <div style="padding: 5%;">
 
+
             <div>
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Age Group</th>
-                            <th scope="col">Weekday</th>
-                            <th scope="col">Start Time</th>
-                            <th scope="col">Level</th>
-                            <th scope="col">Teacher</th>
-                            <th scope="col">Student Count</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var group in Model.Groups)
-                        {
-                        <tr>
-                            <th scope="row">@group.Id</th>
-                            <td>@group.Name</td>
-                            <td>@group.AgeGroup</td>
-                            <td>@group.DayOfWeek</td>
-                            <td>@group.StartTime</td>
-                            <td>@group.LevelName</td>
-                            <td>@group.TeacherName</td>
-                            <td>@group.StudentsCount / @group.MaxStudentsCount</td>
-                            <td>@*@group.Comaptibility*@</td>
-                            
-                        </tr>
-                        }
-                    </tbody>
-                </table>
+                <form method="post" asp-action="AddToGroup">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Age Group</th>
+                                <th scope="col">Weekday</th>
+                                <th scope="col">Start Time</th>
+                                <th scope="col">Level</th>
+                                <th scope="col">Teacher</th>
+                                <th scope="col">Student Count</th>
+                                <th class="text-center" scope="col">Choose a group</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var group in Model.GroupsForSelection)
+                            {
+                                <tr>
+                                    <th scope="row">@group.Id</th>
+                                    <td>@group.Name</td>
+                                    <td>@group.AgeGroup</td>
+                                    <td>@group.DayOfWeek</td>
+                                    <td>@group.StartTime</td>
+                                    <td>@group.LevelName</td>
+                                    <td>@group.TeacherName</td>
+                                    <td>@group.StudentsCount / @group.MaxStudentsCount</td>
+                                    @*<td>@group.Comaptibility</td>*@
+                                    @if (group.ActiveGroup)
+                                    {
+                                        <td class="bg-info text-center">Current Group</td>
+                                    }
+                                    else
+                                    {
+                                        <td><input type="radio" asp-for="@Model.IsSelected" value="@group.Id" style="margin-bottom:5px;width:20px;margin-left:40px" /></td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                        <div align="center">
+                            <input type="submit" class="form-control button btn-info col-md-6" value="Confirm group selection" />
+                        </div>
+                </form>
             </div>
         </div>
     </div>

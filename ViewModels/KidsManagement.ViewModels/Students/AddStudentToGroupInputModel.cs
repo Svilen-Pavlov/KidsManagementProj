@@ -9,11 +9,14 @@ namespace KidsManagement.ViewModels.Students
     {
         public AddStudentToGroupInputModel()
         {
-            Groups = new List<SingleGroupDetailsViewModel>();
+            StudentIsInGroup = false;
+            GroupsForSelection = new List<SingleGroupDetailsViewModel>();
         }
+        public int IsSelected { get; set; } //specifically for selection
 
-        public int StudentId { get; set; } //do I even need this?
+        public bool StudentIsInGroup { get; set; } 
 
-        public List<SingleGroupDetailsViewModel> Groups {get;set;}
+        public List<SingleGroupDetailsViewModel> GroupsForSelection {get;set;}
+
     }
 }

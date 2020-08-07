@@ -52,16 +52,6 @@ namespace KidsManagement.Services.Students
             return student.Id;
         }
 
-        public async Task AssignStudentToGroup(int studentId, int groupId)
-        {
-            var student=await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
-
-            student.GroupId = groupId;
-            student.Status = StudentStatus.Active;
-
-            await this.db.SaveChangesAsync();
-        }
-
         public async Task<bool> Exists(int StudentId) // with or w/o deleted?
         {
             return await this.db.Students.AnyAsync(x => x.Id == StudentId);

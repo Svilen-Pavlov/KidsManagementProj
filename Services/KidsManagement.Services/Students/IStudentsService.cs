@@ -13,8 +13,6 @@ namespace KidsManagement.Services.Students
 
         Task<bool> Exists(int studentId);
 
-        Task AssignStudentToGroup(int studentId, int groupId);
-
         Task<StudentDetailsViewModel> FindById(int studentId);
 
         AllStudentsDetailsViewModel GetAll();

@@ -47,9 +47,9 @@ namespace KidsManagement.Services.Groups
                 MaxStudents = (int)model.AgeGroup
             };
 
-            if(model.TeacherId!=0)
+            if (model.TeacherId != 0)
                 group.TeacherId = model.TeacherId;
-            
+
 
             await this.db.Groups.AddAsync(group);
             await this.db.SaveChangesAsync();
@@ -69,7 +69,7 @@ namespace KidsManagement.Services.Groups
                 Id = group.Id,
                 Name = group.Name,
                 CurrentLessonNumber = group.CurrentLessonNumber,
-                AgeGroup = group.AgeGroup==0? InfoStrings.GeneralNotSpecified:group.AgeGroup.ToString(),
+                AgeGroup = group.AgeGroup == 0 ? InfoStrings.GeneralNotSpecified : group.AgeGroup.ToString(),
                 DayOfWeek = group.DayOfWeek,
                 Duration = group.Duration.ToString(Const.hourMinutesFormat),
                 StartDate = group.StartDate.ToString(Const.dateOnlyFormat),
@@ -139,7 +139,7 @@ namespace KidsManagement.Services.Groups
             var groups = this.db.Groups
                 .Include(g => g.Level)
                 .Include(g => g.Teacher)
-                .Include(g=>g.Students)
+                .Include(g => g.Students)
                 .Select(g => new SingleGroupDetailsViewModel
                 {
                     Id = g.Id,
@@ -147,8 +147,8 @@ namespace KidsManagement.Services.Groups
                     DayOfWeek = g.DayOfWeek,
                     StartTime = g.StartTime.ToString(Const.hourMinutesFormat),
                     LevelName = g.Level.Name,
-                    TeacherName = g.Teacher==null? InfoStrings.GroupHasNoTeacherYet : g.Teacher.FullName, //make it the same as in other methods - FindById
-                    StudentsCount=g.Students.Count()
+                    TeacherName = g.Teacher == null ? InfoStrings.GroupHasNoTeacherYet : g.Teacher.FullName, //make it the same as in other methods - FindById
+                    StudentsCount = g.Students.Count()
                 })
                 .ToArray()
                 .OrderBy(x => x.DayOfWeek)
@@ -169,7 +169,7 @@ namespace KidsManagement.Services.Groups
 
             var groups = this.db.Groups
                 .Where(g => g.TeacherId == teacherId)
-                .Include(g=>g.Students)
+                .Include(g => g.Students)
                 .Select(g => new SingleGroupOfTeacherDetailsViewModel
                 {
                     Id = g.Id,
@@ -207,13 +207,13 @@ namespace KidsManagement.Services.Groups
         /// <summary>
         /// Gets all groups that are assigned to a specific teacher by teacherId
         /// </summary>
-        public IEnumerable<GroupSelectionViewModel> GetAllForSelection(int teacherId) 
+        public IEnumerable<GroupSelectionViewModel> GetAllForSelection(int teacherId)
         {
-                var groups = this.db.Groups.Where(g => g.TeacherId == teacherId).Select(g => new GroupSelectionViewModel
-                {
-                    Id = g.Id,
-                    Name = g.Name
-                }).ToList();
+            var groups = this.db.Groups.Where(g => g.TeacherId == teacherId).Select(g => new GroupSelectionViewModel
+            {
+                Id = g.Id,
+                Name = g.Name
+            }).ToList();
 
             return groups;
         }
@@ -249,7 +249,7 @@ namespace KidsManagement.Services.Groups
 
         public async Task<IEnumerable<SingleGroupDetailsViewModel>> GetVacantGroupsWithProperAge(int studentId)
         {
-            var student=await this.studentsService.FindById(studentId); // optimize this so that we don't need another call too the DB (only needed properties are student Id and grade)
+            var student = await this.studentsService.FindById(studentId); // optimize this so that we don't need another call too the DB (only needed properties are student Id and grade)
 
             var grade = (int)student.Grade;
             var ageGroup = new AgeGroup();
@@ -260,32 +260,34 @@ namespace KidsManagement.Services.Groups
 
 
             var groups = this.db.Groups
-                .Include(g=>g.Teacher)
-                .Include(g=>g.Level)
-                .Include(g=>g.Students)
-                .Where(g => g.AgeGroup == ageGroup && (int)g.Status<3)
+                .Include(g => g.Teacher)
+                .Include(g => g.Level)
+                .Include(g => g.Students)
+                .Where(g => g.AgeGroup == ageGroup && (int)g.Status < 3)
                 .ToArray()
-                .Select(g=> new SingleGroupDetailsViewModel
+                .Select(g => new SingleGroupDetailsViewModel
                 {
-                    Id=g.Id,
-                    Name=g.Name,
-                    TeacherName=g.TeacherId==null? InfoStrings.GroupHasNoTeacherYet : g.Teacher.FullName,
-                    AgeGroup=g.AgeGroup,
-                    DayOfWeek=g.DayOfWeek,
-                    LevelName=g.Level.Name,
-                    StartTime=g.StartTime.ToString(Const.hourMinutesFormat),
-                    StudentsCount=g.Students.Count(),
-                    MaxStudentsCount=g.MaxStudents,
+                    Id = g.Id,
+                    Name = g.Name,
+                    TeacherName = g.TeacherId == null ? InfoStrings.GroupHasNoTeacherYet : g.Teacher.FullName,
+                    AgeGroup = g.AgeGroup,
+                    DayOfWeek = g.DayOfWeek,
+                    LevelName = g.Level.Name,
+                    StartTime = g.StartTime.ToString(Const.hourMinutesFormat),
+                    StudentsCount = g.Students.Count(),
+                    MaxStudentsCount = g.MaxStudents,
+                    ActiveGroup = student.GroupId == g.Id ? true : false
                 })
-                .OrderBy(g=>g.DayOfWeek)
-                .ThenBy(g=>g.StartTime)
-                .ThenBy(g=>g.StudentsCount)
+                .OrderByDescending(g => g.ActiveGroup)
+                .ThenBy(g => g.DayOfWeek)
+                .ThenBy(g => g.StartTime)
+                .ThenBy(g => g.StudentsCount)
                 .ToArray();
 
-            
 
-            //https://stackoverflow.com/questions/25182011/why-async-await-allows-for-implicit-conversion-from-a-list-to-ienumerable
-            return await Task.FromResult(groups);
+
+            return await Task.FromResult(groups); //https://stackoverflow.com/questions/25182011/why-async-await-allows-for-implicit-conversion-from-a-list-to-ienumerable
         }
+
     }
 }

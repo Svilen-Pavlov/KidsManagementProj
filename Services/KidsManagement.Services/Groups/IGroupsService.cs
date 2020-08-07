@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Enums;
 using KidsManagement.ViewModels.Groups;
+using KidsManagement.ViewModels.Students;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,6 +31,7 @@ namespace KidsManagement.Services.Groups
         IEnumerable<GroupSelectionViewModel> GetAllForSelection(int teacherId);
 
         IEnumerable<GroupSelectionViewModel> GetAllForSelection(bool includingGroupsWithAssignedTeacher);
-        void ChangeTeacher(int newTeacherId, int groupId);  
+        void ChangeTeacher(int newTeacherId, int groupId);
+
     }
 }

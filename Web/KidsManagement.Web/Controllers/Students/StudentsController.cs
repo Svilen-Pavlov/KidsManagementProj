@@ -50,18 +50,18 @@ namespace KidsManagement.Web.Controllers.Students
             var studentId = await this.studentsService.CreateStudent(model);
             this.TempData["studentId"] = studentId;
             var parents = this.parentsService.GetAllForSelection(studentId).ToList();
-            var outputModel = new EditParentsInputModel() {Parents=parents};
+            var outputModel = new EditParentsInputModel() { Parents = parents };
 
-            return await Task.Run(()=>this.View("EditParents", outputModel));
+            return await Task.Run(() => this.View("EditParents", outputModel));
         }
 
-        
+
 
         [HttpPost]
         public async Task<IActionResult> EditStudentParents(EditParentsInputModel model)
         {
             var studentId = this.TempData["studentId"];
-            if (studentId == null || (studentId is int)==false) 
+            if (studentId == null || (studentId is int) == false)
                 return this.Redirect("/"); //invalid student create ERROR
 
             model.StudentId = (int)studentId;
@@ -69,30 +69,39 @@ namespace KidsManagement.Web.Controllers.Students
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = model.StudentId }));
         }
-                              
+
         public async Task<IActionResult> Details(int studentId)
         {
             if (await this.studentsService.Exists(studentId) == false)
             {
                 this.Redirect("/");
             }
-
             var model = await this.studentsService.FindById(studentId);
+            
+            this.TempData["studentId"] = studentId;
+            this.TempData["studentIsInGroup"] = model.Status.ToString();
+
             return this.View(model);
         }
 
-        public async Task<IActionResult> AddToGroup (int studentId)
+        public async Task<IActionResult> AddToGroup()
         {
-            if(await this.studentsService.Exists(studentId) == false)
+            var studentId = this.TempData["studentId"];
+            if (studentId == null || (studentId is int) == false)
+                return this.Redirect("/");
+
+            int studentIdInt = (int)studentId;
+
+            if (await this.studentsService.Exists(studentIdInt) == false)
             {
                 this.Redirect("/");
             }
 
-            var groupsList = await this.groupsService.GetVacantGroupsWithProperAge(studentId);
+            var groupsList = await this.groupsService.GetVacantGroupsWithProperAge(studentIdInt);
 
-            var outputModel = new AddStudentToGroupInputModel() { StudentId = studentId, Groups=groupsList.ToList() };
-            this.TempData["studentId"] = studentId;
-
+            var outputModel = new AddStudentToGroupInputModel() {GroupsForSelection = groupsList.ToList() };
+            this.TempData.Keep("studentIsInGroup");
+            this.TempData.Keep("studentId");
 
             return await Task.Run(() => this.View(outputModel));
         }
@@ -101,13 +110,22 @@ namespace KidsManagement.Web.Controllers.Students
         public async Task<IActionResult> AddToGroup(AddStudentToGroupInputModel model)
         {
             var studentId = this.TempData["studentId"];
+            var groupId = model.IsSelected;
             if (studentId == null || (studentId is int) == false)
-                return this.Redirect("/");
+                return this.Redirect("/"); //todo groupId is null or not int
 
-            //add/change student's group
+            if (await this.groupsService.GroupExists(groupId) == false)
+            {
+                return this.Redirect("/"); // group does not exist
+            }
+            int studentIdInt = (int)studentId;
+
+            if (this.TempData["studentIsInGroup"].ToString() == "Active")
+               await this.groupsService.RemoveStudent(studentIdInt, groupId);
+
+            await this.groupsService.AddStudent(studentIdInt, groupId);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
-
         }
 
         [HttpPost]

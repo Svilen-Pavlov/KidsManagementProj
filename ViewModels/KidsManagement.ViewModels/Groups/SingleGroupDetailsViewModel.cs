@@ -25,5 +25,6 @@ namespace KidsManagement.ViewModels.Groups
         public int MaxStudentsCount { get; set; }
         //public double Compatibility { get; set; }
 
+        public bool ActiveGroup { get; set; } //specifically for Add/Change Method
     }
 }
