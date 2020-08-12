@@ -170,7 +170,7 @@ namespace KidsManagement.Services.Teachers
 
         public async Task<int> AddGroups(AddGroupsToTeacherViewModel model)
         {
-            var teacher = this.db.Teachers.FirstOrDefaultAsync(x => x.Id == model.TeacherId).Result;
+            var teacher = await this.db.Teachers.FirstOrDefaultAsync(x => x.Id == model.TeacherId); 
 
             var groupsIds = model.Groups.Where(x => x.Selected).Select(x => x.Id).ToArray();
             var groupsForTeacher = this.db.Groups.Where(x => groupsIds.Contains(x.Id)).ToArray();
@@ -183,5 +183,13 @@ namespace KidsManagement.Services.Teachers
             return await this.db.SaveChangesAsync();
         }
 
+        public async Task<int> GetBussinessIdByUserId(string userId)
+        {
+            var businessEntityId = (await this.db.Teachers.FirstOrDefaultAsync(u => u.ApplicationUserId == userId)).Id; // are we making use of async
+
+            //var id = businessEntity.Id;
+
+            return businessEntityId;
+        }
     }
 }

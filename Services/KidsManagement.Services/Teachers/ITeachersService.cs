@@ -22,5 +22,7 @@ namespace KidsManagement.Services.Teachers
         Task<bool> UserExists(string username);
 
         Task<int> AddGroups(AddGroupsToTeacherViewModel model);
+
+        Task<int> GetBussinessIdByUserId(string userId);
     }
 }

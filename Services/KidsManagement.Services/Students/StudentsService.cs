@@ -113,6 +113,31 @@ namespace KidsManagement.Services.Students
             return model;
         }
 
+        public AllStudentsDetailsViewModel GetAll(int teacherId)
+        {
+            var students = this.db.Students
+                .Include(s=>s.Group)
+                .Where(s=>s.Group.TeacherId==teacherId)
+               .Select(student => new AllSingleStudentsViewModel
+               {
+                   Id = student.Id,
+                   FulLName = student.FullName,
+                   Gender = student.Gender,
+                   Age = student.Age,
+                   GroupName = student.Group == null ? InfoStrings.StudentNotInAGroupYet : student.Group.Name,
+               })
+               .ToArray()
+               .OrderBy(x => x.FulLName)
+                .ToArray();
+
+
+            var studentsList = new List<AllSingleStudentsViewModel>(students);
+
+            var model = new AllStudentsDetailsViewModel() { Students = studentsList };
+
+            return model;
+        }
+
         public async Task EditParents(EditParentsInputModel model)
         {
             var student = this.db.Students.FirstOrDefaultAsync(x => x.Id == model.StudentId).Result;

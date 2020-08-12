@@ -33,6 +33,36 @@ namespace KidsManagement.Web.Seeders
             await SeedUsersToRolesAsync();
         }
 
+        private async Task SeedUsersAsync()
+        {
+            var exists = userManager.FindByNameAsync(username1);
+
+            if (exists != null)
+            {
+                //return;
+            }
+
+            var user = await this.userManager.CreateAsync(new ApplicationUser
+            {
+                UserName = username1,
+                Email = $"{username1}@abv.bg",
+                EmailConfirmed = true,
+                
+            },
+            password1);
+
+        }
+        private async Task SeedRolesAsync()
+        {
+            var role = await roleManager.FindByNameAsync(role1);
+            if (role != null)
+            {
+                //return;
+            }
+
+            await roleManager.CreateAsync(new ApplicationRole(role1));
+
+        }
         private async Task SeedUsersToRolesAsync()
         {
             var user = await userManager.FindByNameAsync(username1);
@@ -59,36 +89,6 @@ namespace KidsManagement.Web.Seeders
             await db.SaveChangesAsync();
         }
 
-        private async Task SeedRolesAsync()
-        {
-            var role = await roleManager.FindByNameAsync(role1);
-            if (role != null)
-            {
-                //return;
-            }
 
-            await roleManager.CreateAsync(new ApplicationRole(role1));
-
-        }
-
-        private async Task SeedUsersAsync()
-        {
-            var exists = userManager.FindByNameAsync(username1);
-
-            if (exists != null)
-            {
-                //return;
-            }
-
-            var user = await this.userManager.CreateAsync(new ApplicationUser
-            {
-                UserName = username1,
-                Email = $"{username1}@abv.bg",
-                EmailConfirmed = true,
-                
-            },
-            password1);
-
-        }
     }
 }

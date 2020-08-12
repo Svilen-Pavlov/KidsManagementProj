@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data.Models.Enums;
 using KidsManagement.Services.Groups;
 using KidsManagement.Services.Levels;
+using KidsManagement.Services.Students;
 using KidsManagement.Services.Teachers;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
@@ -9,22 +10,23 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace KidsManagement.Web.Controllers.Teachers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Teacher")]
     public class TeachersController : Controller
     {
         private readonly ITeachersService teachersService;
         private readonly ILevelsService levelsService;
         private readonly IGroupsService groupsService;
+        private readonly IStudentsService studentsService;
 
-
-
-        public TeachersController(ITeachersService teachersService, ILevelsService levelsService, IGroupsService groupsService)
+        public TeachersController(ITeachersService teachersService, ILevelsService levelsService, IGroupsService groupsService, IStudentsService studentsService)
         {
             this.groupsService = groupsService;
+            this.studentsService = studentsService;
             this.teachersService = teachersService;
             this.levelsService = levelsService;
         }
@@ -102,5 +104,34 @@ namespace KidsManagement.Web.Controllers.Teachers
 
             return await Task.Run(()=>RedirectToAction("Details", new { teacherId = model.TeacherId }));
         }
+
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> MyZone()
+        {
+            var userTeachernId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacherId = this.teachersService.GetBussinessIdByUserId(userTeachernId).Result;
+            this.TempData["teacherId"] = teacherId;
+
+            return await Task.Run(() => this.View());
+        }
+
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> MyStudents()
+        {
+            var teacherId = TempData["teacherId"];
+            this.TempData.Keep("teacherId");
+
+            if (teacherId == null || (teacherId is int) == false)
+                return this.Redirect("/"); //invalid teacher ERROR
+            var teacherIdInt = (int)teacherId;
+
+
+
+            var viewModel = this.studentsService.GetAll(teacherIdInt);
+
+            return await Task.Run(() => this.View(viewModel));
+        }
+
+
     }
 }

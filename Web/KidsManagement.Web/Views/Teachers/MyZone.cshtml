@@ -1,0 +1,37 @@
+﻿@using KidsManagement.ViewModels.Groups;
+
+@model AllGroupsDetailsViewModel;
+@{
+    ViewData["Title"] = "Details";
+}
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">My Zone</h1>
+        <div>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">My Students</th>
+                        <th scope="col">My Groups</th>
+                        <th scope="col">My Schedule</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="form-group row-md-6">
+                            <a asp-controller="Teachers" asp-action="MyStudents">Check my Students</a>
+                        </td>
+                        <td class="form-group row-md-6">
+                            <a asp-controller="Teachers" asp-action="MyGroups">Check my Groups</a>
+                        </td>
+                        <td class="form-group row-md-6">
+                            <a asp-controller="Teachers" asp-action="MySchedule">Check my Schedule</a>
+                        </td>
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>
