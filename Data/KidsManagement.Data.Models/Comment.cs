@@ -28,5 +28,10 @@ namespace KidsManagement.Data.Models
         public Teacher Teacher { get; set; }
 
         //middle table between teachers and students 
+
+        public override string ToString()
+        {
+            return this.Content;
+        }
     }
 }

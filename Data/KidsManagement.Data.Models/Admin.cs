@@ -48,6 +48,9 @@ namespace KidsManagement.Data.Models
         public virtual string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
 
-
+        public override string ToString()
+        {
+            return this.FullName;
+        }
     }
 }

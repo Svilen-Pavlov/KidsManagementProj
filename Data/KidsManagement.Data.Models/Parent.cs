@@ -53,6 +53,9 @@ namespace KidsManagement.Data.Models
 
         public virtual ICollection<StudentParent> Children { get; set; }
 
-      
+        public override string ToString()
+        {
+            return this.FullName;
+        }
     }
 }

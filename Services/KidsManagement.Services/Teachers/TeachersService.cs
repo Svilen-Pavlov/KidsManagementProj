@@ -4,6 +4,7 @@ using KidsManagement.Data.Models.Constants;
 using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
+using KidsManagement.ViewModels.Teachers.MyZoneModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -191,5 +192,32 @@ namespace KidsManagement.Services.Teachers
 
             return businessEntityId;
         }
+
+        public TeacherMyZoneViewModel GetMyZoneInfo(int teacherId)
+        {
+            var teacher = this.db.Teachers
+                .Include(t=>t.Groups)
+                .ThenInclude(g=>g.Students)
+                .FirstOrDefault(t=>t.Id==teacherId);
+
+            var model = new TeacherMyZoneViewModel();
+            model.Statistics.GroupsCount = teacher.Groups.Count().ToString();
+            model.Statistics.StudentsCount = teacher.Groups.Sum(g => g.Students.Count).ToString();
+            double weeklyMaxHours = 30;
+            model.Statistics.WeeklyHoursCapacity = weeklyMaxHours.ToString(); //decide weather to leave it static TODO
+            TimeSpan workHours = new TimeSpan(teacher.Groups.Sum(g => g.Duration.Ticks));
+            model.Statistics.WorkingHours = workHours.ToString(Const.hourMinutesFormat);
+            model.Statistics.Efficiency = string.Format("{0}%",Math.Round(workHours.TotalHours/ weeklyMaxHours * 100,2));
+
+            //notifications
+            var currentWeekStartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            var nextWeekStartDate = currentWeekStartDate.AddDays(-7);
+
+            var studentsWithBirthdays=teacher.Groups.SelectMany(g=>g.Students).Where(s=>s.BirthDate)
+
+
+            return model;
+        }
+
     }
 }

@@ -26,5 +26,10 @@ namespace KidsManagement.Data.Models
         [Required]
         public int ParentId { get; set; }
         public virtual Parent Parent { get; set; }
+
+        public override string ToString()
+        {
+            return this.Content;
+        }
     }
 }

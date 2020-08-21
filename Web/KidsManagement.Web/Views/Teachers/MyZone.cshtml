@@ -1,6 +1,6 @@
-﻿@using KidsManagement.ViewModels.Groups;
+﻿@using KidsManagement.ViewModels.Teachers.MyZoneModels;
 
-@model AllGroupsDetailsViewModel;
+@model TeacherMyZoneViewModel;
 @{
     ViewData["Title"] = "Details";
 }
@@ -9,24 +9,50 @@
         <h1 style="margin: 2%; text-align: center;">My Zone</h1>
         <div>
             <table class="table">
-                <thead class="thead-dark">
+                <thead class="thead-dark" align="center">
                     <tr>
-                        <th scope="col">My Students</th>
-                        <th scope="col">My Groups</th>
-                        <th scope="col">My Schedule</th>
+                        <th scope="col">Actions</th>
+                        <th scope="col">Statistics</th>
+                        <th scope="col">Notifications</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody align="center">
                     <tr>
                         <td class="form-group row-md-6">
-                            <a asp-controller="Teachers" asp-action="MyStudents">Check my Students</a>
+                            <div class="button-holder">
+                                <a href="/Teachers/MyStudents" class="btn btn-info">Check my Students</a>
+                            </div>
+                            <hr />
+                            <div class="button-holder">
+                                <a href="/Teachers/MyGroups" class="btn btn-info">Check my Groups</a>
+                            </div>
+                            <hr />
+
+                            <div class="button-holder">
+                                <a href="/Teachers/MySchedule" class="btn btn-info">Check my Schedule</a>
+                            </div>
                         </td>
                         <td class="form-group row-md-6">
-                            <a asp-controller="Teachers" asp-action="MyGroups">Check my Groups</a>
+                            <div>
+                                Number of Groups: @Model.Statistics.GroupsCount
+                            </div>
+                            <div>
+                                Number of Students: @Model.Statistics.StudentsCount
+                            </div>
+                            <div>
+                                Weekly work hours: @Model.Statistics.WorkingHours
+                            </div>
+                            <div>
+                                Weekly maximum working hours: @Model.Statistics.WeeklyHoursCapacity
+                            </div>
+                            <div>
+                                Personal Efficiency: @Model.Statistics.Efficiency
+                            </div>
                         </td>
                         <td class="form-group row-md-6">
-                            <a asp-controller="Teachers" asp-action="MySchedule">Check my Schedule</a>
+                            @*Notifications*@
                         </td>
+
 
                     </tr>
                 </tbody>

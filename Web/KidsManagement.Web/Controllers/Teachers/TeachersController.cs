@@ -112,7 +112,9 @@ namespace KidsManagement.Web.Controllers.Teachers
             var teacherId = this.teachersService.GetBussinessIdByUserId(userTeachernId).Result;
             this.TempData["teacherId"] = teacherId;
 
-            return await Task.Run(() => this.View());
+            var model = this.teachersService.GetMyZoneInfo(teacherId);
+
+            return await Task.Run(() => this.View(model));
         }
 
         [Authorize(Roles = "Teacher")]
@@ -134,6 +136,21 @@ namespace KidsManagement.Web.Controllers.Teachers
 
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> MyGroups()
+        {
+            var teacherId = TempData["teacherId"];
+            this.TempData.Keep("teacherId");
+
+            if (teacherId == null || (teacherId is int) == false)
+                return this.Redirect("/"); //invalid teacher ERROR
+            var teacherIdInt = (int)teacherId;
+
+            var viewModel = this.groupsService.GetAll(teacherIdInt);
+
+            return await Task.Run(() => this.View(viewModel));
+        }
+
+        [Authorize(Roles = "Teacher,Admin")]
+        public async Task<IActionResult> MySchedule()
         {
             var teacherId = TempData["teacherId"];
             this.TempData.Keep("teacherId");

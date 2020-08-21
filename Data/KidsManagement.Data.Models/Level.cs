@@ -41,5 +41,10 @@ namespace KidsManagement.Data.Models
         //[Required]
         //public int SubjectId { get; set; }
         //public Subject Subject { get; set; }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

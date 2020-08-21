@@ -43,7 +43,10 @@ namespace KidsManagement.Data.Models
         //[Required]
         //public int TotalStudentsCount { get; set; } FOR SERVICES!
 
-
+        public override string ToString()
+        {
+            return this.FullName;
+        }
 
     }
 }
