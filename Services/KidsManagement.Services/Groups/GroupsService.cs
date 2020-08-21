@@ -114,10 +114,16 @@ namespace KidsManagement.Services.Groups
             await this.db.SaveChangesAsync();
         }
 
-        public async Task RemoveStudent(int studentId, int groupId)
+        public async Task RemoveStudent(int studentId)
         {
-            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
-            student.GroupId = 0;
+            var student = await this.db.Students
+                .Include(s=>s.Group)
+                .FirstOrDefaultAsync(x => x.Id == studentId);
+            
+            var group = student.Group;
+
+            group.Students.Remove(student);
+
             student.Status = StudentStatus.Inactive;
             await this.db.SaveChangesAsync();
         }
@@ -136,10 +142,16 @@ namespace KidsManagement.Services.Groups
 
         public AllGroupsDetailsViewModel GetAll()
         {
+            return this.GetAll(0);
+        }
+
+        public AllGroupsDetailsViewModel GetAll(int teacherId)
+        {
             var groups = this.db.Groups
                 .Include(g => g.Level)
                 .Include(g => g.Teacher)
                 .Include(g => g.Students)
+                .Where(g=> (teacherId!=0)? g.TeacherId == teacherId : true) //skip where if teacherId==0 ; https://stackoverflow.com/questions/3682835/if-condition-in-linq-where-clause
                 .Select(g => new SingleGroupDetailsViewModel
                 {
                     Id = g.Id,
@@ -153,18 +165,16 @@ namespace KidsManagement.Services.Groups
                 .ToArray()
                 .OrderBy(x => x.DayOfWeek)
                 .ThenBy(x => x.StartTime)
-                .ThenByDescending(x => x.StudentsCount);
+                .ThenByDescending(x => x.StudentsCount)
+                .ToList();
 
 
-            var groupsList = new List<SingleGroupDetailsViewModel>(groups);
-
-            var model = new AllGroupsDetailsViewModel() { Groups = groupsList };
+            var model = new AllGroupsDetailsViewModel() { Groups = groups };
 
             return model;
         }
 
-
-        public AllGroupsOfTeacherViewModel GetAllByTeacher(int teacherId)
+        public AllGroupsOfTeacherViewModel GetTeacherGroupsAdminInfo(int teacherId)
         {
 
             var groups = this.db.Groups
@@ -263,7 +273,7 @@ namespace KidsManagement.Services.Groups
                 .Include(g => g.Teacher)
                 .Include(g => g.Level)
                 .Include(g => g.Students)
-                .Where(g => g.AgeGroup == ageGroup && (int)g.Status < 3)
+                .Where(g => g.AgeGroup == ageGroup && (int)g.Status < 3 || g.Students.Any(s=>s.Id==student.Id))
                 .ToArray()
                 .Select(g => new SingleGroupDetailsViewModel
                 {

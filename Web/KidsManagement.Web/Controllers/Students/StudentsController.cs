@@ -79,7 +79,7 @@ namespace KidsManagement.Web.Controllers.Students
             var model = await this.studentsService.FindById(studentId);
             
             this.TempData["studentId"] = studentId;
-            this.TempData["studentIsInGroup"] = model.Status.ToString();
+            this.TempData["studentStatus"] = model.Status.ToString();
 
             return this.View(model);
         }
@@ -100,7 +100,7 @@ namespace KidsManagement.Web.Controllers.Students
             var groupsList = await this.groupsService.GetVacantGroupsWithProperAge(studentIdInt);
 
             var outputModel = new AddStudentToGroupInputModel() {GroupsForSelection = groupsList.ToList() };
-            this.TempData.Keep("studentIsInGroup");
+            this.TempData.Keep("studentStatus");
             this.TempData.Keep("studentId");
 
             return await Task.Run(() => this.View(outputModel));
@@ -120,8 +120,8 @@ namespace KidsManagement.Web.Controllers.Students
             }
             int studentIdInt = (int)studentId;
 
-            if (this.TempData["studentIsInGroup"].ToString() == "Active")
-               await this.groupsService.RemoveStudent(studentIdInt, groupId);
+            if (this.TempData["studentStatus"].ToString() == "Active")
+               await this.groupsService.RemoveStudent(studentIdInt);
 
             await this.groupsService.AddStudent(studentIdInt, groupId);
 

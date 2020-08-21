@@ -1,0 +1,46 @@
+﻿@using KidsManagement.ViewModels.Groups;
+
+@model AllGroupsDetailsViewModel;
+@{
+    ViewData["Title"] = "Details";
+}
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">My Groups</h1>
+        <div>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Level Name</th>
+                        <th scope="col">Day Of Week</th>
+                        <th scope="col">Start Time</th>
+                        <th scope="col">Teacher Name</th>
+                        <th scope="col">Number of Students</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var group in Model.Groups)
+                    {
+                        <tr>
+                            <th scope="row">@group.Id</th>
+                            <td class="form-group row-md-6">
+                                <a asp-controller="Groups"
+                                   asp-action="Details"
+                                   asp-route-groupId="@group.Id">@group.Name</a>
+                            </td>
+                            <td>@group.LevelName</td>
+                            <td>@group.DayOfWeek</td>
+                            <td>@group.StartTime</td>
+                            <td>@group.TeacherName</td>
+                            <td>@group.StudentsCount</td>
+
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>

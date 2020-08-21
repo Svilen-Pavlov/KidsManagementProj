@@ -132,6 +132,19 @@ namespace KidsManagement.Web.Controllers.Teachers
             return await Task.Run(() => this.View(viewModel));
         }
 
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> MyGroups()
+        {
+            var teacherId = TempData["teacherId"];
+            this.TempData.Keep("teacherId");
 
+            if (teacherId == null || (teacherId is int) == false)
+                return this.Redirect("/"); //invalid teacher ERROR
+            var teacherIdInt = (int)teacherId;
+
+            var viewModel = this.groupsService.GetAll(teacherIdInt);
+
+            return await Task.Run(() => this.View(viewModel));
+        }
     }
 }

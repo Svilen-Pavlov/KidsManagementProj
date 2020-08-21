@@ -17,12 +17,13 @@ namespace KidsManagement.Services.Groups
 
         Task AddStudent(int studentId, int groupId);
 
-        Task RemoveStudent(int studentId, int groupId);
+        Task RemoveStudent(int studentId);
 
         Task<bool> GroupExists(int groupId);
 
         AllGroupsDetailsViewModel GetAll();
-        AllGroupsOfTeacherViewModel GetAllByTeacher(int teacherId);
+        AllGroupsDetailsViewModel GetAll(int teacherId);
+        AllGroupsOfTeacherViewModel GetTeacherGroupsAdminInfo(int teacherId);
 
         //Task<bool> GroupIsFull(int groupId);
 

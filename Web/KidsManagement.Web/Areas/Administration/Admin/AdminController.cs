@@ -33,7 +33,7 @@ namespace KidsManagement.Web.Areas.Administration.Admin
         }
         public IActionResult AllGroupsOfTeacher(int teacherId)
         {
-            var model = this.groupsService.GetAllByTeacher(teacherId);
+            var model = this.groupsService.GetTeacherGroupsAdminInfo(teacherId);
             return this.View(model);   
         }
 
