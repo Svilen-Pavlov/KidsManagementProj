@@ -11,13 +11,38 @@
             <table class="table">
                 <thead class="thead-dark" align="center">
                     <tr>
-                        <th scope="col">Actions</th>
-                        <th scope="col">Statistics</th>
                         <th scope="col">Notifications</th>
+                        <th scope="col">Statistics</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody align="center">
                     <tr>
+                         <td class="form-group row-md-6">
+                            @foreach (var notification in Model.Notifications)
+                            {
+                                <p>
+                                    @notification.Type.ToString(): @notification.Content
+                                </p>
+                            }
+                        </td>
+                        <td class="form-group row-md-6">
+                            <div>
+                                Number of Groups: @Model.Statistics.GroupsCount
+                            </div>
+                            <div>
+                                Number of Students: @Model.Statistics.StudentsCount
+                            </div>
+                            <div>
+                                Weekly work hours: @Model.Statistics.WorkingHours /  @Model.Statistics.WeeklyHoursCapacity
+                            </div>
+                            @*<div>
+                                Weekly maximum working hours:
+                            </div>*@
+                            <div>
+                                Personal Efficiency: @Model.Statistics.Efficiency
+                            </div>
+                        </td>
                         <td class="form-group row-md-6">
                             <div class="button-holder">
                                 <a href="/Teachers/MyStudents" class="btn btn-info">Check my Students</a>
@@ -32,28 +57,6 @@
                                 <a href="/Teachers/MySchedule" class="btn btn-info">Check my Schedule</a>
                             </div>
                         </td>
-                        <td class="form-group row-md-6">
-                            <div>
-                                Number of Groups: @Model.Statistics.GroupsCount
-                            </div>
-                            <div>
-                                Number of Students: @Model.Statistics.StudentsCount
-                            </div>
-                            <div>
-                                Weekly work hours: @Model.Statistics.WorkingHours
-                            </div>
-                            <div>
-                                Weekly maximum working hours: @Model.Statistics.WeeklyHoursCapacity
-                            </div>
-                            <div>
-                                Personal Efficiency: @Model.Statistics.Efficiency
-                            </div>
-                        </td>
-                        <td class="form-group row-md-6">
-                            @*Notifications*@
-                        </td>
-
-
                     </tr>
                 </tbody>
 

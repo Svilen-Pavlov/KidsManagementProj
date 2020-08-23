@@ -23,14 +23,14 @@ namespace KidsManagement.Services.Teachers
         private readonly ICloudinaryService cloudinaryService;
 
         public TeachersService(KidsManagementDbContext db, ICloudinaryService cloudinaryService, UserManager<ApplicationUser> userManager) : base
-            (db,userManager)
+            (db, userManager)
         {
             this.db = db;
             this.cloudinaryService = cloudinaryService;
             this.userManager = userManager;
         }
 
-       
+
         public async Task<int> CreateTeacher(CreateTeacherInputModel model) //idk if this populates teacherlevels correctly
         {
             var pic = model.ProfileImage;
@@ -75,7 +75,7 @@ namespace KidsManagement.Services.Teachers
                 ProfilePicURI = picURI,
                 Groups = groupsToAssignToTeacher,
                 QualifiedLevels = qualifiedLevels.Select(ql => new LevelTeacher { Level = ql }).ToArray(),
-                ApplicationUserId=user.Id,
+                ApplicationUserId = user.Id,
             };
             await this.db.Teachers.AddAsync(teacher);
 
@@ -88,7 +88,7 @@ namespace KidsManagement.Services.Teachers
         public TeacherDetailsViewModel FindById(int teacherId)
         {
             var teacher = this.db.Teachers
-                .Include(t=>t.ApplicationUser)
+                .Include(t => t.ApplicationUser)
                 .FirstOrDefault(x => x.Id == teacherId);
             var levelsIds = this.db.LevelTeachers.Where(x => x.TeacherId == teacherId).Select(x => x.LevelId).ToArray();
             var levels = this.db.Levels.Where(x => levelsIds.Contains(x.Id));
@@ -100,12 +100,12 @@ namespace KidsManagement.Services.Teachers
 
 
             string dissmissalDate = teacher.DismissalDate == null ? InfoStrings.GeneralNotSpecified : teacher.DismissalDate.Value.ToString(Const.dateOnlyFormat);
-            
-            string phoneNumber =InfoStrings.GeneralNotSpecified;
-            string email = InfoStrings.GeneralNotSpecified;
-            string username= InfoStrings.GeneralNotSpecified;
 
-            if (string.IsNullOrEmpty(teacher.ApplicationUserId)==false)
+            string phoneNumber = InfoStrings.GeneralNotSpecified;
+            string email = InfoStrings.GeneralNotSpecified;
+            string username = InfoStrings.GeneralNotSpecified;
+
+            if (string.IsNullOrEmpty(teacher.ApplicationUserId) == false)
             {
                 phoneNumber = teacher.ApplicationUser.PhoneNumber;
                 email = teacher.ApplicationUser.Email;
@@ -124,9 +124,9 @@ namespace KidsManagement.Services.Teachers
                 QualifiedLevels = levels,
                 ProfilePicURI = teacher.ProfilePicURI,
                 Groups = groups,
-                Username= username,
+                Username = username,
                 Email = email,
-                PhoneNumber= phoneNumber
+                PhoneNumber = phoneNumber
             };
 
             return model;
@@ -171,7 +171,7 @@ namespace KidsManagement.Services.Teachers
 
         public async Task<int> AddGroups(AddGroupsToTeacherViewModel model)
         {
-            var teacher = await this.db.Teachers.FirstOrDefaultAsync(x => x.Id == model.TeacherId); 
+            var teacher = await this.db.Teachers.FirstOrDefaultAsync(x => x.Id == model.TeacherId);
 
             var groupsIds = model.Groups.Where(x => x.Selected).Select(x => x.Id).ToArray();
             var groupsForTeacher = this.db.Groups.Where(x => groupsIds.Contains(x.Id)).ToArray();
@@ -196,28 +196,98 @@ namespace KidsManagement.Services.Teachers
         public TeacherMyZoneViewModel GetMyZoneInfo(int teacherId)
         {
             var teacher = this.db.Teachers
-                .Include(t=>t.Groups)
-                .ThenInclude(g=>g.Students)
-                .FirstOrDefault(t=>t.Id==teacherId);
+                .Include(t => t.Groups)
+                .ThenInclude(g => g.Students)
+                .FirstOrDefault(t => t.Id == teacherId);
 
             var model = new TeacherMyZoneViewModel();
+
+
+            //Statistics
             model.Statistics.GroupsCount = teacher.Groups.Count().ToString();
             model.Statistics.StudentsCount = teacher.Groups.Sum(g => g.Students.Count).ToString();
             double weeklyMaxHours = 30;
             model.Statistics.WeeklyHoursCapacity = weeklyMaxHours.ToString(); //decide weather to leave it static TODO
             TimeSpan workHours = new TimeSpan(teacher.Groups.Sum(g => g.Duration.Ticks));
             model.Statistics.WorkingHours = workHours.ToString(Const.hourMinutesFormat);
-            model.Statistics.Efficiency = string.Format("{0}%",Math.Round(workHours.TotalHours/ weeklyMaxHours * 100,2));
+            model.Statistics.Efficiency = string.Format("{0}%", Math.Round(workHours.TotalHours / weeklyMaxHours * 100, 2));
 
-            //notifications
-            var currentWeekStartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
-            var nextWeekStartDate = currentWeekStartDate.AddDays(-7);
 
-            var studentsWithBirthdays=teacher.Groups.SelectMany(g=>g.Students).Where(s=>s.BirthDate)
+
+            //Notifications
+            var notificationRangeStartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            var notificationRangeEndDate = notificationRangeStartDate.AddDays(14);
+            var notifications = new List<MyZoneNotification>();
+
+            //groups
+            //starting
+            var groupsStarting = teacher.Groups
+              .Where(g => g.StartDate >= notificationRangeStartDate && g.StartDate <= notificationRangeEndDate)
+              .OrderBy(g => g.StartDate)
+              .ToList();
+
+            AddNotificationsGroup(notifications, groupsStarting, InfoStrings.MyZoneNotificationsGroupStart);
+            //ending
+            var groupsEnding = teacher.Groups
+               .Where(g => g.EndDate >= notificationRangeStartDate && g.EndDate <= notificationRangeEndDate)
+               .OrderBy(g => g.EndDate)
+               .ToList();
+            AddNotificationsGroup(notifications, groupsEnding, InfoStrings.MyZoneNotificationsGroupEnd);
+
+            //birthdays
+            var studentsWithBirthdays = teacher.Groups
+                .SelectMany(g => g.Students)
+                .Where(s => IsBirthDayInRange(s.BirthDate, notificationRangeStartDate, notificationRangeEndDate))
+                .OrderBy(s => s.BirthDate)
+                .ToArray();
+            AddNotificationsBirthday(notifications, studentsWithBirthdays, InfoStrings.MyZoneNotificationsBirthday);
+
+            model.Notifications = notifications;
+
+            //Schedule
 
 
             return model;
         }
+
+
+        public static void AddNotificationsGroup(List<MyZoneNotification> notifications, IEnumerable<Group> groups, string content)
+        {
+            foreach (var group in groups)
+            {
+                var notification = new MyZoneNotification()
+                {
+                    Type = MyZoneNotificationType.Group,
+                    Content = string.Format(content, group.Name, group.StartDate.Day, group.StartDate.Month)
+                };
+                notifications.Add(notification);
+            }
+        }
+
+        public static void AddNotificationsBirthday(List<MyZoneNotification> notifications, IEnumerable<Student> students, string content)
+        {
+            foreach (var student in students)
+            {
+                var newAge = DateTime.Now.Year - student.BirthDate.Year;
+                var notification = new MyZoneNotification()
+                {
+                    Type = MyZoneNotificationType.Birthday,
+                    Content = string.Format(content, student.FullName, student.Group.Name, newAge, student.BirthDate.Day, student.BirthDate.Month)
+                };
+
+                notifications.Add(notification);
+            }
+        }
+        public static bool IsBirthDayInRange(DateTime birthday, DateTime start, DateTime end)
+        {
+            DateTime temp = birthday.AddYears(start.Year - birthday.Year).Date;
+
+            if (temp < start)
+                temp = temp.AddYears(1);
+
+            return birthday.Date <= end && temp >= start && temp <= end;
+        }
+
 
     }
 }

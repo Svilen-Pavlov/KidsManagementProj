@@ -9,12 +9,12 @@ namespace KidsManagement.ViewModels.Teachers.MyZoneModels
         public TeacherMyZoneViewModel()
         {
             this.Statistics = new MyZoneStatistics();
-            this.Notifications = new HashSet<MyZoneNotifications>();
+            this.Notifications = new HashSet<MyZoneNotification>();
         }
 
         public MyZoneStatistics Statistics { get; set; }
 
-        public IEnumerable<MyZoneNotifications> Notifications { get; set; }
+        public IEnumerable<MyZoneNotification> Notifications { get; set; }
 
     }
  
