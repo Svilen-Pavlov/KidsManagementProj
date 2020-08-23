@@ -1,1 +1,54 @@
-﻿
+﻿@using KidsManagement.ViewModels.Teachers.MyZoneModels.MySchedule;
+
+@model ScheduleViewModel;
+@{
+    ViewData["Title"] = "Details";
+}
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Schedule - @Model.FromDate  to @Model.ToDate</h1>
+        <div>
+            <table class="table">
+                <thead class="thead-dark" align="center">
+                    <tr>
+                        <th scope="col">Time:</th>
+                        <th scope="col">Tuesday</th>
+                        <th scope="col">Wednesday</th>
+                        <th scope="col">Thursday</th>
+                        <th scope="col">Friday</th>
+                        <th scope="col">Saturday</th>
+                        <th scope="col">Sunday</th>
+                        <th scope="col">Monday</th>
+                    </tr>
+                </thead>
+                <tbody align="center">
+                    @for (int i = 0; i < 8; i++)
+                    {
+
+                        <tr>
+                            @if (i == 0)
+                            {
+                                <td class="form-group row-md-6">
+                                    @for (int j = 8; j < 20; j++)
+                                    {
+                                        <div>@j:00 - @(j + 1):00 <hr /></div>
+                                    }
+                                </td>
+                            }
+                            <td class="form-group row-md-6">
+                                @for (int j2 = 0; j2 < Model.ScheduleWeekDays.FirstOrDefault().TimeSlots.Count(); j2++)@*// za vseki weekday eventite razgunati nadolo*@
+                                {
+                                <div css=" .boxed {border: 1px solid green ;}"> @*probly wont work*@
+                                    @Model.ScheduleWeekDays.FirstOrDefault().TimeSlots[j2].GroupName
+                                    (@Model.ScheduleWeekDays.FirstOrDefault().TimeSlots[j2].StartTime - @Model.ScheduleWeekDays.FirstOrDefault().TimeSlots[j2].EndTime)
+                                </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>

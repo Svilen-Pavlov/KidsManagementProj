@@ -108,9 +108,8 @@ namespace KidsManagement.Web.Controllers.Teachers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> MyZone()
         {
-            var userTeachernId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var teacherId = this.teachersService.GetBussinessIdByUserId(userTeachernId).Result;
-            this.TempData["teacherId"] = teacherId;
+            var teacherIdnullable = GetLoggedInTeacherBussinessId();
+            var teacherId=CheckTeacherId(teacherIdnullable).Result;
 
             var model = this.teachersService.GetMyZoneInfo(teacherId);
 
@@ -120,16 +119,10 @@ namespace KidsManagement.Web.Controllers.Teachers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> MyStudents()
         {
-            var teacherId = TempData["teacherId"];
-            this.TempData.Keep("teacherId");
+            var teacherIdnullable = GetLoggedInTeacherBussinessId();
+            var teacherId = CheckTeacherId(teacherIdnullable).Result;
 
-            if (teacherId == null || (teacherId is int) == false)
-                return this.Redirect("/"); //invalid teacher ERROR
-            var teacherIdInt = (int)teacherId;
-
-
-
-            var viewModel = this.studentsService.GetAll(teacherIdInt);
+            var viewModel = this.studentsService.GetAll(teacherId);
 
             return await Task.Run(() => this.View(viewModel));
         }
@@ -137,31 +130,43 @@ namespace KidsManagement.Web.Controllers.Teachers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> MyGroups()
         {
-            var teacherId = TempData["teacherId"];
-            this.TempData.Keep("teacherId");
+            var teacherIdnullable = GetLoggedInTeacherBussinessId();
+            var teacherId = CheckTeacherId(teacherIdnullable).Result;
 
-            if (teacherId == null || (teacherId is int) == false)
-                return this.Redirect("/"); //invalid teacher ERROR
-            var teacherIdInt = (int)teacherId;
-
-            var viewModel = this.groupsService.GetAll(teacherIdInt);
+            var viewModel = this.groupsService.GetAll(teacherId);
 
             return await Task.Run(() => this.View(viewModel));
         }
 
         [Authorize(Roles = "Teacher,Admin")]
-        public async Task<IActionResult> MySchedule()
+        public async Task<IActionResult> MySchedule(DateTime startDate)
         {
-            var teacherId = TempData["teacherId"];
-            this.TempData.Keep("teacherId");
+            var teacherIdnullable = GetLoggedInTeacherBussinessId();
+            var teacherId = CheckTeacherId(teacherIdnullable).Result;
 
-            if (teacherId == null || (teacherId is int) == false)
-                return this.Redirect("/"); //invalid teacher ERROR
-            var teacherIdInt = (int)teacherId;
+            var viewModel = this.teachersService.GetMySchedule(teacherId, startDate);
 
-            var viewModel = this.groupsService.GetAll(teacherIdInt);
+            return await Task.Run(() => this.View());
+        }
 
-            return await Task.Run(() => this.View(viewModel));
+        public int? GetLoggedInTeacherBussinessId()
+        {
+            var userTeachernId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacherId = this.teachersService.GetBussinessIdByUserId(userTeachernId).Result;
+           
+            return teacherId;
+        }
+
+        public async Task<int> CheckTeacherId(int? teacherIdnullabe)
+        {
+            if (teacherIdnullabe == null || (teacherIdnullabe is int) == false)
+            throw new Exception(); //todo invalid userId Exception
+            
+            int teacherId = (int)teacherIdnullabe;
+            if (await this.teachersService.TeacherExists(teacherId)==false)
+                throw new Exception(); //todo teacher does not exist Exception
+
+            return teacherId;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
 using KidsManagement.ViewModels.Teachers.MyZoneModels;
+using KidsManagement.ViewModels.Teachers.MyZoneModels.MySchedule;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,5 +28,7 @@ namespace KidsManagement.Services.Teachers
         Task<int> GetBussinessIdByUserId(string userId);
 
         TeacherMyZoneViewModel GetMyZoneInfo(int teacherId);
+
+        ScheduleViewModel GetMySchedule(int teacherId, DateTime startdate);
     }
 }

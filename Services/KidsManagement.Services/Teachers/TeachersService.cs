@@ -5,6 +5,7 @@ using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
 using KidsManagement.ViewModels.Teachers.MyZoneModels;
+using KidsManagement.ViewModels.Teachers.MyZoneModels.MySchedule;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -248,6 +249,12 @@ namespace KidsManagement.Services.Teachers
 
 
             return model;
+        }
+
+        public ScheduleViewModel GetMySchedule(int teacherId, DateTime startDate)
+        {
+
+            return null;
         }
 
 
