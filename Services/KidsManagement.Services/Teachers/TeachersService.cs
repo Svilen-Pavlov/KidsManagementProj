@@ -253,8 +253,67 @@ namespace KidsManagement.Services.Teachers
 
         public ScheduleViewModel GetMySchedule(int teacherId, DateTime startDate)
         {
+            if (startDate.Year == 1) startDate=DateTime.Now;
+            var fromDate = DateTimeExtensions.StartOfWeek(startDate, DayOfWeek.Sunday);
+            var toDate = startDate.AddDays(6);
 
-            return null;
+            var groups = this.db.Groups
+                .Include(g=>g.Students) //needed only for studentscount in timeSlot
+                .Where(g => g.TeacherId == teacherId)
+                .Where(g => g.StartDate.Date < toDate.Date || g.EndDate > fromDate)
+                .OrderBy(g=>g.DayOfWeek)
+                .ToArray();
+
+            var scheduleWeekDays = new List<ScheduleWeekDayViewModel>();
+            
+            for (int i = 0; i < 7; i++) //weekdays
+            {
+                var scheduleWeekday = new ScheduleWeekDayViewModel() { DayOfWeek = fromDate.AddDays(i).DayOfWeek };
+                
+                if (groups.Any(g => g.DayOfWeek == scheduleWeekday.DayOfWeek) == false) continue;
+                
+                var dayOfWeekTimeSlots = new List<DayOfWeekTimeSlot>();
+                var groupsForTheDay = groups
+                    .Where(g=>g.DayOfWeek==scheduleWeekday.DayOfWeek)
+                    .OrderBy(g=>g.StartTime)
+                    .ToArray();
+
+
+                for (int j = 0; j < groupsForTheDay.Count(); j++) //timeslots
+                {
+                    var group = groups[i];
+                    var timeSlot = new DayOfWeekTimeSlot()
+                    {
+                        GroupName=group.Name,
+                        StartTime=group.StartTime,
+                        EndTime=group.EndTime,
+                        Duration=group.Duration,
+                        StartDate=group.StartDate,
+                        EndDate=group.EndDate,
+                        StudentsCount=group.Students.Count(),
+                        //KnownColorName=group.KnownColorName  TODO:Color in groups entity 
+
+                    };
+                    dayOfWeekTimeSlots.Add(timeSlot);
+                }
+
+                scheduleWeekday.TimeSlots = dayOfWeekTimeSlots;
+
+                scheduleWeekDays.Add(scheduleWeekday);
+            }
+
+
+
+
+
+            var model = new ScheduleViewModel()
+            {
+                FromDate = fromDate.ToString(Const.dateOnlyFormat),
+                ToDate = toDate.ToString(Const.dateOnlyFormat),
+                ScheduleWeekDays= scheduleWeekDays
+            };
+
+            return model;
         }
 
 
@@ -295,6 +354,14 @@ namespace KidsManagement.Services.Teachers
             return birthday.Date <= end && temp >= start && temp <= end;
         }
 
-
+        
+    }
+    public static class DateTimeExtensions
+    {
+        public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
+        {
+            int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
+            return dt.AddDays(-1 * diff).Date;
+        }
     }
 }

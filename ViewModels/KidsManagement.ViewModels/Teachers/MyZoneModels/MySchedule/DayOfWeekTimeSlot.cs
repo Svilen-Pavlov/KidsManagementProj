@@ -2,7 +2,7 @@
 
 namespace KidsManagement.ViewModels.Teachers.MyZoneModels.MySchedule
 {
-    public class WeekDayTimeSlot
+    public class DayOfWeekTimeSlot
     {
         public string GroupName { get; set; }
 
@@ -13,7 +13,7 @@ namespace KidsManagement.ViewModels.Teachers.MyZoneModels.MySchedule
 
         //optional
 
-        public string KnownColorName { get; set; }
+        public string KnownColorName { get; set; } //http://www.flounder.com/csharp_color_table.htm
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 

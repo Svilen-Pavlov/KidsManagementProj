@@ -146,7 +146,7 @@ namespace KidsManagement.Web.Controllers.Teachers
 
             var viewModel = this.teachersService.GetMySchedule(teacherId, startDate);
 
-            return await Task.Run(() => this.View());
+            return await Task.Run(() => this.View(viewModel));
         }
 
         public int? GetLoggedInTeacherBussinessId()

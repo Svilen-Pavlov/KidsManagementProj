@@ -6,46 +6,55 @@
 }
 <section class="py-5">
     <div class="container">
-        <h1 style="margin: 2%; text-align: center;">Schedule - @Model.FromDate  to @Model.ToDate</h1>
+        <h1 style="margin: 2%; text-align: center;">@Model.FromDate   -   @Model.ToDate</h1>
         <div>
             <table class="table">
                 <thead class="thead-dark" align="center">
                     <tr>
                         <th scope="col">Time:</th>
-                        <th scope="col">Tuesday</th>
+                        <th scope="col">Sunday</th>
+                        <th scope="col">Monday</th>
+                        <th scope="col">Tuesday </th>
                         <th scope="col">Wednesday</th>
                         <th scope="col">Thursday</th>
                         <th scope="col">Friday</th>
                         <th scope="col">Saturday</th>
-                        <th scope="col">Sunday</th>
-                        <th scope="col">Monday</th>
                     </tr>
                 </thead>
                 <tbody align="center">
-                    @for (int i = 0; i < 8; i++)
-                    {
-
-                        <tr>
-                            @if (i == 0)
+                    <tr>
+                        <td class="form-group row-md-6">
+                            @for (int i = 8; i < 20; i++) // ONLY TIME   td=1 column day/time, DIV=1 group entry
                             {
-                                <td class="form-group row-md-6">
-                                    @for (int j = 8; j < 20; j++)
-                                    {
-                                        <div>@j:00 - @(j + 1):00 <hr /></div>
-                                    }
-                                </td>
+                                <div>@i:00 - @(i + 1):00 <hr /></div>// 1 div = 1h
                             }
+                        </td>
+                        @for (int j = 0; j < 7; j++) // dayOfWeek Columns //same dai
+                        {
+                            //Empty divs to splitup groups
                             <td class="form-group row-md-6">
-                                @for (int j2 = 0; j2 < Model.ScheduleWeekDays.FirstOrDefault().TimeSlots.Count(); j2++)@*// za vseki weekday eventite razgunati nadolo*@
+                                @for (int j2 = 8; j2 < 20; j2++)@* kolko razdeleniq nadolu po 4as broim *@
                                 {
-                                <div css=" .boxed {border: 1px solid green ;}"> @*probly wont work*@
-                                    @Model.ScheduleWeekDays.FirstOrDefault().TimeSlots[j2].GroupName
-                                    (@Model.ScheduleWeekDays.FirstOrDefault().TimeSlots[j2].StartTime - @Model.ScheduleWeekDays.FirstOrDefault().TimeSlots[j2].EndTime)
-                                </div>
+                                    {
+                                        int slots = 0;
+                                    }
+                                    if ((int)@Model.ScheduleWeekDays[j].DayOfWeek == j2 + 1) //uslovie za same day
+                                    {
+                                        <div>
+                                            @Model.ScheduleWeekDays[j].TimeSlots[slots].GroupName
+                                            (@Model.ScheduleWeekDays[j].TimeSlots[slots].StartTime - @Model.ScheduleWeekDays.FirstOrDefault().TimeSlots[j2].EndTime)
+                                        </div>
+                                            @{slots++; }
+                                        }
+                                        else
+                                        {
+                                        <div></div>
+                                    }
+
                                 }
                             </td>
-                        </tr>
-                    }
+                        }
+                    </tr>
                 </tbody>
 
             </table>

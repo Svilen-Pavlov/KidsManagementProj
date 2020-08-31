@@ -5,8 +5,18 @@ namespace KidsManagement.ViewModels.Teachers.MyZoneModels.MySchedule
 {
     public class ScheduleWeekDayViewModel
     {
-        public DayOfWeek WeekDay { get; set; }
+        public ScheduleWeekDayViewModel()
+        {
+            this.TimeSlots = new List<DayOfWeekTimeSlot>();
 
-        public List<WeekDayTimeSlot> TimeSlots { get; set; }
+        }
+        public DayOfWeek DayOfWeek { get; set; }
+
+        public List<DayOfWeekTimeSlot> TimeSlots { get; set; }
+
+        public override string ToString()
+        {
+            return this.DayOfWeek.ToString();
+        }
     }
 }
