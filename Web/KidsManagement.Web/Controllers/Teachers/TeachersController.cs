@@ -139,12 +139,19 @@ namespace KidsManagement.Web.Controllers.Teachers
         }
 
         [Authorize(Roles = "Teacher,Admin")]
-        public async Task<IActionResult> MySchedule(DateTime startDate)
+        public async Task<IActionResult> MySchedule(int marker)
         {
             var teacherIdnullable = GetLoggedInTeacherBussinessId();
             var teacherId = CheckTeacherId(teacherIdnullable).Result;
+           
+            if (marker == 0)
+                this.TempData["date"] = DateTime.Now;
 
-            var viewModel = this.teachersService.GetMySchedule(teacherId, startDate);
+            DateTime date = DateTime.Parse(this.TempData["date"].ToString());
+
+            var viewModel = this.teachersService.GetMySchedule(teacherId, date, marker);
+
+            this.TempData["date"] = viewModel.FromDate;
 
             return await Task.Run(() => this.View(viewModel));
         }

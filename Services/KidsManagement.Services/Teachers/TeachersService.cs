@@ -251,31 +251,35 @@ namespace KidsManagement.Services.Teachers
             return model;
         }
 
-        public ScheduleViewModel GetMySchedule(int teacherId, DateTime startDate)
+        public ScheduleViewModel GetMySchedule(int teacherId, DateTime inputDate, int marker)
         {
-            if (startDate.Year == 1) startDate=DateTime.Now;
-            var fromDate = DateTimeExtensions.StartOfWeek(startDate, DayOfWeek.Sunday);
-            var toDate = startDate.AddDays(6);
+            var fromDate = DateTimeExtensions.StartOfWeek(inputDate.Date, DayOfWeek.Sunday);
+
+            if (marker != 0)
+                fromDate=fromDate.AddDays(marker * 7);
+            
+
+            var toDate = fromDate.AddDays(6);
 
             var groups = this.db.Groups
-                .Include(g=>g.Students) //needed only for studentscount in timeSlot
+                .Include(g => g.Students) //needed only for studentscount in timeSlot
                 .Where(g => g.TeacherId == teacherId)
-                .Where(g => g.StartDate.Date < toDate.Date || g.EndDate > fromDate)
-                .OrderBy(g=>g.DayOfWeek)
+                .Where(g => (g.StartDate>toDate || g.EndDate<fromDate) ==false)
+                .OrderBy(g => g.DayOfWeek)
                 .ToArray();
 
             var scheduleWeekDays = new List<ScheduleWeekDayViewModel>();
-            
+
             for (int i = 0; i < 7; i++) //weekdays
             {
                 var scheduleWeekday = new ScheduleWeekDayViewModel() { DayOfWeek = fromDate.AddDays(i).DayOfWeek };
-                
-                if (groups.Any(g => g.DayOfWeek == scheduleWeekday.DayOfWeek) == false) continue;
-                
+
+                //if (groups.Any(g => g.DayOfWeek == scheduleWeekday.DayOfWeek) == false) continue;
+
                 var dayOfWeekTimeSlots = new List<DayOfWeekTimeSlot>();
                 var groupsForTheDay = groups
-                    .Where(g=>g.DayOfWeek==scheduleWeekday.DayOfWeek)
-                    .OrderBy(g=>g.StartTime)
+                    .Where(g => g.DayOfWeek == scheduleWeekday.DayOfWeek)
+                    .OrderBy(g => g.StartTime)
                     .ToArray();
 
 
@@ -284,13 +288,13 @@ namespace KidsManagement.Services.Teachers
                     var group = groups[i];
                     var timeSlot = new DayOfWeekTimeSlot()
                     {
-                        GroupName=group.Name,
-                        StartTime=group.StartTime,
-                        EndTime=group.EndTime,
-                        Duration=group.Duration,
-                        StartDate=group.StartDate,
-                        EndDate=group.EndDate,
-                        StudentsCount=group.Students.Count(),
+                        GroupName = group.Name,
+                        StartTime = group.StartTime.ToString(Const.hourMinutesFormat),
+                        EndTime = group.EndTime.ToString(Const.hourMinutesFormat),
+                        Duration = group.Duration.ToString(Const.hourMinutesFormat),
+                        StartDate = group.StartDate.ToString(Const.dateOnlyFormat),
+                        EndDate = group.EndDate.ToString(Const.dateOnlyFormat),
+                        StudentsCount = group.Students.Count(),
                         //KnownColorName=group.KnownColorName  TODO:Color in groups entity 
 
                     };
@@ -308,9 +312,11 @@ namespace KidsManagement.Services.Teachers
 
             var model = new ScheduleViewModel()
             {
-                FromDate = fromDate.ToString(Const.dateOnlyFormat),
-                ToDate = toDate.ToString(Const.dateOnlyFormat),
-                ScheduleWeekDays= scheduleWeekDays
+                FromDateDisplay = fromDate.ToString(Const.dateOnlyFormat),
+                ToDateDisplay = toDate.ToString(Const.dateOnlyFormat),
+                FromDate = fromDate,
+                ToDate = toDate,
+                ScheduleWeekDays = scheduleWeekDays
             };
 
             return model;
@@ -354,14 +360,18 @@ namespace KidsManagement.Services.Teachers
             return birthday.Date <= end && temp >= start && temp <= end;
         }
 
-        
+        public static bool IsDateInRange(DateTime groupStart, DateTime groupEnd, DateTime fromDate, DateTime toDate)
+        {
+            return (groupStart < toDate || groupEnd > fromDate) && (groupStart > fromDate || groupEnd > toDate);
+        }
+
     }
     public static class DateTimeExtensions
     {
         public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
         {
             int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
-            return dt.AddDays(-1 * diff).Date;
+            return dt.AddDays(-1 * diff);
         }
     }
 }

@@ -29,6 +29,6 @@ namespace KidsManagement.Services.Teachers
 
         TeacherMyZoneViewModel GetMyZoneInfo(int teacherId);
 
-        ScheduleViewModel GetMySchedule(int teacherId, DateTime startdate);
+        ScheduleViewModel GetMySchedule(int teacherId, DateTime startdate, int marker);
     }
 }

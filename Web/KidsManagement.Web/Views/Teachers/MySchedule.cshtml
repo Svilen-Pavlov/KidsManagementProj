@@ -6,12 +6,25 @@
 }
 <section class="py-5">
     <div class="container">
-        <h1 style="margin: 2%; text-align: center;">@Model.FromDate   -   @Model.ToDate</h1>
+        <h1 style="margin: 2%; text-align: center;">@Model.FromDateDisplay   -   @Model.ToDateDisplay</h1>
+
+        @*<div class="container-fluid row-md-6 align-center" style="display:inline-block">*@
+        <table align="center">
+            <tr>
+                <td>
+                    <a asp-controller="Teachers" asp-action="MySchedule" asp-route-marker="-1" class="btn btn-info btn-block text-uppercase">Prev Week </a>
+                </td>
+                <td>
+                    <a asp-controller="Teachers" asp-action="MySchedule" asp-route-marker="1" class="btn btn-info btn-block text-uppercase">Next Week </a>
+                </td>
+            </tr>
+        </table>
+
         <div>
             <table class="table">
                 <thead class="thead-dark" align="center">
                     <tr>
-                        <th scope="col">Time:</th>
+                        @*<th scope="col">Time:</th>*@
                         <th scope="col">Sunday</th>
                         <th scope="col">Monday</th>
                         <th scope="col">Tuesday </th>
@@ -23,31 +36,32 @@
                 </thead>
                 <tbody align="center">
                     <tr>
-                        <td class="form-group row-md-6">
-                            @for (int i = 8; i < 20; i++) // ONLY TIME   td=1 column day/time, DIV=1 group entry
-                            {
-                                <div>@i:00 - @(i + 1):00 <hr /></div>// 1 div = 1h
-                            }
-                        </td>
-                        @for (int j = 0; j < 7; j++) // dayOfWeek Columns //same dai
+                        @*<td class="form-group row-md-6">
+                                @for (int i = 8; i < 20; i++) // ONLY TIME   td=1 column day/time, DIV=1 group entry
+                                    {
+                                        <div>@i:00 - @(i + 1):00 <hr /></div>// 1 div = 1h
+                                    }
+                            </td>*@
+                        @for (int j = 0; j < 6; j++) // dayOfWeek Columns //same dai
                         {
                             //Empty divs to splitup groups
                             <td class="form-group row-md-6">
-                                @for (int j2 = 8; j2 < 20; j2++)@* kolko razdeleniq nadolu po 4as broim *@
+                                @for (int j2 = 0; j2 < @Model.ScheduleWeekDays[j].TimeSlots.Count(); j2++)@* kolko razdeleniq nadolu po 4as broim *@
                                 {
+
+                                    int slots = 0;
+
+                                    if ((int)@Model.ScheduleWeekDays[j].DayOfWeek == j2) //uslovie za same day
                                     {
-                                        int slots = 0;
-                                    }
-                                    if ((int)@Model.ScheduleWeekDays[j].DayOfWeek == j2 + 1) //uslovie za same day
-                                    {
+
                                         <div>
-                                            @Model.ScheduleWeekDays[j].TimeSlots[slots].GroupName
-                                            (@Model.ScheduleWeekDays[j].TimeSlots[slots].StartTime - @Model.ScheduleWeekDays.FirstOrDefault().TimeSlots[j2].EndTime)
+                                            @Model.ScheduleWeekDays[j].TimeSlots[slots].GroupName <br />
+                                            (@Model.ScheduleWeekDays[j].TimeSlots[slots].StartTime - @Model.ScheduleWeekDays[j].TimeSlots[slots].EndTime)
                                         </div>
-                                            @{slots++; }
-                                        }
-                                        else
-                                        {
+                                        slots++;
+                                    }
+                                    else
+                                    {
                                         <div></div>
                                     }
 

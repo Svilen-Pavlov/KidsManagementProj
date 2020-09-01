@@ -11,8 +11,10 @@ namespace KidsManagement.ViewModels.Teachers.MyZoneModels.MySchedule
             this.ScheduleWeekDays = new List<ScheduleWeekDayViewModel>();
         }
 
-        public string FromDate { get; set; }
-        public string ToDate { get; set; }
+        public string FromDateDisplay { get; set; }
+        public string ToDateDisplay { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
 
 
         //table formats
