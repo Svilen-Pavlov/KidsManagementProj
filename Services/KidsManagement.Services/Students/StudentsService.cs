@@ -27,12 +27,12 @@ namespace KidsManagement.Services.Students
         public async Task<int> CreateStudent(CreateStudentInputModel model)
         {
             var pic = model.ProfileImage;
-            var picURI= pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
+            var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
             var age = DateTime.Today.Year - model.BirthDate.Year;
             if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
 
-           // var parentIds = model.Parents.Where(x => x.Selected).Select(x => x.Id).ToArray();
-           // var parentsForStudent = this.db.Parents.Where(x => parentIds.Contains(x.Id)).ToArray();
+            // var parentIds = model.Parents.Where(x => x.Selected).Select(x => x.Id).ToArray();
+            // var parentsForStudent = this.db.Parents.Where(x => parentIds.Contains(x.Id)).ToArray();
 
             var student = new Student
             {
@@ -44,7 +44,7 @@ namespace KidsManagement.Services.Students
                 BirthDate = model.BirthDate,
                 Grade = model.Grade,
                 Status = model.Status,
-                ProfilePicURI=picURI
+                ProfilePicURI = picURI
             };
 
             await this.db.Students.AddAsync(student);
@@ -54,7 +54,7 @@ namespace KidsManagement.Services.Students
 
         public async Task<bool> Exists(int StudentId) // with or w/o deleted?
         {
-            return await this.db.Students.AnyAsync(x => x.Id == StudentId);
+            return await this.db.Students.AnyAsync(x => x.Id == StudentId && x.Status != StudentStatus.Quit);
         }
 
         public async Task<StudentDetailsViewModel> FindById(int studentId)
@@ -62,8 +62,8 @@ namespace KidsManagement.Services.Students
             var student = await this.db.Students
                 //.Include(s=>s.Parents)
                 //.ThenInclude(x=>x.Select(y=>y.Parent))
-                .Include(s=>s.Group)
-                .FirstOrDefaultAsync(x => x.Id == studentId);
+                .Include(s => s.Group)
+                .FirstOrDefaultAsync(x => x.Id == studentId && x.Status != StudentStatus.Quit);
             var parents = this.db.Parents.Where(p => p.Children.Any(sp => sp.StudentId == student.Id)).ToArray();
 
             var model = new StudentDetailsViewModel
@@ -79,11 +79,11 @@ namespace KidsManagement.Services.Students
                 GroupId = (int?)student.GroupId == null ? 0 : student.GroupId,
                 GroupName = student.Group == null ? InfoStrings.StudentNotInAGroupYet : student.Group.Name,
                 Status = student.Status,
-                ProfilePicURI=student.ProfilePicURI,
-                Parents=parents.Select(p=> new ParentsSelectionViewModel
+                ProfilePicURI = student.ProfilePicURI,
+                Parents = parents.Select(p => new ParentsSelectionViewModel
                 {
-                    Id=p.Id,
-                    Name=p.FullName
+                    Id = p.Id,
+                    Name = p.FullName
                 }).ToList()
             };
 
@@ -98,7 +98,8 @@ namespace KidsManagement.Services.Students
         public AllStudentsDetailsViewModel GetAll(int teacherId)
         {
             var students = this.db.Students
-                .Where(s=>(teacherId!=0)?s.Group.TeacherId==teacherId:true)
+                .Where(s => (teacherId != 0) ? s.Group.TeacherId == teacherId : true)
+                .Where(s => s.Status != StudentStatus.Quit)
                .Select(student => new AllSingleStudentsViewModel
                {
                    Id = student.Id,
@@ -134,6 +135,21 @@ namespace KidsManagement.Services.Students
 
             await this.db.SaveChangesAsync();
 
+        }
+
+        public async Task<int> Delete(int studentId)
+        {
+            var student = await this.db.Students
+                .Include(s => s.Group)
+                .FirstOrDefaultAsync(s => s.Id == studentId);
+
+            if (student.Group != null)
+                student.Group.Students.Remove(student);
+
+            student.Status = StudentStatus.Quit;
+
+
+            return this.db.SaveChangesAsync().Result;
         }
     }
 }

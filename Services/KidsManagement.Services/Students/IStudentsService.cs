@@ -20,5 +20,6 @@ namespace KidsManagement.Services.Students
 
         Task EditParents(EditParentsInputModel model);
 
+        Task<int> Delete(int studentId);
     }
 }

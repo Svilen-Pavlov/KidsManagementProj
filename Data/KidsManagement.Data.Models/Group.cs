@@ -51,7 +51,7 @@ namespace KidsManagement.Data.Models
         //stats
         public int MaxStudents { get; set; }
 
-        //[Required] make it required tho
+        [Required]
         public GroupStatus Status { get;set; }
 
         //links

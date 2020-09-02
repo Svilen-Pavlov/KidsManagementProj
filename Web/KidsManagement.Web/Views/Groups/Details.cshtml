@@ -6,9 +6,9 @@
     <div class="container">
         <h1 style="margin: 2%; text-align: center;">@Model.Name</h1>
        
-        <div class="form-row">
-            <div class="col">
-                <div class="form-group col-md-6">
+        <div class="form-row" >
+            <div class="col" >
+                <div class="form-group col-md-6" align="center">
                     <label asp-for="@Model.CurrentLessonNumber"></label>
                     <input asp-for="@Model.CurrentLessonNumber" type="text" readonly class="form-control" name="CurrentLessonNumber" value="@Model.CurrentLessonNumber">
                 </div>
@@ -46,22 +46,25 @@
                 <hr />
                 @foreach (var student in Model.Students)
                 {
-                    <div class="form-group row-md-6">
+                    <div class="form-group col-md-6">
                         <a asp-controller="Students"
                            asp-action="Details"
                            asp-route-studentId="@student.Id">@student.FulLName  @student.Age (@student.Gender)</a>
                     </div>
                 }
+                <hr />
+
+                @if (Model.Students.Count() < Model.MaxStudents) //adding student to group
+                {
+                    <div class="form-group text-center col-md-6">
+                        <div class="button-holder">
+                            <a href="/Groups/AddStudents?groupId=@Model.Id" class="btn btn-info btn-block">Add Students</a>
+                        </div>
+                    </div>
+                }
             </div>
 
-            @if (Model.Students.Count() < Model.MaxStudents) //adding student to group
-            {
-                @*<div class="form-group text-center">
-                        <div class="button-holder">
-                            <a href="/Groups/AddStudentToGroup?groupId=@Model.Id" class="btn btn-primary btn-block text-uppercase">Add Student</a>
-                        </div>
-                    </div>*@
-            }
+           
 
         </div>
     </div>

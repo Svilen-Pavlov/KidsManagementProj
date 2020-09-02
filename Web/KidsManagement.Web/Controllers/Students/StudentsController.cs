@@ -86,46 +86,59 @@ namespace KidsManagement.Web.Controllers.Students
 
         public async Task<IActionResult> AddToGroup()
         {
-            var studentId = this.TempData["studentId"];
-            if (studentId == null || (studentId is int) == false)
+            var studentIdNullable = this.TempData["studentId"];
+            if (studentIdNullable == null || (studentIdNullable is int) == false)
                 return this.Redirect("/");
 
-            int studentIdInt = (int)studentId;
+            int studentId = (int)studentIdNullable;
 
-            if (await this.studentsService.Exists(studentIdInt) == false)
+            if (await this.studentsService.Exists(studentId) == false)
             {
                 this.Redirect("/");
             }
 
-            var groupsList = await this.groupsService.GetVacantGroupsWithProperAge(studentIdInt);
+            var groupsList = await this.groupsService.GetVacantGroupsWithProperAge(studentId);
 
-            var outputModel = new AddStudentToGroupInputModel() {GroupsForSelection = groupsList.ToList() };
+            var model = new AddStudentToGroupInputModel() {GroupsForSelection = groupsList.ToList() };
             this.TempData.Keep("studentStatus");
             this.TempData.Keep("studentId");
 
-            return await Task.Run(() => this.View(outputModel));
+            return await Task.Run(() => View(model));
         }
 
         [HttpPost]
         public async Task<IActionResult> AddToGroup(AddStudentToGroupInputModel model)
         {
-            var studentId = this.TempData["studentId"];
+            var studentIdNullable = this.TempData["studentId"];
             var groupId = model.IsSelected;
-            if (studentId == null || (studentId is int) == false)
+            if (studentIdNullable == null || (studentIdNullable is int) == false)
                 return this.Redirect("/"); //todo groupId is null or not int
 
             if (await this.groupsService.GroupExists(groupId) == false)
             {
                 return this.Redirect("/"); // group does not exist
             }
-            int studentIdInt = (int)studentId;
+            int studentId = (int)studentIdNullable;
 
             if (this.TempData["studentStatus"].ToString() == "Active")
-               await this.groupsService.RemoveStudent(studentIdInt);
+               await this.groupsService.RemoveStudent(studentId);
 
-            await this.groupsService.AddStudent(studentIdInt, groupId);
+            await this.groupsService.AddStudent(studentId, groupId);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
+        }
+
+        public async Task<IActionResult> Delete(int studentId)
+        {
+            if (await this.studentsService.Exists(studentId) == false)
+            {
+                this.Redirect("/");
+            }
+            var result = await this.studentsService.Delete(studentId);
+
+
+            return await Task.Run(() => this.RedirectToAction("Index"));
+
         }
 
         [HttpPost]

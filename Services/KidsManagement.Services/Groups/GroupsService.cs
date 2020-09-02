@@ -60,10 +60,10 @@ namespace KidsManagement.Services.Groups
         public GroupDetailsViewModel FindById(int groupId)
         {
             var group = this.db.Groups
-                //.Include(g=>g.Teacher) optimize DB operation
+                //.Include(g=>g.Teacher) optimize DB operation include case if group is teacherless 
                 .FirstOrDefault(x => x.Id == groupId);
             var level = this.db.Levels.FirstOrDefault(x => x.Id == group.LevelId); //dali 6e go nameri
-            var students = this.db.Students.Where(x => x.GroupId == group.Id).ToArray();
+            var students = this.db.Students.Where(x => x.GroupId == group.Id).ToArray(); //should it be Included? optimize
             var model = new GroupDetailsViewModel
             {
                 Id = group.Id,

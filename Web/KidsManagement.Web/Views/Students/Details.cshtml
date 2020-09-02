@@ -74,8 +74,15 @@
                     </div>
                 }
                 <div class="form-group row-md-6" align="center">
-                    <a asp-action="EditParents" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle">Add & edit parents</a> @*TODO: fill in entire EditParentsModel somehow*@
+                    <a asp-action="EditParents" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle">Add & edit parents</a> 
                 </div>
+                @*@if (this.User.IsInRole("Admin"))*@
+                {
+                    <div class="form-group row-md-6" align="center">
+                        <a asp-action="Delete" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle" onclick = "return confirm('Are you sure you want to delete?')">Delete</a> 
+                    </div>
+                    
+                }
             </div>
         </div>
     </div>
