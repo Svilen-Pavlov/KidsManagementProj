@@ -120,9 +120,8 @@ namespace KidsManagement.Services.Groups
                 .Include(s=>s.Group)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
             
-            var group = student.Group;
 
-            group.Students.Remove(student);
+            student.Group.Students.Remove(student);
 
             student.Status = StudentStatus.Inactive;
             await this.db.SaveChangesAsync();

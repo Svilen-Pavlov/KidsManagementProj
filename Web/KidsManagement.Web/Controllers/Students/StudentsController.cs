@@ -6,6 +6,7 @@ using KidsManagement.ViewModels.Parents;
 using KidsManagement.ViewModels.Students;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,62 +41,53 @@ namespace KidsManagement.Web.Controllers.Students
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateStudentInputModel model) //tozi model se vru6ta ot viewto
+        public async Task<IActionResult> Create(CreateStudentInputModel model) 
         {
-            if (ModelState.IsValid == false)
-            {
-                return this.Redirect("/"); //invalid student create ERROR
-            }
-
+            if (ModelState.IsValid == false) return this.Redirect("/"); //todo error
+           
             var studentId = await this.studentsService.CreateStudent(model);
             this.TempData["studentId"] = studentId;
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
+        }
+
+
+        public async Task<IActionResult> Details(int studentId)
+        {
+            await CheckStudentId(studentId);
+
+            var model = await this.studentsService.FindById(studentId);
+
+            this.TempData["studentId"] = studentId;
+            this.TempData["studentStatus"] = model.Status.ToString();
+
+            return await Task.Run(() => this.View(model));
+        }
+
+        public async Task<IActionResult> EditStudentParents()
+        {
+            int studentId = await CheckStudentId(this.TempData["studentId"]);
+
             var parents = this.parentsService.GetAllForSelection(studentId).ToList();
             var outputModel = new EditParentsInputModel() { Parents = parents };
 
             return await Task.Run(() => this.View("EditParents", outputModel));
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> EditStudentParents(EditParentsInputModel model)
         {
-            var studentId = this.TempData["studentId"];
-            if (studentId == null || (studentId is int) == false)
-                return this.Redirect("/"); //invalid student create ERROR
-
-            model.StudentId = (int)studentId;
+            model.StudentId = await CheckStudentId(this.TempData["studentId"]);
             await this.studentsService.EditParents(model);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = model.StudentId }));
         }
 
-        public async Task<IActionResult> Details(int studentId)
-        {
-            if (await this.studentsService.Exists(studentId) == false)
-            {
-                this.Redirect("/");
-            }
-            var model = await this.studentsService.FindById(studentId);
-            
-            this.TempData["studentId"] = studentId;
-            this.TempData["studentStatus"] = model.Status.ToString();
-
-            return this.View(model);
-        }
+        
 
         public async Task<IActionResult> AddToGroup()
         {
-            var studentIdNullable = this.TempData["studentId"];
-            if (studentIdNullable == null || (studentIdNullable is int) == false)
-                return this.Redirect("/");
-
-            int studentId = (int)studentIdNullable;
-
-            if (await this.studentsService.Exists(studentId) == false)
-            {
-                this.Redirect("/");
-            }
+            int studentId = await CheckStudentId(this.TempData["studentId"]);
 
             var groupsList = await this.groupsService.GetVacantGroupsWithProperAge(studentId);
 
@@ -109,16 +101,8 @@ namespace KidsManagement.Web.Controllers.Students
         [HttpPost]
         public async Task<IActionResult> AddToGroup(AddStudentToGroupInputModel model)
         {
-            var studentIdNullable = this.TempData["studentId"];
-            var groupId = model.IsSelected;
-            if (studentIdNullable == null || (studentIdNullable is int) == false)
-                return this.Redirect("/"); //todo groupId is null or not int
-
-            if (await this.groupsService.GroupExists(groupId) == false)
-            {
-                return this.Redirect("/"); // group does not exist
-            }
-            int studentId = (int)studentIdNullable;
+            int studentId=await CheckStudentId(this.TempData["studentId"]);
+            int groupId = model.IsSelected;
 
             if (this.TempData["studentStatus"].ToString() == "Active")
                await this.groupsService.RemoveStudent(studentId);
@@ -130,15 +114,33 @@ namespace KidsManagement.Web.Controllers.Students
 
         public async Task<IActionResult> Delete(int studentId)
         {
-            if (await this.studentsService.Exists(studentId) == false)
-            {
-                this.Redirect("/");
-            }
+            await CheckStudentId(studentId);
             var result = await this.studentsService.Delete(studentId);
 
-
             return await Task.Run(() => this.RedirectToAction("Index"));
+        }
 
+        public async Task<IActionResult> EditInfo(int studentId)
+        {
+            await CheckStudentId(studentId);
+            //var result = await this.studentsService.Get(studentId);
+
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
+
+
+        }
+
+        public async Task<int> CheckStudentId(object studentIdNullable)
+        {
+            if (studentIdNullable == null || (studentIdNullable is int) == false)
+                throw new Exception(); //todo invalid userId Exception
+
+            int studentId = (int)studentIdNullable;
+            if (await this.studentsService.Exists(studentId) == false)
+                throw new Exception(); //todo teacher does not exist Exception
+
+            return studentId;
         }
 
         [HttpPost]
@@ -154,5 +156,6 @@ namespace KidsManagement.Web.Controllers.Students
 
             return this.RedirectToAction("Details", entityId);
         }
+
     }
 }
