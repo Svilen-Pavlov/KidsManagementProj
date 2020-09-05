@@ -1,0 +1,61 @@
+﻿@using KidsManagement.ViewModels.Parents;
+
+@model EditParentsInputModel;
+@{
+    ViewData["Title"] = "Details";
+}
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Select Parents</h1>
+        <div style="padding: 5%;">
+
+            <form enctype="multipart/form-data" method="post" asp-action="AddParents">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center" scope="col">Id</th>
+                            <th class="text-center" scope="col">Name</th>
+                            <th class="text-center" scope="col">Email</th>
+                            <th class="text-center" scope="col">Phone Number</th>
+                            <th class="text-center" scope="col">Selected: </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @for (var i = 0; i < Model.Parents.Count(); i++)
+                        {
+                            <tr>
+                                <th class="text-center" scope="row">@Model.Parents[i].Id</th>
+                                <td class="text-center">@Model.Parents[i].Name</td>
+                                <td class="text-center">@Model.Parents[i].Email</td>
+                                <td class="text-center">@Model.Parents[i].PhoneNumber</td>
+                                @if (Model.Parents[i].Selected)
+                                {
+                                    <td class="bg-info text-center">Current</td>
+                                }
+                                else
+                                {
+                                    @*<div class="custom-control custom-checkbox">
+                                        <input type="hidden" asp-for="@Model.Parents[i].Id" />
+                                        <input asp-for="Parents[i].Selected" />
+                                        @Model.Parents[i].Name
+                                    </div>*@
+                                    <td>
+                                        <div class="custom-control custom-checkbox style="margin-bottom:5px;width:20px;margin-left:40px"">
+                                            <input type="hidden" asp-for="@Model.Parents[i].Id" />
+                                            <input asp-for="@Model.Parents[i].Selected" />
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                </table>
+                <div align="center">
+                    <input type="submit" class="form-control button btn-info col-md-6" value="Confirm" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

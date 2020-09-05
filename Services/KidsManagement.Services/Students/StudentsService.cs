@@ -120,7 +120,7 @@ namespace KidsManagement.Services.Students
             return model;
         }
 
-        public async Task EditParents(EditParentsInputModel model)
+        public async Task AddParents(EditParentsInputModel model)
         {
             var student = this.db.Students.FirstOrDefaultAsync(x => x.Id == model.StudentId).Result;
 
@@ -135,6 +135,15 @@ namespace KidsManagement.Services.Students
 
             await this.db.SaveChangesAsync();
 
+        }
+
+        public async Task<int> UnassignParent(int studentId, int parentId)
+        {
+            var link = await this.db.StudentParents.FirstOrDefaultAsync(sp => sp.StudentId == studentId && sp.ParentId == parentId);
+
+            this.db.StudentParents.Remove(link);
+
+            return await this.db.SaveChangesAsync();
         }
 
         public async Task<int> Delete(int studentId)

@@ -64,26 +64,37 @@ namespace KidsManagement.Web.Controllers.Students
             return await Task.Run(() => this.View(model));
         }
 
-        public async Task<IActionResult> EditStudentParents()
+
+
+        public async Task<IActionResult> AddParents()
         {
             int studentId = await CheckStudentId(this.TempData["studentId"]);
 
             var parents = this.parentsService.GetAllForSelection(studentId).ToList();
             var outputModel = new EditParentsInputModel() { Parents = parents };
 
-            return await Task.Run(() => this.View("EditParents", outputModel));
+            this.TempData.Keep("studentId");
+
+            return await Task.Run(() => this.View("AddParents", outputModel));
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditStudentParents(EditParentsInputModel model)
+        public async Task<IActionResult> AddParents(EditParentsInputModel model)
         {
             model.StudentId = await CheckStudentId(this.TempData["studentId"]);
-            await this.studentsService.EditParents(model);
+            await this.studentsService.AddParents(model);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = model.StudentId }));
         }
 
-        
+        public async Task<IActionResult> UnassignParent(int parentId)
+        {
+            int studentId=await CheckStudentId(this.TempData["studentId"]);
+            await CheckParentId(parentId);
+            var result = await this.studentsService.UnassignParent(studentId,parentId);
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
+        }
 
         public async Task<IActionResult> AddToGroup()
         {
@@ -127,8 +138,6 @@ namespace KidsManagement.Web.Controllers.Students
 
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
-
-
         }
 
         public async Task<int> CheckStudentId(object studentIdNullable)
@@ -141,6 +150,12 @@ namespace KidsManagement.Web.Controllers.Students
                 throw new Exception(); //todo teacher does not exist Exception
 
             return studentId;
+        }
+
+        public async Task CheckParentId(int parentId)
+        {
+            if (await this.parentsService.Exists(parentId) == false)
+                throw new Exception(); //todo teacher does not exist Exception
         }
 
         [HttpPost]

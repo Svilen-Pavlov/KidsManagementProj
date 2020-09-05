@@ -11,6 +11,7 @@ namespace KidsManagement.Services.Students
     {
         Task<int> CreateStudent(CreateStudentInputModel model);
 
+       
         Task<bool> Exists(int studentId);
 
         Task<StudentDetailsViewModel> FindById(int studentId);
@@ -18,7 +19,9 @@ namespace KidsManagement.Services.Students
         AllStudentsDetailsViewModel GetAll();
         AllStudentsDetailsViewModel GetAll(int teacherId);
 
-        Task EditParents(EditParentsInputModel model);
+        Task AddParents(EditParentsInputModel model);
+
+        Task<int> UnassignParent(int studentId, int parentId);
 
         Task<int> Delete(int studentId);
     }

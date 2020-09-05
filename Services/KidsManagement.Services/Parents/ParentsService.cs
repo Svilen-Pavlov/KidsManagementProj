@@ -104,16 +104,19 @@ namespace KidsManagement.Services.Parents
         }
         public IEnumerable<ParentsSelectionViewModel> GetAllForSelection(int studentId)
         {
-            var currentParentsIds = this.db.StudentParents.Where(x => x.StudentId == studentId).Select(x => x.ParentId).ToArray();
+            var currentParentsIds = this.db.StudentParents.Where(x => x.StudentId == studentId).Select(x => x.ParentId).ToArray(); //2 db operations - TODO optimize
             var list = this.db.Parents.Select(x =>
                 new ParentsSelectionViewModel
                 {
                     Id = x.Id,
                     Name = x.FullName,
+                    Email=x.Email,
+                    PhoneNumber=x.PhoneNumber,
                     Selected = currentParentsIds.Contains(x.Id) ? true : false
                 })
                 .ToArray()
-                .OrderBy(x => x.Name)
+                .OrderByDescending(x => x.Selected)
+                .ThenBy(x=>x.Name)
                 .ToList();
             return list;
         }

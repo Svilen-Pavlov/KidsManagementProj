@@ -8,7 +8,6 @@
         <h1 style="margin: 2%; text-align: center;">@Model.FullName</h1>
 
         <div class="form-row">
-
             <div class="col-md-6">
                 <div class="form-group row-md-6">
                     <label asp-for="@Model.Gender">Gender</label>
@@ -30,61 +29,78 @@
                     <label asp-for="@Model.Status">Status</label>
                     <input type="text" readonly class="form-control" id="Status" name="Status" value="@Model.Status">
                 </div>
+
+                <label asp-for="@Model.GroupName">Current Group</label>
                 <div class="form-group row-md-6">
-                    <label asp-for="@Model.GroupName">Current Group</label>
-                    <input type="text" readonly class="form-control" id="Status" name="Status" value="@Model.GroupName">
+                    <input type="text" readonly class="form-control" id="GroupName" name="GroupName" value="@Model.GroupName">
+                </div>
+                @{
+                    string groupButtonLabel = Model.GroupId == 0 ? "Add to group" : "Change group";
+                    string parentsButtonLabel = Model.Parents.Count() == 0 ? "Assign parents" : "Add more parents";
+                }
+                <div class="form-group row-md-2">
+                    <a asp-action="AddToGroup" asp-route-studentId="@Model.Id" class="btn btn-info">@groupButtonLabel</a>
                 </div>
                 <hr />
+                @*@if (this.User.IsInRole("Admin"))*@
+                {
+                <table>
+                    <tr>
+                        <td>
+                            <div class="form-group row-md-6" align="center">
+                                <a asp-action="Delete" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group row-md-6" align="center">
+                                <a asp-action="EditInfo" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle">Edit Info</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                }
+
+            </div>
+            <div class="container-fluid col-md-6">
+                <div class="form-group row-md-6">
+                    <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
+                </div>
                 <div class="form-group row-md-6">
                     <label asp-for="@Model.Parents"></label>
-                    <br />
+
                     @if (@Model.Parents.Count() == 0)
                     {
                         <input type="text" readonly class="form-control" id="Status" name="Status" value="No parents chosen yet">
                     }
                     else
                     {
+                        <table>
+                            @foreach (var parent in Model.Parents)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="form-group row-md-6">
+                                            <a asp-controller="Parents" asp-action="Details" asp-route-Id="@parent.Id" class="accordion">@parent.Name</a>
+                                        </div>
 
-                        @foreach (var parent in Model.Parents)
-                        {
-                            <div class="form-group row-md-6">
-                                <a asp-controller="Parents"
-                                   asp-action="Details"
-                                   asp-route-Id="@parent.Id" class="accordion"> @parent.Name</a>
-                            </div>
-                        }
+                                    </td>
+                                    <td>
+                                        <div class="form-group row-md-2">
+                                            <a asp-action="UnassignParent" asp-route-parentId="@parent.Id" class="btn btn-info" onclick="return confirm('Are you sure you want to delete?')">Unassign</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
                     }
                 </div>
-            </div>
-            <div class="container-fluid col-md-6">
-                <div class="form-group row-md-6">
-                    <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
+                <div class="form-group row-md-6" align="left">
+                    <a asp-action="AddParents" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle">@parentsButtonLabel</a>
                 </div>
                 <hr />
-                @if (@Model.GroupId == 0)
-                {
-                    <div class="form-group row-md-6" align="center">
-                        <a asp-action="AddToGroup" asp-route-studentId="@Model.Id" class="btn btn-info">Add to group</a>
-                    </div>
-                }
-                else
-                {
-                    <div class="form-group row-md-6" align="center">
-                        <a asp-action="AddToGroup" asp-route-studentId="@Model.Id" class="btn btn-info">Change group</a>
-                    </div>
-                }
-                <div class="form-group row-md-6" align="center">
-                    <a asp-action="EditStudentParents" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle">Add & edit parents</a> 
-                </div>
-                @*@if (this.User.IsInRole("Admin"))*@
-                {
-                    <div class="form-group row-md-6" align="center">
-                        <a asp-action="Delete" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle" onclick = "return confirm('Are you sure you want to delete?')">Delete</a> 
-                    </div>
-                    <div class="form-group row-md-6" align="center">
-                        <a asp-action="EditInfo" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle">Edit Info</a>
-                    </div>
-                }
+
+
+
             </div>
         </div>
     </div>
