@@ -10,7 +10,8 @@
         <h1 style="margin: 2%; text-align: center;">Select Parents</h1>
         <div style="padding: 5%;">
 
-            <form enctype="multipart/form-data" method="post" asp-action="AddParents">
+            <form method="post" asp-action="AddParents">
+            @*<form enctype="multipart/form-data" method="post" asp-action="AddParents">*@
                 <table class="table">
                     <thead class="thead-light">
                         <tr>
@@ -31,12 +32,12 @@
                                 <td class="text-center">@Model.Parents[i].Name</td>
                                 <td class="text-center">@Model.Parents[i].Email</td>
                                 <td class="text-center">@Model.Parents[i].PhoneNumber</td>
-                                @if (Model.Parents[i].Selected)
+                                @*@if (Model.Parents[i].Selected)
                                 {
                                     <td class="bg-info text-center">Current</td>
                                 }
                                 else
-                                {
+                                {*@
                                     @*<div class="custom-control custom-checkbox">
                                         <input type="hidden" asp-for="@Model.Parents[i].Id" />
                                         <input asp-for="Parents[i].Selected" />
@@ -48,7 +49,7 @@
                                             <input asp-for="@Model.Parents[i].Selected" />
                                         </div>
                                     </td>
-                                }
+                                @*}*@
                             </tr>
                         }
                 </table>
