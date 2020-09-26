@@ -8,9 +8,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KidsManagement.ViewModels.Students
 {
-    public class CreateStudentInputModel
+    public class CreateEditStudentInputModel
     {
-        public CreateStudentInputModel()
+        public CreateEditStudentInputModel()
         {
             Parents = new List<ParentsSelectionViewModel>();
         }

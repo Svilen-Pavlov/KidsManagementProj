@@ -24,7 +24,7 @@ namespace KidsManagement.Services.Students
             this.db = db;
             this.cloudinaryService = cloudinaryService;
         }
-        public async Task<int> CreateStudent(CreateStudentInputModel model)
+        public async Task<int> CreateStudent(CreateEditStudentInputModel model)
         {
             var pic = model.ProfileImage;
             var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
@@ -161,12 +161,12 @@ namespace KidsManagement.Services.Students
             return this.db.SaveChangesAsync().Result;
         }
 
-        public async Task<CreateStudentInputModel> GetInfoForEdit(int studentId)
+        public async Task<CreateEditStudentInputModel> GetInfoForEdit(int studentId)
         {
             var student = await this.db.Students
                .FirstOrDefaultAsync(x => x.Id == studentId);
 
-            var model = new CreateStudentInputModel
+            var model = new CreateEditStudentInputModel
             {
                 FirstName = student.FirstName,
                 MiddleName = student.MiddleName,
@@ -180,7 +180,7 @@ namespace KidsManagement.Services.Students
             return model;
         }
 
-        public async Task EditInfo(CreateStudentInputModel model)
+        public async Task EditInfo(CreateEditStudentInputModel model)
         {
             var pic = model.ProfileImage;
             var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);

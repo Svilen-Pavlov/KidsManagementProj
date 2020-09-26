@@ -1,7 +1,9 @@
 ﻿@using KidsManagement.ViewModels.Students;
 
 @model StudentDetailsViewModel
-
+@{
+    ViewData["Title"] = "Details";
+}
 
 <section class="py-5">
     <div class="container">
@@ -44,23 +46,23 @@
                 <hr />
                 @if (this.User.IsInRole("Admin"))
                 {
-                <table>
-                    <tr>
-                        <td>
-                            <div class="form-group row-md-6" align="center">
-                                <a asp-action="Delete" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group row-md-6" align="center">
-                                <a asp-action="EditInfo"  asp-route-studentId="@Model.Id" class="btn btn-info" align="middle">Edit Info</a>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="form-group row-md-6" align="center">
+                                    <a asp-action="Delete" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row-md-6" align="center">
+                                    <a asp-action="EditInfo" asp-route-studentId="@Model.Id" class="btn btn-info" align="middle">Edit Info</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 }
-
             </div>
+
             <div class="container-fluid col-md-6">
                 <div class="form-group row-md-6">
                     <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
@@ -98,9 +100,6 @@
                     <a asp-action="AddParents" class="btn btn-info" align="middle">@parentsButtonLabel</a>
                 </div>
                 <hr />
-
-
-
             </div>
         </div>
     </div>

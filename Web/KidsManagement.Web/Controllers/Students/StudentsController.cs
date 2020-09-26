@@ -41,7 +41,7 @@ namespace KidsManagement.Web.Controllers.Students
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateStudentInputModel model)
+        public async Task<IActionResult> Create(CreateEditStudentInputModel model)
         {
             if (ModelState.IsValid == false) return this.Redirect("/"); //todo error
 
@@ -141,7 +141,7 @@ namespace KidsManagement.Web.Controllers.Students
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditInfo(CreateStudentInputModel model)
+        public async Task<IActionResult> EditInfo(CreateEditStudentInputModel model)
         {
             ////a  mix of edit/create/details
             int studentId=await CheckStudentId(TempData["studentId"]);

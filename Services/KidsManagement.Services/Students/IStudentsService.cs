@@ -9,7 +9,7 @@ namespace KidsManagement.Services.Students
 {
     public interface IStudentsService
     {
-        Task<int> CreateStudent(CreateStudentInputModel model);
+        Task<int> CreateStudent(CreateEditStudentInputModel model);
 
        
         Task<bool> Exists(int studentId);
@@ -19,8 +19,8 @@ namespace KidsManagement.Services.Students
         AllStudentsDetailsViewModel GetAll();
         AllStudentsDetailsViewModel GetAll(int teacherId);
 
-        Task<CreateStudentInputModel> GetInfoForEdit(int studentId);
-        Task EditInfo(CreateStudentInputModel model);
+        Task<CreateEditStudentInputModel> GetInfoForEdit(int studentId);
+        Task EditInfo(CreateEditStudentInputModel model);
 
         Task AddParents(EditParentsInputModel model);
 

@@ -1,9 +1,9 @@
 ﻿@using KidsManagement.ViewModels.Students;
 @using KidsManagement.Data.Models.Enums;
 
-@model CreateStudentInputModel;
+@model CreateEditStudentInputModel;
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
 <section class="py-5">
@@ -13,7 +13,7 @@
 
             <form enctype="multipart/form-data" method="post" asp-action="EditInfo">
                 <div class="form-row">
-                    <div class="form-col">
+                    <div class="form-col row-md-6">
                         <div class="form-group row-md-6">
                             <label asp-for="FirstName"></label>
                             <input asp-for="FirstName" type="text" class="form-control" id="FirstName" name="FirstName">
@@ -38,9 +38,6 @@
                             <label asp-for="Grade"></label>
                             <select asp-for="Grade" asp-items="Html.GetEnumSelectList<GradeLevel>()" class="form-control"></select>
                         </div>
-
-
-                        @*da go vidim*@
                         <div class="form-group row-md-6">
                             <div class="form-group">
                                 <label asp-for="ProfileImage" class="control-label"></label>
@@ -55,7 +52,7 @@
                         <hr />
                         <input type="submit" class="form-control button btn-info" value="Edit" />
                     </div>
-                    <div class="form-col">
+                    <div class="container-fluid col-md-6">
                         <div class="form-group row-md-6">
                             <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
                         </div>
