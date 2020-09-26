@@ -33,10 +33,46 @@ namespace KidsManagementConsole
             //UpdateGroupAgeGroups(db);
             //UpdateStudentStatuses(db);
             //UpdateStudentGrades(db);
-
+            //UpdateParentsStatuses(db);
         }
 
-       
+        private static void UpdateParentsStatuses(KidsManagementDbContext db)
+        {
+            var parents = db.Parents
+                            .Include(p => p.Children)
+                            .ThenInclude(sp => sp.Student)
+                            .ToArray();
+            foreach (var parent in parents)
+            {
+                if (parent.Id == 72)
+                    Console.WriteLine();
+                if (parent.Children.Count == 0)
+                {
+                    parent.Status = ParentStatus.Initial;
+                }
+                else
+                {
+                    if (parent.Children.Any(s => s.Student.Status == StudentStatus.Active))
+                    {
+                        parent.Status = ParentStatus.Active;
+                    }
+                    else if (parent.Children.All(s => s.Student.Status == StudentStatus.Quit))
+                    {
+                        parent.Status = ParentStatus.Quit;
+                    }
+                    else if (parent.Children.All(s => s.Student.Status == StudentStatus.Inactive))
+                    {
+                        parent.Status = ParentStatus.Inactive;
+                    }
+                    else
+                    {
+                        parent.Status = ParentStatus.Initial; //parent has at least 1 child that can still become active
+                    }
+                }
+            }
+
+            db.SaveChanges();
+        }
 
         private static void UpdateStudentGrades(KidsManagementDbContext db)
         {
@@ -115,7 +151,7 @@ namespace KidsManagementConsole
                 }
             }
 
-            db.SaveChanges();
+            //  db.SaveChanges();
 
         }
 

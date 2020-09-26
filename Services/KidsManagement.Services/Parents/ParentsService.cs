@@ -1,5 +1,6 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
+using KidsManagement.Data.Models.Enums;
 using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.ViewModels.Notes;
 using KidsManagement.ViewModels.Parents;
@@ -46,11 +47,11 @@ namespace KidsManagement.Services.Parents
                 Email = model.Email,
                 AlternativeEmail = model.AlternativeEmail,
                 ProfilePicURI = picURI,
-                
+
             };
             var initialNote = new Note()
             {
-                AdminId = adminId, 
+                AdminId = adminId,
                 Content = model.InitialAdminNote,
                 Date = DateTime.Now,
             };
@@ -71,7 +72,7 @@ namespace KidsManagement.Services.Parents
                 .FirstOrDefaultAsync(x => x.Id == parentId);
             var children = this.db.Students.Where(p => p.Parents.Any(sp => sp.ParentId == parent.Id)).ToArray();
             var notes = this.db.Notes
-                .Include(n=>n.Admin)
+                .Include(n => n.Admin)
                 .Where(n => n.ParentId == parent.Id).ToArray();
 
             var model = new ParentsDetailsViewModel
@@ -80,22 +81,22 @@ namespace KidsManagement.Services.Parents
                 FirstName = parent.FirstName,
                 LastName = parent.LastName,
                 Gender = parent.Gender,
-                PhoneNumber=parent.PhoneNumber,
-                AlternativePhoneNumber=parent.AlternativePhoneNumber,
-                Email=parent.Email,
-                AlternativeEmail=parent.AlternativeEmail,
+                PhoneNumber = parent.PhoneNumber,
+                AlternativePhoneNumber = parent.AlternativePhoneNumber,
+                Email = parent.Email,
+                AlternativeEmail = parent.AlternativeEmail,
                 ProfilePicURI = parent.ProfilePicURI,
                 Children = children.Select(p => new StudentSelectionViewModel
                 {
                     Id = p.Id,
                     Name = p.FullName
                 }).ToList(),
-                AdminNotes= notes.Select(n=>new NotesSelectionViewModel
+                AdminNotes = notes.Select(n => new NotesSelectionViewModel
                 {
-                    AdminName=n.Admin.FullName,
-                    Content=n.Content,
-                    Date=n.Date,
-                    Id=n.Id
+                    AdminName = n.Admin.FullName,
+                    Content = n.Content,
+                    Date = n.Date,
+                    Id = n.Id
                 }).ToList()
 
             };
@@ -106,22 +107,56 @@ namespace KidsManagement.Services.Parents
         {
             var currentParentsIds = this.db.StudentParents.Where(x => x.StudentId == studentId).Select(x => x.ParentId).ToArray(); //2 db operations - TODO optimize
             var list = this.db.Parents
-                .Where(x=>currentParentsIds.Contains(x.Id)==false)
+                .Where(x => currentParentsIds.Contains(x.Id) == false)
                 .Select(x =>
                 new ParentsSelectionViewModel
                 {
                     Id = x.Id,
                     Name = x.FullName,
-                    Email=x.Email,
-                    PhoneNumber=x.PhoneNumber,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
                     Selected = false
                 })
                 .ToArray()
                 .OrderByDescending(x => x.Selected)
-                .ThenBy(x=>x.Name)
+                .ThenBy(x => x.Name)
                 .ToList();
             return list;
         }
 
+        public AllParentsDetailsViewModel GetAll()
+        {
+            return this.GetAll(0);
+        }
+
+        public AllParentsDetailsViewModel GetAll(int studentId)
+        {
+            var parentsRaw = this.db.Parents
+                .Where(p => p.Status != ParentStatus.Quit) 
+                .Include(p => p.Children)
+                .Where(p => (studentId != 0) ? p.Children.Any(c => c.ParentId == p.Id) : true)
+                .ToArray();
+
+            var parents = parentsRaw
+              .Select(parent => new AllSingleParentsViewModel
+              {
+                  Id = parent.Id,
+                  FulLName = parent.FullName,
+                  Gender = parent.Gender,
+                  StudentsCount = parent.Children.Count(),
+                  Email = parent.Email,
+                  PhoneNumber = parent.PhoneNumber
+              })
+              .ToArray()
+              .OrderBy(x => x.FulLName)
+              .ToArray();
+
+
+            var parentsList = new List<AllSingleParentsViewModel>(parents);
+
+            var model = new AllParentsDetailsViewModel() { Parents = parentsList };
+
+            return model;
+        }
     }
 }

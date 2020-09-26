@@ -48,6 +48,7 @@ namespace KidsManagement.Data.Models
 
         public string ProfilePicURI { get; set; }
 
+        public ParentStatus Status { get; set; }
         //many to many
         public virtual ICollection<Note> AdminNotes { get; set; }
 

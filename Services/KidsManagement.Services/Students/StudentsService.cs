@@ -31,9 +31,6 @@ namespace KidsManagement.Services.Students
             var age = DateTime.Today.Year - model.BirthDate.Year;
             if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
 
-            // var parentIds = model.Parents.Where(x => x.Selected).Select(x => x.Id).ToArray();
-            // var parentsForStudent = this.db.Parents.Where(x => parentIds.Contains(x.Id)).ToArray();
-
             var student = new Student
             {
                 FirstName = model.FirstName,

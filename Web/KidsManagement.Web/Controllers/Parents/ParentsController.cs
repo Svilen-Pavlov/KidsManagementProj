@@ -28,7 +28,11 @@ namespace KidsManagement.Web.Controllers.Parents
             this.userManager = userManager;
         }
 
-        
+        public async Task<IActionResult> Index()
+        {
+            var model = this.parentsService.GetAll();
+            return await Task.Run(() => this.View(model));
+        }
 
         public async Task<IActionResult> Create()
         {

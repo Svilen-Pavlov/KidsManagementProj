@@ -8,6 +8,8 @@ namespace KidsManagement.Services.Parents
 {
     public interface IParentsService
     {
+        AllParentsDetailsViewModel GetAll();
+        AllParentsDetailsViewModel GetAll(int studentId);
         IEnumerable<ParentsSelectionViewModel> GetAllForSelection(int studentId);
 
         Task<bool> Exists(int parentId);

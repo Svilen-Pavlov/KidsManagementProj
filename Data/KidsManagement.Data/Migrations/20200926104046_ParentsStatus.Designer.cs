@@ -4,14 +4,16 @@ using KidsManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KidsManagement.Data.Migrations
 {
     [DbContext(typeof(KidsManagementDbContext))]
-    partial class KidsManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200926104046_ParentsStatus")]
+    partial class ParentsStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

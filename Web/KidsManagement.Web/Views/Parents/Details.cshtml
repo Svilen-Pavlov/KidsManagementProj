@@ -1,8 +1,9 @@
 ﻿@using KidsManagement.ViewModels.Parents;
 
 @model ParentsDetailsViewModel
-
-
+@{
+    ViewData["Title"] = "Details";
+}
 
 
 <section class="py-5">
@@ -32,7 +33,24 @@
                     <label asp-for="@Model.AlternativeEmail">Alt. Email</label>
                     <input type="text" readonly class="form-control" id="AlternativeEmail" name="AlternativeEmail" value="@Model.AlternativeEmail">
                 </div>
-
+                <hr />
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="form-group row-md-6" align="center">
+                                    <a asp-action="Delete" asp-route-parentId="@Model.Id" class="btn btn-info" align="middle" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row-md-6" align="center">
+                                    <a asp-action="EditInfo" asp-route-parentId="@Model.Id" class="btn btn-info" align="middle">Edit Info</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                }
 
             </div>
 
@@ -50,6 +68,19 @@
             </div>
 
             <div class="col-md-6">
+                <label class="table-info" asp-for="@Model.AdminNotes"></label>
+                <hr />
+                <dl>
+                    @foreach (var note in Model.AdminNotes)
+                    {
+                        <dt>On @note.Date , by @note.AdminName</dt>
+                        <dd>@note.Content</dd>
+                    }
+                </dl>
+
+            </div>
+
+            <div class="col-md-6">
                 <label class="table-info" asp-for="@Model.Children"></label>
                 <hr />
                 @foreach (var student in Model.Children)
@@ -60,18 +91,6 @@
                            asp-route-Id="@student.Id"> @student.Name</a>
                     </div>
                 }
-            </div>
-
-            <div class="col-md-6">
-                <label class="table-info" asp-for="@Model.AdminNotes"></label>
-                <hr />
-                <dl>
-                    @foreach (var note in Model.AdminNotes)
-                    {
-                    <dt>On @note.Date , by @note.AdminName</dt>
-                    <dd>@note.Content</dd>
-                    }
-                </dl>
             </div>
 
 

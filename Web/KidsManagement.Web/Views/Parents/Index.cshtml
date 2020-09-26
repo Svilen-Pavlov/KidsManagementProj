@@ -1,1 +1,44 @@
-﻿
+﻿@using KidsManagement.ViewModels.Parents;
+
+@model AllParentsDetailsViewModel;
+@{
+    ViewData["Title"] = "Details";
+}
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">All Parents</h1>
+        <div>
+            <table class="table"  style="text-align: center">
+                <thead class="thead-dark" style="text-align: center">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Children</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">PhoneNumber</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var parent in Model.Parents.OrderBy(x => x.Id))
+                    {
+                        <tr>
+                            <th scope="row">@parent.Id</th>
+                            <td>@parent.FulLName</td>
+                            <td>@parent.Gender</td>
+                            <td>@parent.StudentsCount</td>
+                            <td>@parent.Email</td>
+                            <td>@parent.PhoneNumber</td>
+                            <td>
+                                <div class="button-holder">
+                                    <a href="/Parents/Details?parentId=@parent.Id" class="btn btn-info text-uppercase">Details</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>
