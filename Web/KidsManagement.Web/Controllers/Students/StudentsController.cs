@@ -41,10 +41,10 @@ namespace KidsManagement.Web.Controllers.Students
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateStudentInputModel model) 
+        public async Task<IActionResult> Create(CreateStudentInputModel model)
         {
             if (ModelState.IsValid == false) return this.Redirect("/"); //todo error
-           
+
             var studentId = await this.studentsService.CreateStudent(model);
             this.TempData["studentId"] = studentId;
 
@@ -72,7 +72,6 @@ namespace KidsManagement.Web.Controllers.Students
 
             var parents = this.parentsService.GetAllForSelection(studentId).ToList();
             var outputModel = new EditParentsInputModel() { Parents = parents };
-
             this.TempData.Keep("studentId");
 
             return await Task.Run(() => this.View("AddParents", outputModel));
@@ -89,9 +88,9 @@ namespace KidsManagement.Web.Controllers.Students
 
         public async Task<IActionResult> UnassignParent(int parentId)
         {
-            int studentId=await CheckStudentId(this.TempData["studentId"]);
+            int studentId = await CheckStudentId(this.TempData["studentId"]);
             await CheckParentId(parentId);
-            var result = await this.studentsService.UnassignParent(studentId,parentId);
+            var result = await this.studentsService.UnassignParent(studentId, parentId);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
         }
@@ -102,7 +101,7 @@ namespace KidsManagement.Web.Controllers.Students
 
             var groupsList = await this.groupsService.GetVacantGroupsWithProperAge(studentId);
 
-            var model = new AddStudentToGroupInputModel() {GroupsForSelection = groupsList.ToList() };
+            var model = new AddStudentToGroupInputModel() { GroupsForSelection = groupsList.ToList() };
             this.TempData.Keep("studentStatus");
             this.TempData.Keep("studentId");
 
@@ -112,11 +111,11 @@ namespace KidsManagement.Web.Controllers.Students
         [HttpPost]
         public async Task<IActionResult> AddToGroup(AddStudentToGroupInputModel model)
         {
-            int studentId=await CheckStudentId(this.TempData["studentId"]);
+            int studentId = await CheckStudentId(this.TempData["studentId"]);
             int groupId = model.IsSelected;
 
             if (this.TempData["studentStatus"].ToString() == "Active")
-               await this.groupsService.RemoveStudent(studentId);
+                await this.groupsService.RemoveStudent(studentId);
 
             await this.groupsService.AddStudent(studentId, groupId);
 
@@ -134,10 +133,22 @@ namespace KidsManagement.Web.Controllers.Students
         public async Task<IActionResult> EditInfo(int studentId)
         {
             await CheckStudentId(studentId);
-            //var result = await this.studentsService.Get(studentId);
+            var model = await this.studentsService.GetInfoForEdit(studentId);
+            this.TempData["studentId"] = studentId;
 
 
-            return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
+            return await Task.Run(() => this.View(model));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditInfo(CreateStudentInputModel model)
+        {
+            ////a  mix of edit/create/details
+            int studentId=await CheckStudentId(TempData["studentId"]);
+            model.Id = studentId;
+            await this.studentsService.EditInfo(model);
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { studentId = model.Id }));
         }
 
         public async Task<int> CheckStudentId(object studentIdNullable)
@@ -156,20 +167,6 @@ namespace KidsManagement.Web.Controllers.Students
         {
             if (await this.parentsService.Exists(parentId) == false)
                 throw new Exception(); //todo teacher does not exist Exception
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file, int studentId)
-        {
-            if (file == null)
-            {
-                return this.Redirect("/"); //FILE IS NULL ERROR
-            }
-            var a = this.RouteData.Values;
-            var entityId = studentId;
-            var picURI = await this.cloudinaryService.UploadProfilePicASync(file);
-
-            return this.RedirectToAction("Details", entityId);
         }
 
     }

@@ -14,6 +14,9 @@ namespace KidsManagement.ViewModels.Students
         {
             Parents = new List<ParentsSelectionViewModel>();
         }
+
+        public int Id { get; set; } //only for Edit
+
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string FirstName { get; set; }
@@ -39,9 +42,10 @@ namespace KidsManagement.ViewModels.Students
         [Required]
         public StudentStatus Status { get; set; }
 
+        public string ProfilePicURI { get; set; } //only for edit
+        public IFormFile ProfileImage { get; set; }
         public int GroupId { get; set; }
 
-        public IFormFile ProfileImage { get; set; }
 
         public List<ParentsSelectionViewModel> Parents { get; set; }
     }

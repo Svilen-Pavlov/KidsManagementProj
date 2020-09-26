@@ -160,5 +160,46 @@ namespace KidsManagement.Services.Students
 
             return this.db.SaveChangesAsync().Result;
         }
+
+        public async Task<CreateStudentInputModel> GetInfoForEdit(int studentId)
+        {
+            var student = await this.db.Students
+               .FirstOrDefaultAsync(x => x.Id == studentId);
+
+            var model = new CreateStudentInputModel
+            {
+                FirstName = student.FirstName,
+                MiddleName = student.MiddleName,
+                LastName = student.LastName,
+                BirthDate = student.BirthDate,
+                Gender = student.Gender,
+                Grade = student.Grade,
+                ProfilePicURI = student.ProfilePicURI,
+            };
+
+            return model;
+        }
+
+        public async Task EditInfo(CreateStudentInputModel model)
+        {
+            var pic = model.ProfileImage;
+            var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
+            var age = DateTime.Today.Year - model.BirthDate.Year;
+           
+            if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
+
+            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == model.Id);
+
+            student.FirstName = model.FirstName;
+            student.MiddleName = model.MiddleName;
+            student.LastName = model.LastName;
+            student.Gender = model.Gender;
+            student.Age = age;
+            student.BirthDate = model.BirthDate;
+            student.Grade = model.Grade;
+            student.ProfilePicURI = picURI;
+
+            await this.db.SaveChangesAsync();
+        }
     }
 }

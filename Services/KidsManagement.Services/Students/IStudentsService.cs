@@ -19,6 +19,9 @@ namespace KidsManagement.Services.Students
         AllStudentsDetailsViewModel GetAll();
         AllStudentsDetailsViewModel GetAll(int teacherId);
 
+        Task<CreateStudentInputModel> GetInfoForEdit(int studentId);
+        Task EditInfo(CreateStudentInputModel model);
+
         Task AddParents(EditParentsInputModel model);
 
         Task<int> UnassignParent(int studentId, int parentId);

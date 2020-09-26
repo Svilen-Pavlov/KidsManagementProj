@@ -1,0 +1,67 @@
+﻿@using KidsManagement.ViewModels.Students;
+@using KidsManagement.Data.Models.Enums;
+
+@model CreateStudentInputModel;
+@{
+    ViewData["Title"] = "Create";
+}
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Edit Info</h1>
+        <div style="padding: 5%;">
+
+            <form enctype="multipart/form-data" method="post" asp-action="EditInfo">
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group row-md-6">
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" type="text" class="form-control" id="FirstName" name="FirstName">
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="MiddleName"></label>
+                            <input asp-for="MiddleName" type="text" class="form-control" id="MiddleName" name="MiddleName">
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" type="text" class="form-control" id="LastName">
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label for="Gender">Gender</label>
+                            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control"></select>
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="BirthDate"></label>
+                            <input asp-for="BirthDate" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" id="BirthDate" name="BirthDate">
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="Grade"></label>
+                            <select asp-for="Grade" asp-items="Html.GetEnumSelectList<GradeLevel>()" class="form-control"></select>
+                        </div>
+
+
+                        @*da go vidim*@
+                        <div class="form-group row-md-6">
+                            <div class="form-group">
+                                <label asp-for="ProfileImage" class="control-label"></label>
+                                <div class="custom-file">
+                                    <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                                @*<span asp-validation-for="ProfileImage" class="text-danger"></span>* apply this@
+                                    @*this indian guy carried me https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/*@
+                            </div>
+                        </div>
+                        <hr />
+                        <input type="submit" class="form-control button btn-info" value="Edit" />
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group row-md-6">
+                            <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
