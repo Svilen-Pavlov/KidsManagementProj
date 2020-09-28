@@ -1,4 +1,5 @@
 ﻿using KidsManagement.ViewModels.Parents;
+using KidsManagement.ViewModels.Students;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,5 +18,9 @@ namespace KidsManagement.Services.Parents
         Task<ParentsDetailsViewModel> FindById(int parentId);
 
         Task<int> CreateParent(CreateParentInputModel model, string userAdminId);
+
+        Task<int> Delete(int parentId);
+
+        Task<AllStudentsDetailsViewModel> GetNonQuitStudents(int parentId);
     }
 }

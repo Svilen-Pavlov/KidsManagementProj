@@ -40,12 +40,12 @@
                         <tr>
                             <td>
                                 <div class="form-group row-md-6" align="center">
-                                    <a asp-action="Delete" asp-route-parentId="@Model.Id" class="btn btn-info" align="middle" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+                                    <a asp-controller="Parents" asp-action="Delete" asp-route-parentId="@Model.Id" class="btn btn-info" align="middle" onclick="return confirm('Are you sure you want to delete? Only Parents with all of their Children already deleted can be deleted!')">Delete</a>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group row-md-6" align="center">
-                                    <a asp-action="EditInfo" asp-route-parentId="@Model.Id" class="btn btn-info" align="middle">Edit Info</a>
+                                    <a asp-controller="Parents" asp-route-parentId="@Model.Id" class="btn btn-info" align="middle">Edit Info</a>
                                 </div>
                             </td>
                         </tr>

@@ -100,13 +100,13 @@ namespace KidsManagement.Services.Students
                .Select(student => new AllSingleStudentsViewModel
                {
                    Id = student.Id,
-                   FulLName = student.FullName,
+                   FullName = student.FullName,
                    Gender = student.Gender,
                    Age = student.Age,
                    GroupName = student.Group == null ? InfoStrings.StudentNotInAGroupYet : student.Group.Name,
                })
                .ToArray()
-               .OrderBy(x => x.FulLName)
+               .OrderBy(x => x.FullName)
                 .ToArray();
 
 

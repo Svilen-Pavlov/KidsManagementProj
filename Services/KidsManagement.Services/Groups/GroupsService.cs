@@ -81,7 +81,7 @@ namespace KidsManagement.Services.Groups
                 MaxStudents = (int)group.MaxStudents,
                 Students = students.Select(s => new AllSingleStudentsViewModel()
                 {
-                    FulLName = s.FullName,
+                    FullName = s.FullName,
                     Age = s.Age,
                     Gender = s.Gender,
                     GroupName = group.Name,

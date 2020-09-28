@@ -6,16 +6,22 @@
 }
 <section class="py-5">
     <div class="container">
-        <h1 style="margin: 2%; text-align: center;">All Students</h1>
+        <h1 style="margin: 2%; text-align: center;">List of Children</h1>
+        <div >
+            <p style="text-align: center">
+                Deleting a parent is only possible when all of their children have been deleted as well.
+                <br />The following students have a different status than Quit (Deleted) and need to be managed first:
+            </p>
+        </div>
         <div>
-            <table class="table">
+            <table class="table" style="text-align: center">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Id</th>
-                        <th scope="col">FullName</th>
+                        <th scope="col">Full Name</th>
                         <th scope="col">Gender</th>
                         <th scope="col">Age</th>
-                        <th scope="col">GroupName</th>
+                        <th scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,10 +32,10 @@
                             <td>@student.FullName</td>
                             <td>@student.Gender</td>
                             <td>@student.Age</td>
-                            <td>@student.GroupName</td>
+                            <td>@student.Status</td>
                             <td>
                                 <div class="button-holder">
-                                    <a href="/Students/Details?studentId=@student.Id" class="btn btn-info text-uppercase">DETAILS</a>
+                                    <a href="/Students/Details?studentId=@student.Id" class="btn btn-info text-uppercase">Manage</a>
                                 </div>
                             </td>
                         </tr>
@@ -40,3 +46,4 @@
         </div>
     </div>
 </section>
+

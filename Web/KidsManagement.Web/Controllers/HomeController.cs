@@ -10,13 +10,11 @@ namespace KidsManagement.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ICloudinaryService cloudinaryService;
 
-        public HomeController(ILogger<HomeController> logger, ICloudinaryService cloudinaryService)
+        public HomeController(ILogger<HomeController> logger)
         {
 
             _logger = logger;
-            this.cloudinaryService = cloudinaryService;
         }
 
         public IActionResult Index()

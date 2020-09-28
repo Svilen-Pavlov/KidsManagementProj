@@ -103,6 +103,7 @@ namespace KidsManagement.Services.Parents
 
             return model;
         }
+
         public IEnumerable<ParentsSelectionViewModel> GetAllForSelection(int studentId)
         {
             var currentParentsIds = this.db.StudentParents.Where(x => x.StudentId == studentId).Select(x => x.ParentId).ToArray(); //2 db operations - TODO optimize
@@ -141,20 +142,60 @@ namespace KidsManagement.Services.Parents
               .Select(parent => new AllSingleParentsViewModel
               {
                   Id = parent.Id,
-                  FulLName = parent.FullName,
+                  FullName = parent.FullName,
                   Gender = parent.Gender,
                   StudentsCount = parent.Children.Count(),
                   Email = parent.Email,
                   PhoneNumber = parent.PhoneNumber
               })
               .ToArray()
-              .OrderBy(x => x.FulLName)
+              .OrderBy(x => x.FullName)
               .ToArray();
 
 
             var parentsList = new List<AllSingleParentsViewModel>(parents);
 
             var model = new AllParentsDetailsViewModel() { Parents = parentsList };
+
+            return model;
+        }
+
+        public async Task<int> Delete(int parentId)
+        {
+            var parent = await this.db.Parents
+                .Include(p=>p.Children)
+                .ThenInclude(sp=>sp.Student)
+                .FirstOrDefaultAsync(s => s.Id == parentId);
+
+            if (parent.Children.All(sp=>sp.Student.Status == StudentStatus.Quit) || parent.Children.Count==0)
+            parent.Status = ParentStatus.Quit;
+
+
+            return this.db.SaveChangesAsync().Result;
+        }
+
+        public async Task<AllStudentsDetailsViewModel> GetNonQuitStudents(int parentId)
+        {
+            var parent = await this.db.Parents
+                .Include(p => p.Children)
+                .ThenInclude(sp => sp.Student)
+                .FirstOrDefaultAsync(s => s.Id == parentId);
+
+            var students = parent.Children
+                .Where(sp => sp.Student.Status != StudentStatus.Quit)
+                .Select(student => new AllSingleStudentsViewModel
+                {
+                    Id = student.Student.Id,
+                    FullName = student.Student.FullName,
+                    Age = student.Student.Age,
+                    Gender = student.Student.Gender,
+                    Status=student.Student.Status
+                })
+                .ToArray();
+
+            var studentsList = new List<AllSingleStudentsViewModel>(students);
+
+            var model = new AllStudentsDetailsViewModel() { Students = studentsList };
 
             return model;
         }

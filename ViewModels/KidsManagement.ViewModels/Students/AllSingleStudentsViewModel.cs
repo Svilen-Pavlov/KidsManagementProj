@@ -9,11 +9,12 @@ namespace KidsManagement.ViewModels.Students
     {
         public int Id { get; set; }
 
-        public string FulLName {get; set;}
+        public string FullName {get; set;}
 
         public Gender Gender { get; set; }
 
         public int Age { get; set; }
+        public StudentStatus Status { get; set; }
 
         public string GroupName { get; set; }
     }

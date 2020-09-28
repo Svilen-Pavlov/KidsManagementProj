@@ -74,7 +74,31 @@ namespace KidsManagement.Web.Controllers.Parents
             var parent = await this.parentsService.FindById(parentId);
             return this.View(parent);
         }
-        
 
+        public async Task<IActionResult> Delete(int parentId)
+        {
+            await CheckParentId(parentId);
+            var result = await this.parentsService.Delete(parentId);
+
+
+            if (result == 0)
+                return await Task.Run(() => this.RedirectToAction("ShowNonQuitStudents", new { parentId = parentId }));
+            else
+                return await Task.Run(() => this.RedirectToAction("Index"));
+        }
+
+        public async Task<IActionResult> ShowNonQuitStudents(int parentId)
+        {
+            await CheckParentId(parentId);
+            var model = await this.parentsService.GetNonQuitStudents(parentId);
+
+            return this.View(model);
+        }
+
+        public async Task CheckParentId(int parentId) //SAME AS StudentsController method
+        {
+            if (await this.parentsService.Exists(parentId) == false)
+                throw new Exception(); //todo teacher does not exist Exception
+        }
     }
 }
