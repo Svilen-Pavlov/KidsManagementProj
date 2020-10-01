@@ -36,7 +36,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         {
             var levelsList = this.levelsService.GetAllForSelection();
             var groupsList = this.groupsService.GetAllForSelection(false); //the int? argument is when wanting to add only empty groups to the teacher or other teacher's groups
-            var model = new CreateTeacherInputModel()
+            var model = new CreateEditTeacherInputModel()
             {
                 Levels = levelsList.ToList(),
                 Groups = groupsList.ToList()
@@ -45,7 +45,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateTeacherInputModel model)
+        public async Task<IActionResult> Create(CreateEditTeacherInputModel model)
         {
             if (this.ModelState.IsValid == false)
             {
@@ -156,6 +156,26 @@ namespace KidsManagement.Web.Controllers.Teachers
             return await Task.Run(() => this.View(viewModel));
         }
 
+        public async Task<IActionResult> EditInfo(int teacherId)
+        {
+            await CheckTeacherId(teacherId);
+            var model = await this.teachersService.GetInfoForEdit(teacherId);
+            this.TempData["teacherId"] = teacherId;
+
+
+            return await Task.Run(() => this.View(model));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditInfo(CreateEditTeacherInputModel model)
+        {
+            int teacherId = await CheckTeacherId(this.TempData["teacherId"]);
+            model.Id = teacherId;
+            await this.teachersService.EditInfo(model);
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { teacherId = model.Id }));
+        }
+
         public int? GetLoggedInTeacherBussinessId()
         {
             var userTeachernId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -164,7 +184,7 @@ namespace KidsManagement.Web.Controllers.Teachers
             return teacherId;
         }
 
-        public async Task<int> CheckTeacherId(int? teacherIdnullabe)
+        public async Task<int> CheckTeacherId(object teacherIdnullabe)
         {
             if (teacherIdnullabe == null || (teacherIdnullabe is int) == false)
             throw new Exception(); //todo invalid userId Exception

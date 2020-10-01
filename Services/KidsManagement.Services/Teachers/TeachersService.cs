@@ -32,7 +32,7 @@ namespace KidsManagement.Services.Teachers
         }
 
 
-        public async Task<int> CreateTeacher(CreateTeacherInputModel model) //idk if this populates teacherlevels correctly
+        public async Task<int> CreateTeacher(CreateEditTeacherInputModel model) //idk if this populates teacherlevels correctly
         {
             var pic = model.ProfileImage;
             string picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
@@ -365,6 +365,34 @@ namespace KidsManagement.Services.Teachers
             return (groupStart < toDate || groupEnd > fromDate) && (groupStart > fromDate || groupEnd > toDate);
         }
 
+        public async Task<CreateEditTeacherInputModel> GetInfoForEdit(int teacherId)
+        {
+            var teacher = await this.db.Teachers
+               .FirstOrDefaultAsync(x => x.Id == teacherId);
+
+            var model = new CreateEditTeacherInputModel
+            {
+                FirstName = teacher.FirstName,
+                LastName = teacher.LastName,
+                Gender = teacher.Gender,
+                Salary=teacher.Salary,
+                HiringDate=teacher.HiringDate,
+                DismissalDate=teacher.DismissalDate,
+                ProfilePicURI = teacher.ProfilePicURI,
+            };
+
+            return model;
+        }
+
+        public Task EditInfo(CreateEditTeacherInputModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> Delete(int teacherId)
+        {
+            throw new NotImplementedException();
+        }
     }
     public static class DateTimeExtensions
     {

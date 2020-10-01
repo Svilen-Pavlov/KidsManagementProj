@@ -9,8 +9,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KidsManagement.ViewModels.Teachers
 {
-    public class CreateTeacherInputModel
+    public class CreateEditTeacherInputModel
     {
+        public int Id { get; set; } //for edit only
+
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string FirstName { get; set; }
@@ -25,6 +27,7 @@ namespace KidsManagement.ViewModels.Teachers
         public DateTime HiringDate { get; set; }
         public DateTime? DismissalDate { get; set; }
 
+        public string ProfilePicURI { get; set; } //for edit only
         public IFormFile ProfileImage { get; set; }
         public List<LevelSelectionViewModel> Levels { get; set; } = new List<LevelSelectionViewModel>();
         public List<GroupSelectionViewModel> Groups { get; set; } = new List<GroupSelectionViewModel>();

@@ -9,8 +9,10 @@ using System.Text;
 
 namespace KidsManagement.ViewModels.Parents
 {
-    public class CreateParentInputModel
+    public class CreateEditParentInputModel
     {
+        public int Id { get; set; }
+
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
         public string FirstName { get; set; }
@@ -25,6 +27,7 @@ namespace KidsManagement.ViewModels.Parents
 
         [Required]
         public string PhoneNumber { get; set; }
+
         public string AlternativePhoneNumber { get; set; }
 
         [Required]
@@ -35,6 +38,8 @@ namespace KidsManagement.ViewModels.Parents
         public string AlternativeEmail { get; set; }
 
 
+
+        public string ProfilePicURI { get; set; } //only for edit
 
         [Required]
         public IFormFile ProfileImage { get; set; }

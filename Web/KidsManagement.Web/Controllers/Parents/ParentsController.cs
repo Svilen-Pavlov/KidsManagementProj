@@ -40,7 +40,7 @@ namespace KidsManagement.Web.Controllers.Parents
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateParentInputModel model) //tozi model se vru6ta ot viewto
+        public async Task<IActionResult> Create(CreateEditParentInputModel model) //tozi model se vru6ta ot viewto
         {
             if (ModelState.IsValid == false)
             {
@@ -95,10 +95,37 @@ namespace KidsManagement.Web.Controllers.Parents
             return this.View(model);
         }
 
-        public async Task CheckParentId(int parentId) //SAME AS StudentsController method
+        public async Task<IActionResult> EditInfo(int parentId)
         {
+            await CheckParentId(parentId);
+            var model = await this.parentsService.GetInfoForEdit(parentId);
+            this.TempData["parentId"] = parentId;
+
+
+            return await Task.Run(() => this.View(model));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditInfo(CreateEditParentInputModel model)
+        {
+            int parentId = await CheckParentId(this.TempData["parentId"]);
+            model.Id = parentId;
+            await this.parentsService.EditInfo(model);
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { parentId = model.Id }));
+        }
+
+        public async Task<int> CheckParentId(object parentIdNullable)
+        {
+            if (parentIdNullable == null || (parentIdNullable is int) == false)
+                throw new Exception(); //todo invalid userId Exception
+
+            int parentId = (int)parentIdNullable;
+
             if (await this.parentsService.Exists(parentId) == false)
-                throw new Exception(); //todo teacher does not exist Exception
+                throw new Exception(); //todo parent does not exist Exception
+
+            return parentId;
         }
     }
 }

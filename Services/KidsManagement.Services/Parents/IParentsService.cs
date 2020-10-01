@@ -17,9 +17,13 @@ namespace KidsManagement.Services.Parents
 
         Task<ParentsDetailsViewModel> FindById(int parentId);
 
-        Task<int> CreateParent(CreateParentInputModel model, string userAdminId);
+        Task<int> CreateParent(CreateEditParentInputModel model, string userAdminId);
 
         Task<int> Delete(int parentId);
+
+        Task<CreateEditParentInputModel> GetInfoForEdit(int studentId);
+        Task EditInfo(CreateEditParentInputModel model);
+
 
         Task<AllStudentsDetailsViewModel> GetNonQuitStudents(int parentId);
     }

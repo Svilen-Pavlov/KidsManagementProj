@@ -30,7 +30,7 @@ namespace KidsManagement.Services.Parents
             return await this.db.Parents.AnyAsync(x => x.Id == parentId);
         }
 
-        public async Task<int> CreateParent(CreateParentInputModel model, string userAdminId)
+        public async Task<int> CreateParent(CreateEditParentInputModel model, string userAdminId)
         {
             var pic = model.ProfileImage;
             var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
@@ -198,6 +198,46 @@ namespace KidsManagement.Services.Parents
             var model = new AllStudentsDetailsViewModel() { Students = studentsList };
 
             return model;
+        }
+
+        public async Task<CreateEditParentInputModel> GetInfoForEdit(int parentId)
+        {
+            var parent = await this.db.Parents
+                .FirstOrDefaultAsync(x => x.Id == parentId);
+
+            var model = new CreateEditParentInputModel
+            {
+                FirstName = parent.FirstName,
+                LastName = parent.LastName,
+                Gender = parent.Gender,
+                Email=parent.Email,
+                AlternativeEmail=parent.AlternativeEmail,
+                PhoneNumber=parent.PhoneNumber,
+                AlternativePhoneNumber=parent.AlternativePhoneNumber,
+                ProfilePicURI = parent.ProfilePicURI,
+            };
+
+            return model;
+        }
+
+        public async Task EditInfo(CreateEditParentInputModel model)
+        {
+            var pic = model.ProfileImage;
+            var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
+
+
+            var parent = await this.db.Parents.FirstOrDefaultAsync(x => x.Id == model.Id);
+
+            parent.FirstName = model.FirstName;
+            parent.LastName = model.LastName;
+            parent.Gender = model.Gender;
+            parent.Email = model.Email;
+            parent.AlternativeEmail = model.AlternativeEmail;
+            parent.PhoneNumber = model.PhoneNumber;
+            parent.AlternativePhoneNumber = model.AlternativePhoneNumber;
+            parent.ProfilePicURI = picURI;
+
+            await this.db.SaveChangesAsync();
         }
     }
 }

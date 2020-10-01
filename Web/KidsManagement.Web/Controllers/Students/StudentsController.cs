@@ -158,15 +158,22 @@ namespace KidsManagement.Web.Controllers.Students
 
             int studentId = (int)studentIdNullable;
             if (await this.studentsService.Exists(studentId) == false)
-                throw new Exception(); //todo teacher does not exist Exception
+                throw new Exception(); //todo student does not exist Exception
 
             return studentId;
         }
 
-        public async Task CheckParentId(int parentId)
+        public async Task<int> CheckParentId(object parentIdNullable)
         {
+            if (parentIdNullable == null || (parentIdNullable is int) == false)
+                throw new Exception(); //todo invalid userId Exception
+
+            int parentId = (int)parentIdNullable;
+
             if (await this.parentsService.Exists(parentId) == false)
-                throw new Exception(); //todo teacher does not exist Exception
+                throw new Exception(); //todo parent does not exist Exception
+
+            return parentId;
         }
 
     }

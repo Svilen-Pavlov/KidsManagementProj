@@ -13,7 +13,7 @@ namespace KidsManagement.Services.Teachers
     {
         TeacherDetailsViewModel FindById (int teacherId);
 
-        Task<int> CreateTeacher(CreateTeacherInputModel model);
+        Task<int> CreateTeacher(CreateEditTeacherInputModel model);
 
         Task<bool> TeacherExists(int teacherId);
 
@@ -26,6 +26,11 @@ namespace KidsManagement.Services.Teachers
         Task<int> AddGroups(AddGroupsToTeacherViewModel model);
 
         Task<int> GetBussinessIdByUserId(string userId);
+
+        Task<CreateEditTeacherInputModel> GetInfoForEdit(int teacherId);
+        Task EditInfo(CreateEditTeacherInputModel model);
+
+        Task<int> Delete(int teacherId);
 
         TeacherMyZoneViewModel GetMyZoneInfo(int teacherId);
 
