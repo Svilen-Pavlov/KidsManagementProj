@@ -34,6 +34,16 @@ namespace KidsManagementConsole
             //UpdateStudentStatuses(db);
             //UpdateStudentGrades(db);
             //UpdateParentsStatuses(db);
+            //testGettingPicString(); TOREMOVE
+
+        }
+
+        private static void testGettingPicString()
+        {
+            var full = "http://res.cloudinary.com/svilenpavlov/image/upload/v1601636477/tf9xtcd5jwkxkzaqnzf3.jpg";
+            Uri uri = new UriBuilder(full).Uri;
+            string versionString = uri.Segments[5]; // v1/
+            var test = versionString.Remove(versionString.IndexOf('.'));
         }
 
         private static void UpdateParentsStatuses(KidsManagementDbContext db)

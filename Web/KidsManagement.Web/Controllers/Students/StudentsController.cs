@@ -143,7 +143,6 @@ namespace KidsManagement.Web.Controllers.Students
         [HttpPost]
         public async Task<IActionResult> EditInfo(CreateEditStudentInputModel model)
         {
-            ////a  mix of edit/create/details
             int studentId=await CheckStudentId(TempData["studentId"]);
             model.Id = studentId;
             await this.studentsService.EditInfo(model);

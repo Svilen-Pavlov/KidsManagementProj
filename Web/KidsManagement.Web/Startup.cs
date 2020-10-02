@@ -49,7 +49,7 @@ namespace KidsManagement.Web
             services.AddTransient<IParentsService, ParentsService>();
             services.AddTransient<IPaymentsService, PaymentsService>();
             services.AddTransient<ILevelsService, LevelsService>();
-            services.AddTransient<ICloudinaryService, CloudinaryService>();
+            services.AddTransient<ICloudinaryService, Services.External.CloudinaryService.CloudinaryService>();
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
 
 
@@ -91,7 +91,7 @@ namespace KidsManagement.Web
                this.Configuration["Cloudinary:API_Key"],
                this.Configuration["Cloudinary:API_Secret"]);
 
-            Cloudinary cloudinary = new Cloudinary(account);
+            CloudinaryDotNet.Cloudinary cloudinary = new CloudinaryDotNet.Cloudinary(account);
             services.AddSingleton(cloudinary);
         }
 

@@ -11,16 +11,22 @@ namespace KidsManagement.Services.External.CloudinaryService
 {
     public class CloudinaryService : ICloudinaryService
     {
-        private readonly Cloudinary cloudinary;
-        public CloudinaryService(Cloudinary cloudinary)
+        private readonly CloudinaryDotNet.Cloudinary cloudinary;
+        public CloudinaryService(CloudinaryDotNet.Cloudinary cloudinary)
         {
             this.cloudinary = cloudinary;
         }
 
-        public async Task<string> UploadProfilePicASync(IFormFile file)
+        public async Task<string> UploadPicASync(IFormFile file, string existingURI)
         {
-            byte[] destinationImg;
+            string picId = null;
+            if (existingURI != null)
+            {
+                string idPart = new UriBuilder(existingURI).Uri.Segments[5];
+                picId = idPart.Remove(idPart.IndexOf('.'));
+            }
 
+            byte[] destinationImg;
             using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream);
@@ -32,6 +38,8 @@ namespace KidsManagement.Services.External.CloudinaryService
                 var uploadParams = new ImageUploadParams()
                 {
                     File = new FileDescription(file.FileName, destinationStream),
+                    PublicId= picId,
+                    Invalidate=true, //overwrites CDN cache within minutes
                     Overwrite = true,
                 };
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);

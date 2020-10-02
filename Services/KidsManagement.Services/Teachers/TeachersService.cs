@@ -19,8 +19,6 @@ namespace KidsManagement.Services.Teachers
 {
     public class TeachersService : ApplicationUserService, ITeachersService
     {
-        //private readonly KidsManagementDbContext db;
-        //private readonly UserManager<ApplicationUser> userManager;
         private readonly ICloudinaryService cloudinaryService;
 
         public TeachersService(KidsManagementDbContext db, ICloudinaryService cloudinaryService, UserManager<ApplicationUser> userManager) : base
@@ -34,15 +32,13 @@ namespace KidsManagement.Services.Teachers
 
         public async Task<int> CreateTeacher(CreateEditTeacherInputModel model) //idk if this populates teacherlevels correctly
         {
-            var pic = model.ProfileImage;
-            string picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
             var groupIds = model.Groups.Where(x => x.Selected).Select(x => x.Id).ToArray();
             var groupsToAssignToTeacher = this.db.Groups.Where(x => groupIds.Contains(x.Id)).ToArray(); //howtoasync?
             var levelsIds = model.Levels.Where(x => x.Selected).Select(x => x.Id).ToArray();
             var qualifiedLevels = this.db.Levels.Where(x => levelsIds.Contains(x.Id)).ToArray();
 
-            //User config = //https://stackoverflow.com/questions/34343599/how-to-seed-users-and-roles-with-code-first-migration-using-identity-asp-net-cor
             //user side creation
+            //User config = //https://stackoverflow.com/questions/34343599/how-to-seed-users-and-roles-with-code-first-migration-using-identity-asp-net-cor
             var user = new ApplicationUser
             {
                 Email = model.Email,
@@ -61,7 +57,7 @@ namespace KidsManagement.Services.Teachers
             var result = userStore.CreateAsync(user);
 
             var roles = new string[] { "TEACHER" };
-            await AssignRoles(user.NormalizedUserName, roles);
+            await base.AssignRoles(user.NormalizedUserName, roles);
 
 
             //business side creation
@@ -73,7 +69,7 @@ namespace KidsManagement.Services.Teachers
                 HiringDate = model.HiringDate,
                 DismissalDate = model.DismissalDate,
                 Salary = model.Salary,
-                ProfilePicURI = picURI,
+                ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null),
                 Groups = groupsToAssignToTeacher,
                 QualifiedLevels = qualifiedLevels.Select(ql => new LevelTeacher { Level = ql }).ToArray(),
                 ApplicationUserId = user.Id,
@@ -350,15 +346,6 @@ namespace KidsManagement.Services.Teachers
                 notifications.Add(notification);
             }
         }
-        public static bool IsBirthDayInRange(DateTime birthday, DateTime start, DateTime end)
-        {
-            DateTime temp = birthday.AddYears(start.Year - birthday.Year).Date;
-
-            if (temp < start)
-                temp = temp.AddYears(1);
-
-            return birthday.Date <= end && temp >= start && temp <= end;
-        }
 
         public static bool IsDateInRange(DateTime groupStart, DateTime groupEnd, DateTime fromDate, DateTime toDate)
         {
@@ -384,14 +371,32 @@ namespace KidsManagement.Services.Teachers
             return model;
         }
 
-        public Task EditInfo(CreateEditTeacherInputModel model)
+        public async Task EditInfo(CreateEditTeacherInputModel model)
         {
-            throw new NotImplementedException();
+            var teacher = await this.db.Teachers
+               .FirstOrDefaultAsync(x => x.Id == model.Id);
+
+            teacher.FirstName = model.FirstName;
+            teacher.LastName = model.LastName;
+            teacher.Gender = model.Gender;
+            teacher.Salary = model.Salary;
+            teacher.HiringDate = model.HiringDate;
+            teacher.DismissalDate = model.DismissalDate;
+            teacher.ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null);
         }
 
         public Task<int> Delete(int teacherId)
         {
             throw new NotImplementedException();
+        }
+        public static bool IsBirthDayInRange(DateTime birthday, DateTime start, DateTime end)
+        {
+            DateTime temp = birthday.AddYears(start.Year - birthday.Year).Date;
+
+            if (temp < start)
+                temp = temp.AddYears(1);
+
+            return birthday.Date <= end && temp >= start && temp <= end;
         }
     }
     public static class DateTimeExtensions

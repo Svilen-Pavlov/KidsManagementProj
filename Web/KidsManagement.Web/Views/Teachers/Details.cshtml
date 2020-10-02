@@ -26,6 +26,23 @@
                     <input asp-for="@Model.DismissalDate" readonly class="form-control" type="datetime" name="DismissalDate" value="@Model.DismissalDate">
                 </div>
                 <hr />
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="form-group row-md-6" align="center">
+                                    <a asp-action="Delete" asp-route-teacherId="@Model.Id" class="btn btn-info" align="middle" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row-md-6" align="center">
+                                    <a asp-action="EditInfo" asp-route-teacherId="@Model.Id" class="btn btn-info" align="middle">Edit Info</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                }
                 <label asp-for="@Model.QualifiedLevels"></label>
                 @foreach (var level in Model.QualifiedLevels)
                 {
@@ -45,7 +62,7 @@
                            asp-route-groupId="@group.Id">@group.Name</a>
                     </div>
                 }
-                
+
             </div>
             <div class="col-md-6">
                 <div class="form-group row-md-6">

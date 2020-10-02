@@ -8,6 +8,6 @@ namespace KidsManagement.Services.External.CloudinaryService
 {
    public interface ICloudinaryService
     {
-        Task<string> UploadProfilePicASync(IFormFile file);
+        Task<string> UploadPicASync(IFormFile file, string existingURI);
     }
 }

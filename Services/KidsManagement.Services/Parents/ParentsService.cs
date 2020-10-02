@@ -1,5 +1,6 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
+using KidsManagement.Data.Models.Constants;
 using KidsManagement.Data.Models.Enums;
 using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.ViewModels.Notes;
@@ -32,9 +33,7 @@ namespace KidsManagement.Services.Parents
 
         public async Task<int> CreateParent(CreateEditParentInputModel model, string userAdminId)
         {
-            var pic = model.ProfileImage;
-            var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
-
+           
             var adminId = db.Admins.FirstOrDefault(a => a.ApplicationUserId == userAdminId).Id;
 
             var parent = new Parent
@@ -46,7 +45,7 @@ namespace KidsManagement.Services.Parents
                 AlternativePhoneNumber = model.AlternativePhoneNumber,
                 Email = model.Email,
                 AlternativeEmail = model.AlternativeEmail,
-                ProfilePicURI = picURI,
+                ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, null),
 
             };
             var initialNote = new Note()
@@ -222,10 +221,6 @@ namespace KidsManagement.Services.Parents
 
         public async Task EditInfo(CreateEditParentInputModel model)
         {
-            var pic = model.ProfileImage;
-            var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
-
-
             var parent = await this.db.Parents.FirstOrDefaultAsync(x => x.Id == model.Id);
 
             parent.FirstName = model.FirstName;
@@ -235,7 +230,7 @@ namespace KidsManagement.Services.Parents
             parent.AlternativeEmail = model.AlternativeEmail;
             parent.PhoneNumber = model.PhoneNumber;
             parent.AlternativePhoneNumber = model.AlternativePhoneNumber;
-            parent.ProfilePicURI = picURI;
+            parent.ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, parent.ProfilePicURI);
 
             await this.db.SaveChangesAsync();
         }

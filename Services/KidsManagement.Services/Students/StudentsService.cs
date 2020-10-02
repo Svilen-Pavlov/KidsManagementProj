@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KidsManagement.Services.Students
 {
-    public class StudentsService : IStudentsService
+    public class StudentsService :IStudentsService
     {
         private readonly KidsManagementDbContext db;
         private readonly ICloudinaryService cloudinaryService;
@@ -24,10 +24,9 @@ namespace KidsManagement.Services.Students
             this.db = db;
             this.cloudinaryService = cloudinaryService;
         }
+
         public async Task<int> CreateStudent(CreateEditStudentInputModel model)
         {
-            var pic = model.ProfileImage;
-            var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
             var age = DateTime.Today.Year - model.BirthDate.Year;
             if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
 
@@ -41,8 +40,8 @@ namespace KidsManagement.Services.Students
                 BirthDate = model.BirthDate,
                 Grade = model.Grade,
                 Status = model.Status,
-                ProfilePicURI = picURI
-            };
+                ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage,null)
+        };
 
             await this.db.Students.AddAsync(student);
             await this.db.SaveChangesAsync();
@@ -179,13 +178,10 @@ namespace KidsManagement.Services.Students
 
         public async Task EditInfo(CreateEditStudentInputModel model)
         {
-            var pic = model.ProfileImage;
-            var picURI = pic == null ? string.Empty : await this.cloudinaryService.UploadProfilePicASync(pic);
-            var age = DateTime.Today.Year - model.BirthDate.Year;
-           
-            if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
-
             var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == model.Id);
+           
+            var age = DateTime.Today.Year - model.BirthDate.Year;
+            if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
 
             student.FirstName = model.FirstName;
             student.MiddleName = model.MiddleName;
@@ -194,7 +190,7 @@ namespace KidsManagement.Services.Students
             student.Age = age;
             student.BirthDate = model.BirthDate;
             student.Grade = model.Grade;
-            student.ProfilePicURI = picURI;
+            student.ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, student.ProfilePicURI);
 
             await this.db.SaveChangesAsync();
         }

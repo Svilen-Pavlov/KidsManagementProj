@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace KidsManagement.Services.Groups
 {
 
-    public class GroupsService : IGroupsService
+    public class GroupsService :  IGroupsService
     {
         private readonly KidsManagementDbContext db;
         private readonly IStudentsService studentsService;

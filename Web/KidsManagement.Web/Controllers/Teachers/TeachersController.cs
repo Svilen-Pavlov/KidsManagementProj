@@ -63,11 +63,8 @@ namespace KidsManagement.Web.Controllers.Teachers
 
         public async Task<IActionResult> Details(int teacherId)
         {
-            
-            if (await this.teachersService.TeacherExists(teacherId) == false)
-            {
-                return this.Redirect("/"); //todo: error page
-            }
+            await CheckTeacherId(teacherId);
+            this.TempData["teacherId"] = teacherId;
             var model = this.teachersService.FindById(teacherId); //todo ASYNC
 
             return await Task.Run(() => View(model));
