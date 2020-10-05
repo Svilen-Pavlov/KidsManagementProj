@@ -1,0 +1,47 @@
+﻿@using KidsManagement.ViewModels.Levels;
+
+@model EditTeacherLevelsViewModel;
+@{
+    ViewData["Title"] = "Edit Levels";
+}
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Select Levels</h1>
+        <div style="padding: 5%;">
+
+            <form method="post" asp-action="EditLevels">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center" scope="col">Id</th>
+                            <th class="text-center" scope="col">Name</th>
+                            <th class="text-center" scope="col">Selected</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @for (var i = 0; i < Model.Levels.Count(); i++)
+                        {
+                            <tr>
+                                <th class="text-center" scope="row">@Model.Levels[i].Id</th>
+                                <td class="text-center">@Model.Levels[i].Name</td>
+                                <td class="text-center">@Model.Levels[i].Selected</td>
+                                <td>
+                                    <div class="custom-control custom-checkbox style=" margin-bottom:5px;width:20px;margin-left:40px"">
+                                        <input type="hidden" asp-for="@Model.Levels[i].Id" />
+                                        <input asp-for="@Model.Levels[i].Selected" />
+                                    </div>
+                                </td>
+                                @*}*@
+                            </tr>
+                        }
+                </table>
+                <div align="center">
+                    <input type="submit" class="form-control button btn-info col-md-6" value="Confirm" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

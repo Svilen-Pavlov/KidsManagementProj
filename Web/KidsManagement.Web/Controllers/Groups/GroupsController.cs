@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KidsManagement.Web.Controllers.Groups
 {
-    public class GroupsController:Controller
+    public class GroupsController : Controller
     {
         private readonly IGroupsService groupsService;
         private readonly ITeachersService teachersService;
@@ -27,11 +27,10 @@ namespace KidsManagement.Web.Controllers.Groups
         public async Task<IActionResult> Index()
         {
             var model = this.groupsService.GetAll();
-
-            return await Task.Run(() => View(model)); ; 
+            return await Task.Run(() => View(model)); ;
         }
 
-       
+
 
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
@@ -50,21 +49,16 @@ namespace KidsManagement.Web.Controllers.Groups
         [HttpPost]
         public async Task<IActionResult> Create(CreateGroupInputModel model)
         {
-            if (this.ModelState.IsValid == false)
-            {
-                return this.Redirect("/"); //todo error page
-            }
+            if (this.ModelState.IsValid == false) return this.Redirect("/"); //todo error page
+
             var groupId = await this.groupsService.CreateGroup(model);  //todo ASYNC
             return RedirectToAction("Details", new { groupId = groupId });
         }
 
         public async Task<IActionResult> Details(int groupId)
         {
-           
-            if (await this.groupsService.GroupExists(groupId) == false)
-            {
-                return this.Redirect("/");  //todo: correct redirect
-            }
+
+            await CheckGroupId(groupId);
             var model = this.groupsService.FindById(groupId); //todo ASYNC
 
             this.TempData["groupId"] = groupId;
@@ -72,6 +66,25 @@ namespace KidsManagement.Web.Controllers.Groups
 
             return await Task.Run(() => View(model));
         }
+
+        //public async Task<IActionResult> AssignTeacher(int groupId)
+        //{
+        //    await CheckGroupId(groupId);
+        //    var model = this.teachersService.GetAllEligibleForAGroup(groupId);
+        //    this.TempData["groupId"] = groupId;
+
+        //    return await Task.Run(() => View(model));
+        //}
+
+        //public async Task<IActionResult> AssignTeacher(TeachersElligibleForGroupViewModel model)
+        //{
+        //    int groupId = await CheckGroupId(this.TempData["groupId"]);
+        //    int teacherId = await CheckTeacherId(model.Teachers.Where(t => t.Selected).Id);
+
+        //    this.groupsService.ChangeTeacher(teacherId,groupId);
+
+        //    return RedirectToAction("Details", new { groupId = groupId });
+        //}
 
         //public async Task<IActionResult> AddStudents()
         //{
@@ -112,5 +125,27 @@ namespace KidsManagement.Web.Controllers.Groups
 
         //    return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
         //}
+        public async Task<int> CheckGroupId(object groupIdNullable)
+        {
+            if (groupIdNullable == null || (groupIdNullable is int) == false)
+                throw new Exception(); //todo invalid userId Exception
+
+            int groupId = (int)groupIdNullable;
+            if (await this.groupsService.GroupExists(groupId) == false)
+                throw new Exception(); //todo teacher does not exist Exception
+
+            return groupId;
+        }
+        public async Task<int> CheckTeacherId(object teacherIdnullabe)
+        {
+            if (teacherIdnullabe == null || (teacherIdnullabe is int) == false)
+                throw new Exception(); //todo invalid userId Exception
+
+            int teacherId = (int)teacherIdnullabe;
+            if (await this.teachersService.TeacherExists(teacherId) == false)
+                throw new Exception(); //todo teacher does not exist Exception
+
+            return teacherId;
+        }
     }
 }

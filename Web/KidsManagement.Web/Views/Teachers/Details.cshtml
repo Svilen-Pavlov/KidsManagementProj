@@ -47,19 +47,42 @@
                 @foreach (var level in Model.QualifiedLevels)
                 {
                     <div class="form-group row-md-6">
-
                         <input asp-for="QualifiedLevels" type="text" readonly class="form-control" name="Level" value="@level.Name">
                     </div>
                 }
+                <div>
+                    <a asp-action="EditLevels" asp-route-teacherId="@Model.Id" class="btn btn-info">Edit Levels</a>
+                </div>
                 <hr />
                 <label asp-for="@Model.Groups"></label>
                 <hr />
-                @foreach (var group in Model.Groups)
+                @if (@Model.Groups.Count() == 0)
                 {
-                    <div class="form-group row-md-6">
-                        <a asp-controller="Groups"
-                           asp-action="Details"
-                           asp-route-groupId="@group.Id">@group.Name</a>
+                    <input type="text" readonly class="form-control" id="Status" name="Status" value="No groups assigned yet">
+                }
+                else
+                {
+                    <table>
+                        @foreach (var group in Model.Groups)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="form-group row-md-6">
+                                        <a asp-controller="Groups" asp-action="Details" asp-route-groupId="@group.Id" class="accordion">@group.Name</a>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="form-group row-md-2">
+                                        <a asp-action="UnassignGroup" asp-route-groupId="@group.Id" class="btn btn-info" onclick="return confirm('Are you sure you want to unassign teacher from this group?')">Unassign</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <hr />
+                    <div>
+                        <a asp-action="AddGroups" asp-route-teacherId="@Model.Id" class="btn btn-info">Add Groups</a>
                     </div>
                 }
 
@@ -86,9 +109,7 @@
                             <label asp-for="@Model.PhoneNumber"></label>
                             <input asp-for="@Model.PhoneNumber" readonly class="form-control" type="text" name="@Model.PhoneNumber" value="@Model.PhoneNumber">
                         </div>
-                        <div>
-                            <a asp-action="AddGroups" asp-route-teacherId="@Model.Id" class="btn btn-info">Add Groups</a>
-                        </div>
+
                     }
                 </div>
             </div>

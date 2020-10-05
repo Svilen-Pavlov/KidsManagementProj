@@ -398,6 +398,15 @@ namespace KidsManagement.Services.Teachers
 
             return birthday.Date <= end && temp >= start && temp <= end;
         }
+
+        public async Task<int> UnassignGroup(int teacherId,int groupId)
+        {
+            var teacher = await this.db.Teachers.FirstOrDefaultAsync(g => g.Id == teacherId);
+            var group = await this.db.Groups.FirstOrDefaultAsync(g => g.Id == groupId);
+            teacher.Groups.Remove(group);
+
+            return await this.db.SaveChangesAsync();
+        }
     }
     public static class DateTimeExtensions
     {

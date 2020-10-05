@@ -4,6 +4,7 @@ using KidsManagement.Data.Models.Enums;
 using KidsManagement.ViewModels.Students;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -33,6 +34,7 @@ namespace KidsManagement.ViewModels.Groups
 
 
         public int TeacherId { get; set; }
+        [DisplayName("Teacher")]
         public string TeacherName { get; set; }
 
         public int LevelId { get; set; }

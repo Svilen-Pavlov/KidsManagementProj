@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KidsManagement.Services.Levels
 {
@@ -16,7 +17,10 @@ namespace KidsManagement.Services.Levels
             this.db = db;
         }
 
-      
+        public Task EditLevelsOfTeacher(EditTeacherLevelsViewModel model)
+        {
+            throw new NotImplementedException();
+        }
 
         public IEnumerable<LevelSelectionViewModel> GetAllForSelection()
         {
@@ -30,6 +34,22 @@ namespace KidsManagement.Services.Levels
             var list = new List<LevelSelectionViewModel>(levels);
 
             return list;
+        }
+
+        public EditTeacherLevelsViewModel GetLevelsForEdit(int teacherId)
+        {
+            var teacherLevels = this.db.LevelTeachers
+                .Where(lt => lt.TeacherId == teacherId)
+                .Select(x => new LevelSelectionViewModel
+                {
+                    Id=x.LevelId,
+                    Name=x.Level.Name,
+                    Selected=true
+                })
+                .ToList();
+            var model = new EditTeacherLevelsViewModel { Levels = teacherLevels};
+
+            return model;
         }
     }
 }

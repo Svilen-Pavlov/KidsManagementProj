@@ -33,6 +33,5 @@ namespace KidsManagement.Services.Groups
 
         IEnumerable<GroupSelectionViewModel> GetAllForSelection(bool includingGroupsWithAssignedTeacher);
         void ChangeTeacher(int newTeacherId, int groupId);
-
     }
 }

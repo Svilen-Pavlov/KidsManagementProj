@@ -1,1 +1,76 @@
-﻿
+﻿@using KidsManagement.ViewModels.Teachers;
+@using KidsManagement.Data.Models.Enums;
+
+@model CreateEditTeacherInputModel;
+@{
+    ViewData["Title"] = "Edit";
+}
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Edit Info</h1>
+        <div style="padding: 5%;">
+
+            <form enctype="multipart/form-data" method="post" asp-action="EditInfo">
+
+                <div class="form-row">
+
+                    <div class="col-md-6">
+                        <div class="form-group row-md-6">
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" class="form-control" />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="Gender"></label>
+                            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control"></select>
+                            @*<span asp-validation-for="CurrentLessonNumber" class="text-danger"></span>* libman jquery validation scripts v _Layout da aktiviram https://youtu.be/kQt1Iaab-kU?t=4070@*@
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="Salary"></label>
+                            <input asp-for="Salary" type="number" class="form-control" />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="HiringDate"></label>
+                            <input asp-for="HiringDate" type="date" class="form-control" value="DateTime.Today" />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <label asp-for="DismissalDate"></label>
+                            <input asp-for="DismissalDate" type="date" class="form-control" value="DateTime.Today" />
+                        </div>
+                        <div class="form-group row-md-6">
+                            <div class="form-group">
+                                <label asp-for="ProfileImage" class="control-label"></label>
+                                <div class="custom-file">
+                                    <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <input type="submit" class="form-control button btn-info" value="Edit" />
+                    </div>
+                    <div class="col-md-6">
+                        <div class="container-fluid col-md-6">
+                            <div class="form-group row-md-6">
+                                <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
+                            </div>
+                        </div>
+                        <label style="display:flex; align-items:center"> Choose levels teacher is qualified for: </label>
+                        <hr />
+                        @for (var i = 0; i < Model.Levels.Count(); i++)
+                        {
+                            <div class="custom-control custom-checkbox">
+                                <input type="hidden" asp-for="Levels[i].Id" />
+                                <input asp-for="Levels[i].Selected" />
+                                @Model.Levels[i].Name
+                            </div>
+                        }
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

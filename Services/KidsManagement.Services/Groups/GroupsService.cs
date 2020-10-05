@@ -297,6 +297,6 @@ namespace KidsManagement.Services.Groups
 
             return await Task.FromResult(groups); //https://stackoverflow.com/questions/25182011/why-async-await-allows-for-implicit-conversion-from-a-list-to-ienumerable
         }
-
+      
     }
 }

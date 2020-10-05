@@ -5,6 +5,7 @@ using KidsManagement.ViewModels.Levels;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace KidsManagement.ViewModels.Teachers
@@ -15,19 +16,26 @@ namespace KidsManagement.ViewModels.Teachers
 
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [DisplayName("First Name")]
         public string FirstName { get; set; }
         [Required]
         [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [DisplayName("Last Name")]
         public string LastName { get; set; }
         [Required]
         public Gender Gender { get; set; }
         [Required]
         public decimal Salary { get; set; }
         [Required]
+        [DisplayName("Hiring Date")]
         public DateTime HiringDate { get; set; }
+        
+        [DisplayName("Dissmisal Date")]
         public DateTime? DismissalDate { get; set; }
 
         public string ProfilePicURI { get; set; } //for edit only
+
+        [DisplayName("Profile Picture")]
         public IFormFile ProfileImage { get; set; }
         public List<LevelSelectionViewModel> Levels { get; set; } = new List<LevelSelectionViewModel>();
         public List<GroupSelectionViewModel> Groups { get; set; } = new List<GroupSelectionViewModel>();
@@ -48,6 +56,7 @@ namespace KidsManagement.ViewModels.Teachers
         [Required]
         [DataType(DataType.Password)]
         [Compare("Password")]
+        [DisplayName("Confirm Password")]
         public string ConfirmPassword { get; set; }
     }
 }

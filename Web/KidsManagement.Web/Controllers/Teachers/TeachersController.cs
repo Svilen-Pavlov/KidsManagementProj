@@ -4,6 +4,7 @@ using KidsManagement.Services.Levels;
 using KidsManagement.Services.Students;
 using KidsManagement.Services.Teachers;
 using KidsManagement.ViewModels.Groups;
+using KidsManagement.ViewModels.Levels;
 using KidsManagement.ViewModels.Teachers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -105,7 +106,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> MyZone()
         {
-            var teacherIdnullable = GetLoggedInTeacherBussinessId();
+            var teacherIdnullable = await GetLoggedInTeacherBussinessId();
             var teacherId=CheckTeacherId(teacherIdnullable).Result;
 
             var model = this.teachersService.GetMyZoneInfo(teacherId);
@@ -116,7 +117,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> MyStudents()
         {
-            var teacherIdnullable = GetLoggedInTeacherBussinessId();
+            var teacherIdnullable = await GetLoggedInTeacherBussinessId();
             var teacherId = CheckTeacherId(teacherIdnullable).Result;
 
             var viewModel = this.studentsService.GetAll(teacherId);
@@ -127,7 +128,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> MyGroups()
         {
-            var teacherIdnullable = GetLoggedInTeacherBussinessId();
+            var teacherIdnullable = await GetLoggedInTeacherBussinessId();
             var teacherId = CheckTeacherId(teacherIdnullable).Result;
 
             var viewModel = this.groupsService.GetAll(teacherId);
@@ -138,7 +139,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         [Authorize(Roles = "Teacher,Admin")]
         public async Task<IActionResult> MySchedule(int marker)
         {
-            var teacherIdnullable = GetLoggedInTeacherBussinessId();
+            var teacherIdnullable = await GetLoggedInTeacherBussinessId();
             var teacherId = CheckTeacherId(teacherIdnullable).Result;
            
             if (marker == 0)
@@ -159,7 +160,6 @@ namespace KidsManagement.Web.Controllers.Teachers
             var model = await this.teachersService.GetInfoForEdit(teacherId);
             this.TempData["teacherId"] = teacherId;
 
-
             return await Task.Run(() => this.View(model));
         }
 
@@ -173,10 +173,39 @@ namespace KidsManagement.Web.Controllers.Teachers
             return await Task.Run(() => this.RedirectToAction("Details", new { teacherId = model.Id }));
         }
 
-        public int? GetLoggedInTeacherBussinessId()
+        public async Task<IActionResult> EditLevels(int teacherId)
+        {
+            await CheckTeacherId(teacherId);
+            var model = this.levelsService.GetLevelsForEdit(teacherId);
+           
+            this.TempData["teacherId"] = teacherId;
+
+            return await Task.Run(() => this.View(model));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditLevels(EditTeacherLevelsViewModel model)
+        {
+            int teacherId = await CheckTeacherId(this.TempData["teacherId"]);
+            model.TeacherId = teacherId;
+            await this.levelsService.EditLevelsOfTeacher(model);
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { teacherId = model.TeacherId }));
+        }
+
+        public async Task<IActionResult> UnassignGroup(int groupId)
+        {
+            int teacherId = await CheckTeacherId(this.TempData["teacherId"]);
+            await CheckGroupId(groupId);
+            var result = await this.teachersService.UnassignGroup(teacherId,groupId);
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { teacherId = teacherId }));
+        }
+
+        public async Task<int?> GetLoggedInTeacherBussinessId()
         {
             var userTeachernId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var teacherId = this.teachersService.GetBussinessIdByUserId(userTeachernId).Result;
+            var teacherId = await this.teachersService.GetBussinessIdByUserId(userTeachernId);
            
             return teacherId;
         }
@@ -191,6 +220,18 @@ namespace KidsManagement.Web.Controllers.Teachers
                 throw new Exception(); //todo teacher does not exist Exception
 
             return teacherId;
+        }
+
+        public async Task<int> CheckGroupId(object groupIdNullable)
+        {
+            if (groupIdNullable == null || (groupIdNullable is int) == false)
+                throw new Exception(); //todo invalid userId Exception
+
+            int groupId = (int)groupIdNullable;
+            if (await this.groupsService.GroupExists(groupId) == false)
+                throw new Exception(); //todo teacher does not exist Exception
+
+            return groupId;
         }
     }
 }
