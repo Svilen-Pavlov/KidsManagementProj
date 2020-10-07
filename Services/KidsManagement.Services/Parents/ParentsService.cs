@@ -84,6 +84,7 @@ namespace KidsManagement.Services.Parents
                 AlternativePhoneNumber = parent.AlternativePhoneNumber,
                 Email = parent.Email,
                 AlternativeEmail = parent.AlternativeEmail,
+                Status = parent.Status,
                 ProfilePicURI = parent.ProfilePicURI,
                 Children = children.Select(p => new StudentSelectionViewModel
                 {

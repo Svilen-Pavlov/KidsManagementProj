@@ -193,6 +193,8 @@ namespace KidsManagement.Web.Controllers.Teachers
             return await Task.Run(() => this.RedirectToAction("Details", new { teacherId = model.TeacherId }));
         }
 
+        
+        
         public async Task<IActionResult> UnassignGroup(int groupId)
         {
             int teacherId = await CheckTeacherId(this.TempData["teacherId"]);
@@ -200,6 +202,25 @@ namespace KidsManagement.Web.Controllers.Teachers
             var result = await this.teachersService.UnassignGroup(teacherId,groupId);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { teacherId = teacherId }));
+        }
+
+        public async Task<IActionResult> Delete(int teacherId)
+        {
+            await CheckTeacherId(teacherId);
+            var result = await this.teachersService.Delete(teacherId);
+
+            if (result == 0)
+                return await Task.Run(() => this.RedirectToAction("RemainingGroups", new { teacherId = teacherId }));
+            else
+                return await Task.Run(() => this.RedirectToAction("Index"));
+        }
+
+        public async Task<IActionResult> RemainingGroups(int teacherId)
+        {
+            await CheckTeacherId(teacherId);
+            var model = this.groupsService.GetActiveGroups(teacherId);
+            return await Task.Run(() => this.RedirectToAction("TeachersList", "Admin"));
+
         }
 
         public async Task<int?> GetLoggedInTeacherBussinessId()

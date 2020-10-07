@@ -36,5 +36,6 @@ namespace KidsManagement.Services.Teachers
 
         ScheduleViewModel GetMySchedule(int teacherId, DateTime startdate, int marker);
         Task<int> UnassignGroup(int teacherId,int groupId);
+
     }
 }

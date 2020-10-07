@@ -44,6 +44,7 @@ namespace KidsManagement.Services.Groups
                 EndTime = model.EndTime,
                 LevelId = model.LevelId,
                 Status = GroupStatus.Empty,
+                ActiveStatus=GroupActiveStatus.Initial,
                 MaxStudents = (int)model.AgeGroup
             };
 
@@ -78,6 +79,7 @@ namespace KidsManagement.Services.Groups
                 EndTime = group.EndTime.ToString(Const.hourMinutesFormat),
                 LevelId = (int)group.LevelId,
                 LevelName = level.Name,
+                ActiveStatus = group.ActiveStatus,
                 MaxStudents = (int)group.MaxStudents,
                 Students = students.Select(s => new AllSingleStudentsViewModel()
                 {
@@ -159,7 +161,8 @@ namespace KidsManagement.Services.Groups
                     StartTime = g.StartTime.ToString(Const.hourMinutesFormat),
                     LevelName = g.Level.Name,
                     TeacherName = g.Teacher == null ? InfoStrings.GroupHasNoTeacherYet : g.Teacher.FullName, //make it the same as in other methods - FindById
-                    StudentsCount = g.Students.Count()
+                    StudentsCount = g.Students.Count(),
+                    ActiveStatus=g.ActiveStatus
                 })
                 .ToArray()
                 .OrderBy(x => x.DayOfWeek)
@@ -173,7 +176,7 @@ namespace KidsManagement.Services.Groups
             return model;
         }
 
-        public AllGroupsOfTeacherViewModel GetTeacherGroupsAdminInfo(int teacherId)
+        public AllGroupsOfTeacherViewModel GetTeacherGroups(int teacherId)
         {
 
             var groups = this.db.Groups
@@ -194,6 +197,8 @@ namespace KidsManagement.Services.Groups
                     TeacherId = teacherId,
                     LevelId = g.Level.Id,
                     Capacity = g.MaxStudents,
+                    ActiveStatus = g.ActiveStatus,
+                    Status = g.Status,
                     Efficiency = Math.Round((double)g.Students.Count() / g.MaxStudents * 100, 2)
                     //TODO:
                     //Teacher
@@ -297,6 +302,16 @@ namespace KidsManagement.Services.Groups
 
             return await Task.FromResult(groups); //https://stackoverflow.com/questions/25182011/why-async-await-allows-for-implicit-conversion-from-a-list-to-ienumerable
         }
-      
+
+        public AllGroupsOfTeacherViewModel GetActiveGroups(int teacherId)
+        {
+            var statuses = new List<GroupActiveStatus> { GroupActiveStatus.Started, GroupActiveStatus.Paused };
+            var model=this.GetTeacherGroups(teacherId);
+            var filtered = model.Groups.ToList();
+            filtered.RemoveAll(x => statuses.Contains(x.ActiveStatus) == false);
+            model.Groups = filtered;
+
+            return model;
+        }
     }
 }

@@ -18,20 +18,28 @@ namespace KidsManagement.ViewModels.Groups
       
         public string Name { get; set; }
 
+        [DisplayName("Lesson #")]
         public int CurrentLessonNumber { get; set; }
 
+        [DisplayName("Age Group")]
         public string AgeGroup { get; set; }
 
+        [DisplayName("StartDate")]
         public string StartDate { get; set; }
 
+        [DisplayName("End Date")]
         public string EndDate { get; set; }
 
+        [DisplayName("Weekday")]
         public DayOfWeek DayOfWeek { get; set; }
 
         public string Duration { get; set; }
+        [DisplayName("Start Time")]
         public string StartTime { get; set; }
+        [DisplayName("End Time")]
         public string EndTime { get; set; }
-
+        [DisplayName("Active Status")]
+        public GroupActiveStatus ActiveStatus { get; set; }
 
         public int TeacherId { get; set; }
         [DisplayName("Teacher")]
@@ -40,6 +48,7 @@ namespace KidsManagement.ViewModels.Groups
         public int LevelId { get; set; }
         public string LevelName { get; set; }
 
+        [DisplayName("Le#")]
         public int MaxStudents { get; set; }
         public IEnumerable<AllSingleStudentsViewModel> Students { get; set; }
 

@@ -1,5 +1,7 @@
 ﻿using KidsManagement.Data;
+using KidsManagement.Data.Models;
 using KidsManagement.ViewModels.Levels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +19,26 @@ namespace KidsManagement.Services.Levels
             this.db = db;
         }
 
-        public Task EditLevelsOfTeacher(EditTeacherLevelsViewModel model)
+        public async Task EditLevelsOfTeacher(EditTeacherLevelsViewModel model)
         {
-            throw new NotImplementedException();
+            var levelsForDeletion = this.db.LevelTeachers.Where(x => x.TeacherId == model.TeacherId).ToList();
+            this.db.LevelTeachers.RemoveRange(levelsForDeletion);
+
+            var teacher = await this.db.Teachers
+                .Include(t => t.QualifiedLevels)
+                .FirstOrDefaultAsync(x => x.Id == model.TeacherId);
+
+            var newLevelsIds = model.Levels.Where(x => x.Selected).Select(x => x.Id).ToArray();
+            var newQualifiedLevels = this.db.Levels
+                .Where(x => newLevelsIds.Contains(x.Id))
+                .Select(ql => new LevelTeacher { Level = ql })
+                .ToArray();
+            foreach (var item in newQualifiedLevels)
+            {
+                teacher.QualifiedLevels.Add(item);
+            }
+
+            await this.db.SaveChangesAsync();
         }
 
         public IEnumerable<LevelSelectionViewModel> GetAllForSelection()
@@ -28,8 +47,9 @@ namespace KidsManagement.Services.Levels
             {
                 Id = l.Id,
                 Name = l.Name,
-            }).OrderBy(x => x.Id)
-            .ToArray(); 
+            })
+            .OrderBy(x => x.Id)
+            .ToArray();
 
             var list = new List<LevelSelectionViewModel>(levels);
 
@@ -38,16 +58,22 @@ namespace KidsManagement.Services.Levels
 
         public EditTeacherLevelsViewModel GetLevelsForEdit(int teacherId)
         {
-            var teacherLevels = this.db.LevelTeachers
-                .Where(lt => lt.TeacherId == teacherId)
-                .Select(x => new LevelSelectionViewModel
-                {
-                    Id=x.LevelId,
-                    Name=x.Level.Name,
-                    Selected=true
-                })
-                .ToList();
-            var model = new EditTeacherLevelsViewModel { Levels = teacherLevels};
+            var allLevelsIds = this.db.LevelTeachers
+               .Where(lt => lt.TeacherId == teacherId)
+               .Select(x => x.LevelId)
+               .ToList();
+            var levels = this.db.Levels.Select(l => new LevelSelectionViewModel
+            {
+                Id = l.Id,
+                Name = l.Name,
+                Selected = allLevelsIds.Contains(l.Id)
+            })
+            .OrderBy(x => x.Id)
+            .ToArray(); ;
+
+
+
+            var model = new EditTeacherLevelsViewModel { Levels = levels };
 
             return model;
         }

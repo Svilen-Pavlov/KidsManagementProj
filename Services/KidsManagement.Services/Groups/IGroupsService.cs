@@ -23,7 +23,8 @@ namespace KidsManagement.Services.Groups
 
         AllGroupsDetailsViewModel GetAll();
         AllGroupsDetailsViewModel GetAll(int teacherId);
-        AllGroupsOfTeacherViewModel GetTeacherGroupsAdminInfo(int teacherId);
+        AllGroupsOfTeacherViewModel GetTeacherGroups(int teacherId);
+        AllGroupsOfTeacherViewModel GetActiveGroups(int teacherId);
 
         //Task<bool> GroupIsFull(int groupId);
 

@@ -7,7 +7,7 @@ namespace KidsManagement.ViewModels.Groups
     public class AllGroupsOfTeacherViewModel
     {
         public string TeacherName { get; set; }
-        public IEnumerable<SingleGroupOfTeacherDetailsViewModel> Groups { get; set; }
+        public ICollection<SingleGroupOfTeacherDetailsViewModel> Groups { get; set; }
 
     }
 }

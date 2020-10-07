@@ -25,6 +25,10 @@
                     <label asp-for="@Model.DismissalDate"></label>
                     <input asp-for="@Model.DismissalDate" readonly class="form-control" type="datetime" name="DismissalDate" value="@Model.DismissalDate">
                 </div>
+                <div class="form-group row-md-6">
+                    <label asp-for="@Model.Status"></label>
+                    <input asp-for="@Model.Status" readonly class="form-control" type="text" name="Status" value="@Model.Status">
+                </div>
                 <hr />
                 @if (this.User.IsInRole("Admin"))
                 {
@@ -50,9 +54,13 @@
                         <input asp-for="QualifiedLevels" type="text" readonly class="form-control" name="Level" value="@level.Name">
                     </div>
                 }
-                <div>
-                    <a asp-action="EditLevels" asp-route-teacherId="@Model.Id" class="btn btn-info">Edit Levels</a>
-                </div>
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <div>
+                        <a asp-action="EditLevels" asp-route-teacherId="@Model.Id" class="btn btn-info">Edit Levels</a>
+                    </div>
+                }
+
                 <hr />
                 <label asp-for="@Model.Groups"></label>
                 <hr />
@@ -72,18 +80,25 @@
                                     </div>
 
                                 </td>
-                                <td>
-                                    <div class="form-group row-md-2">
-                                        <a asp-action="UnassignGroup" asp-route-groupId="@group.Id" class="btn btn-info" onclick="return confirm('Are you sure you want to unassign teacher from this group?')">Unassign</a>
-                                    </div>
-                                </td>
+                                @if (this.User.IsInRole("Admin"))
+                                {
+                                    <td>
+                                        <div class="form-group row-md-2">
+                                            <a asp-action="UnassignGroup" asp-route-groupId="@group.Id" class="btn btn-info" onclick="return confirm('Are you sure you want to unassign teacher from this group?')">Unassign</a>
+                                        </div>
+                                    </td>
+                                }
                             </tr>
                         }
                     </table>
                     <hr />
-                    <div>
-                        <a asp-action="AddGroups" asp-route-teacherId="@Model.Id" class="btn btn-info">Add Groups</a>
-                    </div>
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <div>
+                            <a asp-action="AddGroups" asp-route-teacherId="@Model.Id" class="btn btn-info">Add Groups</a>
+                        </div>
+                    }
+
                 }
 
             </div>

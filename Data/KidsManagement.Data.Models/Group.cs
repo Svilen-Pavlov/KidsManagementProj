@@ -53,6 +53,7 @@ namespace KidsManagement.Data.Models
 
         [Required]
         public GroupStatus Status { get;set; }
+        public GroupActiveStatus ActiveStatus { get;set; }
 
         //links
         public int? TeacherId { get; set; }

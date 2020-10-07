@@ -11,12 +11,12 @@
         <div style="padding: 5%;">
 
             <form method="post" asp-action="EditLevels">
-                <table class="table">
+                <table class="table" style="text-align: center;">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center" scope="col">Id</th>
+                            <th class="text-center" scope="col" style="white-space: nowrap;width: 1%;">Id</th>
                             <th class="text-center" scope="col">Name</th>
-                            <th class="text-center" scope="col">Selected</th>
+                            <th class="text-center" scope="col" style="white-space: nowrap;width: 1%;">Selected</th>
                         </tr>
                     </thead>
 
@@ -25,11 +25,10 @@
                         @for (var i = 0; i < Model.Levels.Count(); i++)
                         {
                             <tr>
-                                <th class="text-center" scope="row">@Model.Levels[i].Id</th>
+                                <td class="text-center" scope="row">@Model.Levels[i].Id</td>
                                 <td class="text-center">@Model.Levels[i].Name</td>
-                                <td class="text-center">@Model.Levels[i].Selected</td>
                                 <td>
-                                    <div class="custom-control custom-checkbox style=" margin-bottom:5px;width:20px;margin-left:40px"">
+                                    <div class="custom-control custom-checkbox" style="white-space: nowrap;width: 1%;"> @*style="margin-bottom:5px;width:20px;margin-left:40px"*@
                                         <input type="hidden" asp-for="@Model.Levels[i].Id" />
                                         <input asp-for="@Model.Levels[i].Selected" />
                                     </div>

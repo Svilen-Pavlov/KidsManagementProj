@@ -1,6 +1,7 @@
 ﻿using KidsManagement.Data;
 using KidsManagement.Data.Models;
 using KidsManagement.Data.Models.Constants;
+using KidsManagement.Data.Models.Enums;
 using KidsManagement.Services.External.CloudinaryService;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Teachers;
@@ -30,10 +31,10 @@ namespace KidsManagement.Services.Teachers
         }
 
 
-        public async Task<int> CreateTeacher(CreateEditTeacherInputModel model) //idk if this populates teacherlevels correctly
+        public async Task<int> CreateTeacher(CreateEditTeacherInputModel model) 
         {
             var groupIds = model.Groups.Where(x => x.Selected).Select(x => x.Id).ToArray();
-            var groupsToAssignToTeacher = this.db.Groups.Where(x => groupIds.Contains(x.Id)).ToArray(); //howtoasync?
+            var groupsToAssignToTeacher = this.db.Groups.Where(x => groupIds.Contains(x.Id)).ToArray(); 
             var levelsIds = model.Levels.Where(x => x.Selected).Select(x => x.Id).ToArray();
             var qualifiedLevels = this.db.Levels.Where(x => levelsIds.Contains(x.Id)).ToArray();
 
@@ -72,6 +73,7 @@ namespace KidsManagement.Services.Teachers
                 ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null),
                 Groups = groupsToAssignToTeacher,
                 QualifiedLevels = qualifiedLevels.Select(ql => new LevelTeacher { Level = ql }).ToArray(),
+                Status= groupsToAssignToTeacher.Length==0 ? TeacherStatus.Initial:TeacherStatus.Active,
                 ApplicationUserId = user.Id,
             };
             await this.db.Teachers.AddAsync(teacher);
@@ -119,6 +121,7 @@ namespace KidsManagement.Services.Teachers
                 HiringDate = teacher.HiringDate.ToString(Const.dateOnlyFormat),
                 DismissalDate = dissmissalDate,
                 QualifiedLevels = levels,
+                Status=teacher.Status,
                 ProfilePicURI = teacher.ProfilePicURI,
                 Groups = groups,
                 Username = username,
@@ -132,6 +135,7 @@ namespace KidsManagement.Services.Teachers
         public AllTeachersListViewModel GetAll()
         {
             var teachers = this.db.Teachers
+                          .Where(x=>x.Status!=TeacherStatus.Quit)
                           .Select(teacher => new TeachersListDetailsViewModel
                           {
                               Id = teacher.Id,
@@ -151,7 +155,9 @@ namespace KidsManagement.Services.Teachers
 
         public IEnumerable<TeacherSelectionViewModel> GetAllForSelection()
         {
-            var list = this.db.Teachers.Select(x =>
+            var list = this.db.Teachers
+                .Where(x=>x.Status!=TeacherStatus.Quit)
+                .Select(x =>
                 new TeacherSelectionViewModel
                 {
                     Id = x.Id,
@@ -163,7 +169,7 @@ namespace KidsManagement.Services.Teachers
 
         public async Task<bool> TeacherExists(int teacherId)
         {
-            return await this.db.Teachers.AnyAsync(x => x.Id == teacherId);
+            return await this.db.Teachers.Where(x=>x.Status!=TeacherStatus.Quit).AnyAsync(x => x.Id == teacherId);
         }
 
         public async Task<int> AddGroups(AddGroupsToTeacherViewModel model)
@@ -177,6 +183,7 @@ namespace KidsManagement.Services.Teachers
             {
                 group.TeacherId = teacher.Id;
             }
+            teacher.Status = TeacherStatus.Active;
 
             return await this.db.SaveChangesAsync();
         }
@@ -347,10 +354,6 @@ namespace KidsManagement.Services.Teachers
             }
         }
 
-        public static bool IsDateInRange(DateTime groupStart, DateTime groupEnd, DateTime fromDate, DateTime toDate)
-        {
-            return (groupStart < toDate || groupEnd > fromDate) && (groupStart > fromDate || groupEnd > toDate);
-        }
 
         public async Task<CreateEditTeacherInputModel> GetInfoForEdit(int teacherId)
         {
@@ -385,9 +388,17 @@ namespace KidsManagement.Services.Teachers
             teacher.ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null);
         }
 
-        public Task<int> Delete(int teacherId)
+        public async Task<int> Delete(int teacherId)
         {
-            throw new NotImplementedException();
+            var teacher = await this.db.Teachers
+                .Include(t => t.Groups)
+                .FirstOrDefaultAsync(s => s.Id == teacherId);
+
+            if (teacher.Status!=TeacherStatus.Active)
+            teacher.Status = TeacherStatus.Quit;
+
+
+            return this.db.SaveChangesAsync().Result;
         }
         public static bool IsBirthDayInRange(DateTime birthday, DateTime start, DateTime end)
         {
@@ -401,12 +412,19 @@ namespace KidsManagement.Services.Teachers
 
         public async Task<int> UnassignGroup(int teacherId,int groupId)
         {
-            var teacher = await this.db.Teachers.FirstOrDefaultAsync(g => g.Id == teacherId);
+            var teacher = await this.db.Teachers.Include(t=>t.Groups).FirstOrDefaultAsync(g => g.Id == teacherId);
             var group = await this.db.Groups.FirstOrDefaultAsync(g => g.Id == groupId);
             teacher.Groups.Remove(group);
+            if (teacher.Groups.Count == 0)
+                teacher.Status = TeacherStatus.Inactive;
 
             return await this.db.SaveChangesAsync();
         }
+        public static bool IsDateInRange(DateTime groupStart, DateTime groupEnd, DateTime fromDate, DateTime toDate)
+        {
+            return (groupStart < toDate || groupEnd > fromDate) && (groupStart > fromDate || groupEnd > toDate);
+        }
+
     }
     public static class DateTimeExtensions
     {

@@ -35,7 +35,40 @@ namespace KidsManagementConsole
             //UpdateStudentGrades(db);
             //UpdateParentsStatuses(db);
             //testGettingPicString(); TOREMOVE
+            //UpdateTeachersStatuses(db);
+            //UpdateGroupActiveStatuses(db);
+        }
 
+        private static void UpdateGroupActiveStatuses(KidsManagementDbContext db)
+        {
+            var groups=db.Groups.ToList();
+            var counter = 0;
+            for (int i = 0; i < groups.Count; i++)
+            {
+                groups[i].ActiveStatus = (GroupActiveStatus)counter;
+                counter++;
+                if (counter == 4)
+                    counter = 0;
+            }
+            
+            db.SaveChanges();
+        }
+
+        private static void UpdateTeachersStatuses(KidsManagementDbContext db)
+        {
+            var teachers = db.Teachers
+                           .Include(t=>t.Groups)
+                           .ToArray();
+            foreach (var teacher in teachers)
+            {
+                if (teacher.Groups.Count == 0)
+                    teacher.Status = TeacherStatus.Initial;
+                else
+                {
+                    teacher.Status = TeacherStatus.Active;
+                }
+            }
+            db.SaveChanges();
         }
 
         private static void testGettingPicString()

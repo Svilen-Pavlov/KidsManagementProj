@@ -4,14 +4,16 @@ using KidsManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KidsManagement.Data.Migrations
 {
     [DbContext(typeof(KidsManagementDbContext))]
-    partial class KidsManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201007100015_teacherStatus")]
+    partial class teacherStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,9 +193,6 @@ namespace KidsManagement.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ActiveStatus")
-                        .HasColumnType("int");
 
                     b.Property<int>("AgeGroup")
                         .HasColumnType("int");

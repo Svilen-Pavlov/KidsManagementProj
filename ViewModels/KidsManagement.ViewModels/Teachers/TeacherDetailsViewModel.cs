@@ -17,7 +17,7 @@ namespace KidsManagement.ViewModels.Teachers
         public decimal Salary { get; set; }
         public string HiringDate { get; set; }
         public string DismissalDate { get; set; } 
-
+        public TeacherStatus Status { get; set; } 
         public string ProfilePicURI { get; set; }
         public IEnumerable<Level> QualifiedLevels { get; set; }
 
