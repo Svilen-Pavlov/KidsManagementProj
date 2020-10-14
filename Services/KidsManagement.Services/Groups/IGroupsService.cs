@@ -1,6 +1,4 @@
-﻿using KidsManagement.Data.Models;
-using KidsManagement.Data.Models.Enums;
-using KidsManagement.ViewModels.Groups;
+﻿using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Students;
 using System;
 using System.Collections.Generic;
@@ -11,7 +9,7 @@ namespace KidsManagement.Services.Groups
 {
     public interface IGroupsService
     {
-        Task<int> CreateGroup(CreateGroupInputModel model);
+        Task<int> CreateGroup(CreateEditGroupInputModel model);
 
         GroupDetailsViewModel FindById(int id);
 
@@ -25,11 +23,11 @@ namespace KidsManagement.Services.Groups
 
         AllGroupsDetailsViewModel GetAll();
         AllGroupsDetailsViewModel GetAll(int teacherId);
-        AllGroupsOfTeacherViewModel GetTeacherGroups(int teacherId);
-        AllGroupsOfTeacherViewModel GetTeacherGroupsActive(int teacherId);
-
-        //Task<bool> GroupIsFull(int groupId);
-
+        AllGroupsOfTeacherViewModel GetGroupsByTeacher(int teacherId);
+        AllGroupsOfTeacherViewModel GetActiveGroupsByTeacher(int teacherId);
+        Task<CreateEditGroupInputModel> GetInfoForEdit(int groupId);
+        Task EditInfo(CreateEditGroupInputModel model);
+        Task<int> Delete(int studentId);
         Task<IEnumerable<SingleGroupDetailsViewModel>> GetVacantGroupsWithProperAge(int studentId);
 
         IEnumerable<GroupSelectionViewModel> GetAllForSelection(int teacherId);

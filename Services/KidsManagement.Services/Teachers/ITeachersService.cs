@@ -38,7 +38,7 @@ namespace KidsManagement.Services.Teachers
 
         Task<int> AssignGroup(int teacherId, int groupId);
 
-        Task<int> UnassignGroup(int teacherId,int groupId);
+        Task<int> UnassignGroup(int groupId);
 
         Task<AllTeachersListViewModel> GetAllEligibleTeacherForGroup(int groupId);
 

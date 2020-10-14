@@ -410,15 +410,19 @@ namespace KidsManagement.Services.Teachers
             return birthday.Date <= end && temp >= start && temp <= end;
         }
 
-        public async Task<int> UnassignGroup(int teacherId,int groupId)
+        public async Task<int> UnassignGroup(int groupId)
         {
-            var teacher = await this.db.Teachers.Include(t=>t.Groups).FirstOrDefaultAsync(g => g.Id == teacherId);
-            var group = await this.db.Groups.FirstOrDefaultAsync(g => g.Id == groupId);
+            var group = await this.db.Groups
+                .Include(g=>g.Teacher)
+                .ThenInclude(t=>t.Groups)
+                .FirstOrDefaultAsync(g => g.Id == groupId);
+            var teacher = group.Teacher;
             teacher.Groups.Remove(group);
             if (teacher.Groups.Count == 0)
                 teacher.Status = TeacherStatus.Inactive;
 
-            return await this.db.SaveChangesAsync();
+            var result= await this.db.SaveChangesAsync();
+            return result;
         }
 
 

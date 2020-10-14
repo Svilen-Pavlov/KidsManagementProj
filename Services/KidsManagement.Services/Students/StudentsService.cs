@@ -153,8 +153,8 @@ namespace KidsManagement.Services.Students
 
             student.Status = StudentStatus.Quit;
 
-
-            return this.db.SaveChangesAsync().Result;
+            var result = await this.db.SaveChangesAsync();
+            return result;
         }
 
         public async Task<CreateEditStudentInputModel> GetInfoForEdit(int studentId)

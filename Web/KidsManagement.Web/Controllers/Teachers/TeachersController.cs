@@ -199,7 +199,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         {
             int teacherId = await CheckTeacherId(this.TempData["teacherId"]);
             await CheckGroupId(groupId);
-            var result = await this.teachersService.UnassignGroup(teacherId,groupId);
+            var result = await this.teachersService.UnassignGroup(groupId);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { teacherId = teacherId }));
         }
@@ -218,7 +218,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         public async Task<IActionResult> RemainingGroups(int teacherId)
         {
             await CheckTeacherId(teacherId);
-            var model = this.groupsService.GetTeacherGroupsActive(teacherId);
+            var model = this.groupsService.GetActiveGroupsByTeacher(teacherId);
             return await Task.Run(() => this.RedirectToAction("TeachersList", "Admin"));
 
         }

@@ -46,6 +46,23 @@
                     <label asp-for="@Model.ActiveStatus"></label>
                     <input asp-for="@Model.ActiveStatus" type="text" readonly class="form-control" name="ActiveStatus" value="@Model.ActiveStatus">
                 </div>
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="form-group row-md-6" align="center">
+                                    <a asp-action="Delete" asp-route-groupId="@Model.Id" class="btn btn-info" align="middle" onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row-md-6" align="center">
+                                    <a asp-action="EditInfo" asp-route-groupId="@Model.Id" class="btn btn-info" align="middle">Edit Info</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                }
             </div>
             <div class="col" style="text-align:center;">
                 <label asp-for="@Model.Students" class="table-info"></label>
@@ -104,7 +121,7 @@
                             </td>
                             <td>
                                 <div class="form-group row-md-2" style="text-align:center;">
-                                    <a asp-action="UnassignTeacher" asp-route-teacherId="@Model.TeacherId" class="btn btn-warning" onclick="return confirm('Are you sure you want to unassign teacher from this group?')">Unassign</a>
+                                    <a asp-action="UnassignTeacher" asp-route-teacherId="@Model.Id" class="btn btn-warning" onclick="return confirm('Are you sure you want to unassign teacher from this group?')">Unassign</a>
                                 </div>
                             </td>
                         </tr>

@@ -41,7 +41,7 @@ namespace KidsManagement.Web.Controllers.Groups
         {
             var teachersList = this.teachersService.GetAllForSelection();
             var levelsList = this.levelsService.GetAllForSelection();
-            var model = new CreateGroupInputModel()
+            var model = new CreateEditGroupInputModel()
             {
                 Teachers = teachersList,
                 Levels = levelsList
@@ -51,7 +51,7 @@ namespace KidsManagement.Web.Controllers.Groups
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> Create(CreateGroupInputModel model)
+        public async Task<IActionResult> Create(CreateEditGroupInputModel model)
         {
             if (this.ModelState.IsValid == false) return this.Redirect("/"); //todo error page
 
@@ -118,12 +118,11 @@ namespace KidsManagement.Web.Controllers.Groups
 
         }
 
-        public async Task<IActionResult> UnassignTeacher(int teacherId)
+        public async Task<IActionResult> UnassignTeacher(int groupId)
         {
-            await CheckTeacherId(teacherId);
-            int groupId = await CheckGroupId(this.TempData["groupId"]);
+            await CheckGroupId(this.TempData["groupId"]);
 
-            await this.teachersService.UnassignGroup(teacherId,groupId);
+            await this.teachersService.UnassignGroup(groupId);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
         }
@@ -134,6 +133,34 @@ namespace KidsManagement.Web.Controllers.Groups
             this.TempData["groupId"] = groupId;
 
             return await Task.Run(() => View(model));
+        }
+        public async Task<IActionResult> Delete(int groupId)
+        {
+            await CheckGroupId(groupId);
+
+            await this.teachersService.UnassignGroup(groupId);
+            var result = await this.groupsService.Delete(groupId);
+
+            return await Task.Run(() => this.RedirectToAction("Index"));
+        }
+
+        public async Task<IActionResult> EditInfo(int groupId)
+        {
+            await CheckGroupId(groupId);
+            var model = await this.groupsService.GetInfoForEdit(groupId);
+            this.TempData["groupId"] = groupId;
+
+            return await Task.Run(() => this.View(model));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditInfo(CreateEditGroupInputModel model)
+        {
+            int groupId = await CheckStudentId(TempData["groupId"]);
+            model.Id = groupId;
+            await this.groupsService.EditInfo(model);
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { groupId = model.Id }));
         }
 
         public async Task<IActionResult> AssignTeacher(int teacherId)
