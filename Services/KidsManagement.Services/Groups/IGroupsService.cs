@@ -15,16 +15,18 @@ namespace KidsManagement.Services.Groups
 
         GroupDetailsViewModel FindById(int id);
 
-        Task AddStudent(int studentId, int groupId);
+        Task<bool> AddStudentToGroup(int groupId, int studentId);
 
-        Task RemoveStudent(int studentId);
+        Task RemoveStudentFromGroup(int studentId);
+
+        Task<bool> IsGroupFull(int groupId);
 
         Task<bool> GroupExists(int groupId);
 
         AllGroupsDetailsViewModel GetAll();
         AllGroupsDetailsViewModel GetAll(int teacherId);
         AllGroupsOfTeacherViewModel GetTeacherGroups(int teacherId);
-        AllGroupsOfTeacherViewModel GetActiveGroups(int teacherId);
+        AllGroupsOfTeacherViewModel GetTeacherGroupsActive(int teacherId);
 
         //Task<bool> GroupIsFull(int groupId);
 
@@ -34,5 +36,6 @@ namespace KidsManagement.Services.Groups
 
         IEnumerable<GroupSelectionViewModel> GetAllForSelection(bool includingGroupsWithAssignedTeacher);
         void ChangeTeacher(int newTeacherId, int groupId);
+
     }
 }

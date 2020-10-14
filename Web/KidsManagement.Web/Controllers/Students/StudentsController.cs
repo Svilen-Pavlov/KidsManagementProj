@@ -115,9 +115,9 @@ namespace KidsManagement.Web.Controllers.Students
             int groupId = model.IsSelected;
 
             if (this.TempData["studentStatus"].ToString() == "Active")
-                await this.groupsService.RemoveStudent(studentId);
+                await this.groupsService.RemoveStudentFromGroup(studentId);
 
-            await this.groupsService.AddStudent(studentId, groupId);
+            await this.groupsService.AddStudentToGroup(studentId, groupId);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { studentId = studentId }));
         }

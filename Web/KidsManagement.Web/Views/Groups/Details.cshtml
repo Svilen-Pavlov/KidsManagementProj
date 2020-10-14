@@ -1,84 +1,99 @@
 ﻿@using KidsManagement.ViewModels.Groups;
 
 @model GroupDetailsViewModel
-
+@{
+    ViewData["Title"] = "Details";
+}
 <section class="py-5">
     <div class="container">
         <h1 style="margin: 2%; text-align: center;">@Model.Name</h1>
 
         <div class="form-row" style="text-align:center;">
-            <div class="col">
-                <div class="form-group col-md-6" align="center">
+            <div class="col" style="text-align:center;">
+                <div class="form-group row-md-6" align="center">
                     <label asp-for="@Model.CurrentLessonNumber"></label>
                     <input asp-for="@Model.CurrentLessonNumber" type="text" readonly class="form-control" name="CurrentLessonNumber" value="@Model.CurrentLessonNumber">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group row-md-6">
                     <label asp-for="@Model.AgeGroup"></label>
                     <input asp-for="@Model.AgeGroup" type="text" readonly class="form-control" name="AgeGroup" value="@Model.AgeGroup">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group row-md-6">
                     <label asp-for="@Model.StartDate"></label>
                     <input asp-for="@Model.StartDate" type="text" readonly class="form-control" name="StartDate" value="@Model.StartDate">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group row-md-6">
                     <label asp-for="@Model.EndDate"></label>
                     <input asp-for="@Model.EndDate" type="text" readonly class="form-control" name="EndDate" value="@Model.EndDate">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group row-md-6">
                     <label asp-for="@Model.DayOfWeek"></label>
                     <input asp-for="@Model.DayOfWeek" type="text" readonly class="form-control" name="DayOfWeek" value="@Model.DayOfWeek">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group row-md-6">
                     <label asp-for="@Model.Duration"></label>
                     <input asp-for="@Model.Duration" type="text" readonly class="form-control" name="Duration" value="@Model.Duration">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group row-md-6">
                     <label asp-for="@Model.StartTime"></label>
                     <input asp-for="@Model.StartTime" type="text" readonly class="form-control" name="StartTime" value="@Model.StartTime">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group row-md-6">
                     <label asp-for="@Model.EndTime"></label>
                     <input asp-for="@Model.EndTime" type="text" readonly class="form-control" name="EndTime" value="@Model.EndTime">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group row-md-6">
                     <label asp-for="@Model.ActiveStatus"></label>
                     <input asp-for="@Model.ActiveStatus" type="text" readonly class="form-control" name="ActiveStatus" value="@Model.ActiveStatus">
                 </div>
             </div>
-            <div class="form-group col-md-6  text-center">
-                <label asp-for="@Model.Students"></label>
+            <div class="col" style="text-align:center;">
+                <label asp-for="@Model.Students" class="table-info"></label>
                 <hr />
-                @foreach (var student in Model.Students)
-                {
-                    <div class="form-group col-md-6">
-                        <a asp-controller="Students"
-                           asp-action="Details"
-                           asp-route-studentId="@student.Id">@student.FullName  @student.Age (@student.Gender)</a>
-                    </div>
-                    <hr />
-                }
+                <table>
+                    @foreach (var student in Model.Students)
+                    {
+                        <tr style="text-align:center;">
+                            <td>
+                                <div class="form-group row-md-6">
+                                    <a asp-controller="Students" asp-action="Details" asp-route-studentId="@student.Id" class="accordion">@student.FullName</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row-md-2" style="text-align:center;">
+                                    <a asp-action="UnassignStudent" asp-route-studentId="@student.Id" class="btn btn-warning" onclick="return confirm('Are you sure you want to unassign student from this group?')">Unassign</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <hr />
 
-                @if (Model.Students.Count() < Model.MaxStudents) //adding student to group
+                @*ADDING STUDENTS*@
+                @if (Model.Students.Count() < Model.MaxStudents)
                 {
-                    <div class="form-group text-center col-md-6">
+                    <div class="form-group text-center row-md-6">
                         <div class="button-holder">
-                            <a href="/Groups/AddStudents?groupId=@Model.Id" class="btn btn-info btn-block">Add Students</a>
+                            <a href="/Groups/ListElligibleStudents" class="btn btn-info btn-block">Add Students(Free slots: @this.ViewData["freeStudentSlots"])</a>
                         </div>
                     </div>
+
                 }
-                <label asp-for="@Model.TeacherName"></label>
-                <hr />
-                @if (Model.TeacherName != null)
+                <br />
+                @*//ASSIGNING TEACHER*@
+                <label asp-for="@Model.TeacherName" class="table-warning"></label>
+                @if (Model.TeacherName == null)
                 {
-                    <div class="form-group text-center col-md-6">
-                        <div class="button-holder">
+                    <p>No teacher assigned yet</p>
+                    <div class="form-group text-center">
+                        <div class="button-holder row-md-6">
                             <a href="/Groups/AssignTeacher?groupId=@Model.Id" class="btn btn-info btn-block">Assign Teacher</a>
                         </div>
                     </div>
                 }
                 else
                 {
-                    <div class="form-group col-md-6">
+                    <div class="form-group row-md-6">
                         <a asp-controller="Teachers"
                            asp-action="Details"
                            asp-route-teacherId="@Model.TeacherId">@Model.TeacherName</a>

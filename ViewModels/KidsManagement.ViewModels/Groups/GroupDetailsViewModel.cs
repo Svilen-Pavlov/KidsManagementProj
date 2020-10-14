@@ -46,9 +46,11 @@ namespace KidsManagement.ViewModels.Groups
         public string TeacherName { get; set; }
 
         public int LevelId { get; set; }
+        
+        [DisplayName("Level")]
         public string LevelName { get; set; }
 
-        [DisplayName("Le#")]
+        [DisplayName("Max Students")]
         public int MaxStudents { get; set; }
         public IEnumerable<AllSingleStudentsViewModel> Students { get; set; }
 

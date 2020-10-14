@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KidsManagement.Services.Students
 {
-    public class StudentsService :IStudentsService
+    public class StudentsService : IStudentsService
     {
         private readonly KidsManagementDbContext db;
         private readonly ICloudinaryService cloudinaryService;
@@ -40,8 +40,8 @@ namespace KidsManagement.Services.Students
                 BirthDate = model.BirthDate,
                 Grade = model.Grade,
                 Status = model.Status,
-                ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage,null)
-        };
+                ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, null)
+            };
 
             await this.db.Students.AddAsync(student);
             await this.db.SaveChangesAsync();
@@ -179,7 +179,7 @@ namespace KidsManagement.Services.Students
         public async Task EditInfo(CreateEditStudentInputModel model)
         {
             var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == model.Id);
-           
+
             var age = DateTime.Today.Year - model.BirthDate.Year;
             if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
 
@@ -193,6 +193,33 @@ namespace KidsManagement.Services.Students
             student.ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, student.ProfilePicURI);
 
             await this.db.SaveChangesAsync();
+        }
+
+        public async Task<AllStudentsDetailsViewModel> GetElligibleGrouplessStudents(int groupId)
+        {
+            var elligibleStatuses = new List<StudentStatus>
+            {
+                StudentStatus.Initial,
+                StudentStatus.PassedDemoLesson,
+                StudentStatus.Inactive,
+                StudentStatus.Waiting
+            };
+
+            var students = await this.db.Students
+                .Where(s => elligibleStatuses.Contains(s.Status))
+                .Select(s => new AllSingleStudentsViewModel
+                    {
+                        Id=s.Id,
+                        FullName=s.FullName,
+                        Age=s.Age,
+                        Gender=s.Gender,
+                        Status=s.Status,
+                    }
+                ).ToArrayAsync();
+
+            var model = new AllStudentsDetailsViewModel { Students = students };
+
+            return model;
         }
     }
 }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace KidsManagement.Services.Groups
 {
 
-    public class GroupsService :  IGroupsService
+    public class GroupsService : IGroupsService
     {
         private readonly KidsManagementDbContext db;
         private readonly IStudentsService studentsService;
@@ -44,7 +44,7 @@ namespace KidsManagement.Services.Groups
                 EndTime = model.EndTime,
                 LevelId = model.LevelId,
                 Status = GroupStatus.Empty,
-                ActiveStatus=GroupActiveStatus.Initial,
+                ActiveStatus = GroupActiveStatus.Initial,
                 MaxStudents = (int)model.AgeGroup
             };
 
@@ -107,21 +107,43 @@ namespace KidsManagement.Services.Groups
 
             return model;
         }
-        public async Task AddStudent(int studentId, int groupId)
+        public async Task<bool> AddStudentToGroup(int groupId, int studentId)
         {
             var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
-            student.GroupId = groupId;
-            student.Status = StudentStatus.Active;
+            var group = await this.db.Groups
+                .Include(x=>x.Students)
+                .FirstOrDefaultAsync(x => x.Id == groupId);
 
+            group.Students.Add(student);
+            student.Status = StudentStatus.Active;
+            bool isGroupFull = true;
+
+            if (group.MaxStudents == group.Students.Count)
+                group.Status = GroupStatus.Full;
+            else if (group.Students.Count>group.MaxStudents)
+            {
+                group.Status = GroupStatus.OverLimit;
+            }
+            else
+            {
+                isGroupFull = false;
+            }
             await this.db.SaveChangesAsync();
+            return isGroupFull;
+        }
+        public async Task<bool> IsGroupFull(int groupId)
+        {
+            var notFullStatuses = new List<GroupStatus> { GroupStatus.NotFull, GroupStatus.Empty };
+            var group = await this.db.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+            return notFullStatuses.Contains(group.Status);
         }
 
-        public async Task RemoveStudent(int studentId)
+
+        public async Task RemoveStudentFromGroup(int studentId)
         {
             var student = await this.db.Students
-                .Include(s=>s.Group)
+                .Include(s => s.Group)
                 .FirstOrDefaultAsync(x => x.Id == studentId);
-            
 
             student.Group.Students.Remove(student);
 
@@ -152,7 +174,7 @@ namespace KidsManagement.Services.Groups
                 .Include(g => g.Level)
                 .Include(g => g.Teacher)
                 .Include(g => g.Students)
-                .Where(g=> (teacherId!=0)? g.TeacherId == teacherId : true) //skip where if teacherId==0 ; https://stackoverflow.com/questions/3682835/if-condition-in-linq-where-clause
+                .Where(g => (teacherId != 0) ? g.TeacherId == teacherId : true) //skip where if teacherId==0 ; https://stackoverflow.com/questions/3682835/if-condition-in-linq-where-clause
                 .Select(g => new SingleGroupDetailsViewModel
                 {
                     Id = g.Id,
@@ -162,7 +184,8 @@ namespace KidsManagement.Services.Groups
                     LevelName = g.Level.Name,
                     TeacherName = g.Teacher == null ? InfoStrings.GroupHasNoTeacherYet : g.Teacher.FullName, //make it the same as in other methods - FindById
                     StudentsCount = g.Students.Count(),
-                    ActiveStatus=g.ActiveStatus
+                    ActiveStatus = g.ActiveStatus,
+                    MaxStudentsCount = g.MaxStudents
                 })
                 .ToArray()
                 .OrderBy(x => x.DayOfWeek)
@@ -277,7 +300,7 @@ namespace KidsManagement.Services.Groups
                 .Include(g => g.Teacher)
                 .Include(g => g.Level)
                 .Include(g => g.Students)
-                .Where(g => g.AgeGroup == ageGroup && (int)g.Status < 3 || g.Students.Any(s=>s.Id==student.Id))
+                .Where(g => g.AgeGroup == ageGroup && (int)g.Status < 3 || g.Students.Any(s => s.Id == student.Id))
                 .ToArray()
                 .Select(g => new SingleGroupDetailsViewModel
                 {
@@ -303,15 +326,17 @@ namespace KidsManagement.Services.Groups
             return await Task.FromResult(groups); //https://stackoverflow.com/questions/25182011/why-async-await-allows-for-implicit-conversion-from-a-list-to-ienumerable
         }
 
-        public AllGroupsOfTeacherViewModel GetActiveGroups(int teacherId)
+        public AllGroupsOfTeacherViewModel GetTeacherGroupsActive(int teacherId)
         {
             var statuses = new List<GroupActiveStatus> { GroupActiveStatus.Started, GroupActiveStatus.Paused };
-            var model=this.GetTeacherGroups(teacherId);
+            var model = this.GetTeacherGroups(teacherId);
             var filtered = model.Groups.ToList();
             filtered.RemoveAll(x => statuses.Contains(x.ActiveStatus) == false);
             model.Groups = filtered;
 
             return model;
         }
+
+
     }
 }

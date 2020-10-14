@@ -27,5 +27,7 @@ namespace KidsManagement.Services.Students
         Task<int> UnassignParent(int studentId, int parentId);
 
         Task<int> Delete(int studentId);
+
+        Task<AllStudentsDetailsViewModel> GetElligibleGrouplessStudents(int groupId);
     }
 }

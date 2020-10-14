@@ -1,7 +1,9 @@
 ﻿using KidsManagement.Services.Groups;
 using KidsManagement.Services.Levels;
+using KidsManagement.Services.Students;
 using KidsManagement.Services.Teachers;
 using KidsManagement.ViewModels.Groups;
+using KidsManagement.ViewModels.Students;
 using KidsManagement.ViewModels.Teachers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +19,14 @@ namespace KidsManagement.Web.Controllers.Groups
         private readonly IGroupsService groupsService;
         private readonly ITeachersService teachersService;
         private readonly ILevelsService levelsService;
+        private readonly IStudentsService studentsService;
 
-        public GroupsController(IGroupsService groupsService, ITeachersService teachersService, ILevelsService levelsService)
+        public GroupsController(IGroupsService groupsService, ITeachersService teachersService, ILevelsService levelsService, IStudentsService studentsService)
         {
             this.groupsService = groupsService;
             this.teachersService = teachersService;
             this.levelsService = levelsService;
+            this.studentsService = studentsService;
         }
         public async Task<IActionResult> Index()
         {
@@ -62,11 +66,57 @@ namespace KidsManagement.Web.Controllers.Groups
             var model = this.groupsService.FindById(groupId); //todo ASYNC
 
             this.TempData["groupId"] = groupId;
-            //this.TempData["studentStatus"] = model.Status.ToString(); // additional info for the process (how free spots count)
+            this.TempData["freeStudentSlots"] = model.MaxStudents - model.Students.Count();
+            this.ViewData["freeStudentSlots"] = model.MaxStudents - model.Students.Count();
 
             return await Task.Run(() => View(model));
         }
 
+        public async Task<IActionResult> UnassignStudent(int studentId)
+        {
+            await CheckStudentId(studentId);
+            int groupId=await CheckGroupId(this.TempData["groupId"]);
+            await this.groupsService.RemoveStudentFromGroup(studentId);
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
+        }
+
+
+
+        public async Task<IActionResult> ListElligibleStudents()
+        {
+            int groupId = await CheckGroupId(this.TempData["groupId"]);
+
+            var model = await this.studentsService.GetElligibleGrouplessStudents(groupId);
+            this.ViewData["freeStudentSlots"] = this.TempData["freeStudentSlots"];
+            this.TempData.Keep("groupId");
+            this.TempData.Keep("freeStudentSlots");
+
+
+            return await Task.Run(() => View(model));
+        }
+
+        public async Task<IActionResult> AddStudents(int studentId)
+        {
+            await CheckStudentId(studentId);
+            int groupId = await CheckGroupId(this.TempData["groupId"]);
+
+            
+            this.TempData.Keep("groupId");
+
+            var groupIsFull = await this.groupsService.AddStudentToGroup(groupId, studentId);
+            if (groupIsFull ==false)
+            {
+                this.ViewData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"]-1;
+                this.TempData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"]-1;
+                return await Task.Run(() => this.RedirectToAction("ListElligibleStudents"));
+            }
+            else
+            {
+            return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
+            }
+
+        }
         //public async Task<IActionResult> AssignTeacher(int groupId)
         //{
         //    await CheckGroupId(groupId);
@@ -81,49 +131,9 @@ namespace KidsManagement.Web.Controllers.Groups
         //    int groupId = await CheckGroupId(this.TempData["groupId"]);
         //    int teacherId = await CheckTeacherId(model.Teachers.Where(t => t.Selected).Id);
 
-        //    this.groupsService.ChangeTeacher(teacherId,groupId);
+        //    this.groupsService.Chan3acher(teacherId,groupId);
 
         //    return RedirectToAction("Details", new { groupId = groupId });
-        //}
-
-        //public async Task<IActionResult> AddStudents()
-        //{
-        //    var groupIdNullable = this.TempData["groupId"];
-        //    if (groupIdNullable == null || (groupIdNullable is int) == false)
-        //        return this.Redirect("/");
-
-        //    int groupId = (int)groupIdNullable;
-
-        //    if (await this.groupsService.GroupExists(groupId) == false)
-        //    {
-        //        return this.Redirect("/");
-        //    }
-
-        //    this.TempData["groupId"] = groupId;
-
-        //    var studentsList = await this.studentService.GetEligibleGrouplessStudents(groupId);
-
-        //    var model = new AssignStudentsToGroupInputModel() { StudentsForSelection = studentsList.ToList() };
-        //    //this.TempData.Keep("studentStatus"); // additional info for the process (how free spots count)
-        //    this.TempData.Keep("groupId");
-
-        //    return await Task.Run(() => View(model));
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddStudents(AssignStudentsToGroupInputModel model)
-        //{
-        //    var groupIdNullable = this.TempData["groupId"];
-        //    var studentsList = model.StudentsList; //get a List of Selected Students for addition
-        //    if (groupIdNullable == null || (groupIdNullable is int) == false)
-        //        return this.Redirect("/"); //todo groupId is null or not int
-
-        //    int groupId = (int)groupIdNullable;
-
-
-        //    await this.groupsService.AssignStudentsToGroup(groupId, studentsList);
-
-        //    return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
         //}
         public async Task<int> CheckGroupId(object groupIdNullable)
         {
@@ -146,6 +156,18 @@ namespace KidsManagement.Web.Controllers.Groups
                 throw new Exception(); //todo teacher does not exist Exception
 
             return teacherId;
+        }
+
+        public async Task<int> CheckStudentId(object studentIdNullable)
+        {
+            if (studentIdNullable == null || (studentIdNullable is int) == false)
+                throw new Exception(); //todo invalid userId Exception
+
+            int studentId = (int)studentIdNullable;
+            if (await this.studentsService.Exists(studentId) == false)
+                throw new Exception(); //todo student does not exist Exception
+
+            return studentId;
         }
     }
 }

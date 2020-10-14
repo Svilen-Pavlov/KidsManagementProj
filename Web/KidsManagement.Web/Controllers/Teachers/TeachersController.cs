@@ -218,7 +218,7 @@ namespace KidsManagement.Web.Controllers.Teachers
         public async Task<IActionResult> RemainingGroups(int teacherId)
         {
             await CheckTeacherId(teacherId);
-            var model = this.groupsService.GetActiveGroups(teacherId);
+            var model = this.groupsService.GetTeacherGroupsActive(teacherId);
             return await Task.Run(() => this.RedirectToAction("TeachersList", "Admin"));
 
         }
