@@ -70,7 +70,7 @@ namespace KidsManagement.Services.Teachers
                 HiringDate = model.HiringDate,
                 DismissalDate = model.DismissalDate,
                 Salary = model.Salary,
-                ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null),
+                ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null),
                 Groups = groupsToAssignToTeacher,
                 QualifiedLevels = qualifiedLevels.Select(ql => new LevelTeacher { Level = ql }).ToArray(),
                 Status= groupsToAssignToTeacher.Length==0 ? TeacherStatus.Initial:TeacherStatus.Active,
@@ -141,8 +141,8 @@ namespace KidsManagement.Services.Teachers
                               Id = teacher.Id,
                               FirstName = teacher.FirstName,
                               LastName = teacher.LastName,
-                              Capacity = 0,
-                              Efficiency = 0,
+                              Capacity = 0, //TODO
+                              Efficiency = 0, //TODO
                               Groups = teacher.Groups.Select(x => x.Name).ToArray(),
                           })
                           .ToArray()
@@ -385,7 +385,7 @@ namespace KidsManagement.Services.Teachers
             teacher.Salary = model.Salary;
             teacher.HiringDate = model.HiringDate;
             teacher.DismissalDate = model.DismissalDate;
-            teacher.ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null);
+            teacher.ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null);
         }
 
         public async Task<int> Delete(int teacherId)
@@ -420,11 +420,73 @@ namespace KidsManagement.Services.Teachers
 
             return await this.db.SaveChangesAsync();
         }
+
+
         public static bool IsDateInRange(DateTime groupStart, DateTime groupEnd, DateTime fromDate, DateTime toDate)
         {
             return (groupStart < toDate || groupEnd > fromDate) && (groupStart > fromDate || groupEnd > toDate);
         }
 
+        public async Task<AllTeachersListViewModel> GetAllEligibleTeacherForGroup(int groupId)
+        {
+            var group = await this.db.Groups.FirstOrDefaultAsync(g => g.Id == groupId);
+            var weekDay = group.DayOfWeek;
+            var startTime = group.StartTime;
+            var duration = group.Duration;
+
+            var teachers = await this.db.Teachers.Include(t => t.Groups).ToArrayAsync();
+
+            var freeTeachers = teachers
+                .Where(t => CheckTeacherIsFree(weekDay, startTime, duration, t))
+                .Select(t => new TeachersListDetailsViewModel
+                {
+                    Id = t.Id,
+                    FirstName = t.FirstName,
+                    LastName = t.LastName,
+                    Groups = t.Groups.Select(x => x.Name).ToArray(), //do I need this here
+                    Capacity = 0, //TODO
+                    Efficiency = 0, //TODO
+                })
+                .ToArray();
+
+
+            var model = new AllTeachersListViewModel { Teachers = freeTeachers };
+
+            return model;
+        }
+
+        public async Task<int> AssignGroup(int teacherId, int groupId)
+        {
+            var group = await this.db.Groups.FirstOrDefaultAsync(g => g.Id == groupId);
+            var teacher= await this.db.Teachers
+                .Include(t=>t.Groups)
+                .FirstOrDefaultAsync(t => t.Id == teacherId);
+
+            teacher.Groups.Add(group);
+
+            return await this.db.SaveChangesAsync();
+        }
+
+        private bool CheckTeacherIsFree(DayOfWeek weekday, TimeSpan startTime, TimeSpan duration, Teacher teacher)
+        {
+            TimeSpan endTime = startTime.Add(duration);
+            TimeSpan recess = TimeSpan.FromMinutes(Const.breakBetweenGroupsMinutes);
+            bool result = true;
+            var groups = teacher.Groups.ToArray();
+            foreach (var group in groups.Where(g=>g.DayOfWeek==weekday)) //TODECIDE teacher working days or not filter
+            {
+                var existingGroupStartRecess = group.StartTime.Add(-recess);
+                var existingGroupEndRecess = group.StartTime.Add(group.Duration+recess);
+                
+                //bool overlap = a.start < b.end && b.start < a.end;
+                if (startTime < existingGroupEndRecess && existingGroupStartRecess < endTime)
+                    result = false;
+            }
+
+            return result;
+        }
+
+        //private double CalculateCapacity/Efficiency() TODO
     }
     public static class DateTimeExtensions
     {

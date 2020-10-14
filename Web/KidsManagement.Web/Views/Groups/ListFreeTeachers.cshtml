@@ -1,0 +1,45 @@
+﻿@using KidsManagement.ViewModels.Teachers;
+
+@model AllTeachersListViewModel;
+@{
+    ViewData["Title"] = "Assign Teacher";
+}
+
+
+<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Elligible Teachers</h1>
+        <div>
+            <table class="table" style="text-align: center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Groups Count</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col">Efficiency</th>
+                        <th scope="col">Choose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var teacher in Model.Teachers)
+                    {
+                        <tr>
+                            <th scope="row">@teacher.Id</th>
+                            <td>@teacher.FullName</td>
+                            <td>@teacher.GroupsCount</td>
+                            <td>@teacher.Capacity</td>
+                            <td>@teacher.Efficiency</td>
+                            <td>
+                                <div class="button-holder">
+                                    <a href="/Groups/AssignTeacher?teacherId=@teacher.Id" class="btn btn-info">Assign</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>

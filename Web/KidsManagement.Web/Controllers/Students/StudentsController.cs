@@ -112,7 +112,7 @@ namespace KidsManagement.Web.Controllers.Students
         public async Task<IActionResult> AddToGroup(AddStudentToGroupInputModel model)
         {
             int studentId = await CheckStudentId(this.TempData["studentId"]);
-            int groupId = model.IsSelected;
+            int groupId = model.IdIsSelected;
 
             if (this.TempData["studentStatus"].ToString() == "Active")
                 await this.groupsService.RemoveStudentFromGroup(studentId);

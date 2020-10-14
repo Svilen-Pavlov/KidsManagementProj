@@ -12,7 +12,7 @@ namespace KidsManagement.ViewModels.Students
             StudentIsInGroup = false;
             GroupsForSelection = new List<SingleGroupDetailsViewModel>();
         }
-        public int IsSelected { get; set; } //specifically for selection
+        public int IdIsSelected { get; set; } //specifically for selection
 
         public bool StudentIsInGroup { get; set; } 
 

@@ -81,21 +81,21 @@ namespace KidsManagement.Web.Controllers.Groups
             return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
         }
 
-
-
         public async Task<IActionResult> ListElligibleStudents()
         {
             int groupId = await CheckGroupId(this.TempData["groupId"]);
 
             var model = await this.studentsService.GetElligibleGrouplessStudents(groupId);
             this.ViewData["freeStudentSlots"] = this.TempData["freeStudentSlots"];
-            this.TempData.Keep("groupId");
+            this.ViewData["groupId"] = this.TempData["groupId"];
             this.TempData.Keep("freeStudentSlots");
+            this.TempData.Keep("groupId");
 
 
             return await Task.Run(() => View(model));
         }
 
+        
         public async Task<IActionResult> AddStudents(int studentId)
         {
             await CheckStudentId(studentId);
@@ -117,24 +117,34 @@ namespace KidsManagement.Web.Controllers.Groups
             }
 
         }
-        //public async Task<IActionResult> AssignTeacher(int groupId)
-        //{
-        //    await CheckGroupId(groupId);
-        //    var model = this.teachersService.GetAllEligibleForAGroup(groupId);
-        //    this.TempData["groupId"] = groupId;
 
-        //    return await Task.Run(() => View(model));
-        //}
+        public async Task<IActionResult> UnassignTeacher(int teacherId)
+        {
+            await CheckTeacherId(teacherId);
+            int groupId = await CheckGroupId(this.TempData["groupId"]);
 
-        //public async Task<IActionResult> AssignTeacher(TeachersElligibleForGroupViewModel model)
-        //{
-        //    int groupId = await CheckGroupId(this.TempData["groupId"]);
-        //    int teacherId = await CheckTeacherId(model.Teachers.Where(t => t.Selected).Id);
+            await this.teachersService.UnassignGroup(teacherId,groupId);
 
-        //    this.groupsService.Chan3acher(teacherId,groupId);
+            return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
+        }
+        public async Task<IActionResult> ListFreeTeachers()
+        {
+            int groupId=await CheckGroupId(this.TempData["groupId"]);
+            var model = await this.teachersService.GetAllEligibleTeacherForGroup(groupId);
+            this.TempData["groupId"] = groupId;
 
-        //    return RedirectToAction("Details", new { groupId = groupId });
-        //}
+            return await Task.Run(() => View(model));
+        }
+
+        public async Task<IActionResult> AssignTeacher(int teacherId)
+        {
+            int groupId = await CheckGroupId(this.TempData["groupId"]);
+            await CheckTeacherId(teacherId);
+
+            await this.teachersService.AssignGroup(teacherId, groupId);
+
+            return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
+        }
         public async Task<int> CheckGroupId(object groupIdNullable)
         {
             if (groupIdNullable == null || (groupIdNullable is int) == false)

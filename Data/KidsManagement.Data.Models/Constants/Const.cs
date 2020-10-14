@@ -18,6 +18,8 @@ namespace KidsManagement.Data.Models.Constants
         public const string dateOnlyFormat = "d";
         public const string hourMinutesFormat = @"h\:mm";
 
-        public const string defProfPicURL = "http://res.cloudinary.com/svilenpavlov/image/upload/v1601641040/by5z42szy576diu5brz7.jpg";
+        public const double breakBetweenGroupsMinutes = 15;
+
+        public const string defaultProfPicURL = "http://res.cloudinary.com/svilenpavlov/image/upload/v1601641040/by5z42szy576diu5brz7.jpg";
     }
 }

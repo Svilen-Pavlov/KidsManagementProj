@@ -40,7 +40,7 @@ namespace KidsManagement.Services.Students
                 BirthDate = model.BirthDate,
                 Grade = model.Grade,
                 Status = model.Status,
-                ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, null)
+                ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, null)
             };
 
             await this.db.Students.AddAsync(student);
@@ -190,7 +190,7 @@ namespace KidsManagement.Services.Students
             student.Age = age;
             student.BirthDate = model.BirthDate;
             student.Grade = model.Grade;
-            student.ProfilePicURI = model.ProfileImage == null ? Const.defProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, student.ProfilePicURI);
+            student.ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, student.ProfilePicURI);
 
             await this.db.SaveChangesAsync();
         }

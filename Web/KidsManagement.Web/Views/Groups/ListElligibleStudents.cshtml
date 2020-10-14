@@ -6,8 +6,11 @@
 }
 <section class="py-5">
     <div class="container">
-        <h1 style="margin: 2%; text-align: center;">Elligible Students - @this.ViewData["freeStudentSlots"] free spots left</h1>
+        <h1 style="margin: 2%; text-align: center;">Elligible Students - @this.ViewData["freeStudentSlots"] free spots left </h1>
         <div>
+            <div class="button-holder align-self-center">
+                <a href="/Groups/Details?groupId=@this.ViewData["groupId"]" class="btn btn-info">Back to Group</a>
+            </div>
             <table class="table">
                 <thead class="thead-dark" style="text-align: center">
                     <tr>
@@ -30,7 +33,7 @@
                             <td>@student.Status</td>
                             <td>
                                 <div class="button-holder">
-                                    <a href="/Groups/AddStudents?studentId=@student.Id" class="btn btn-info text-uppercase">Add Student to Group</a>
+                                    <a href="/Groups/AddStudents?studentId=@student.Id" class="btn btn-info">Add Student to Group</a>
                                 </div>
                             </td>
                         </tr>

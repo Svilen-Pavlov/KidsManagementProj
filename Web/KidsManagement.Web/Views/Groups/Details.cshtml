@@ -53,7 +53,7 @@
                 <table>
                     @foreach (var student in Model.Students)
                     {
-                        <tr style="text-align:center;">
+                        <tr class="form-group text-center">
                             <td>
                                 <div class="form-group row-md-6">
                                     <a asp-controller="Students" asp-action="Details" asp-route-studentId="@student.Id" class="accordion">@student.FullName</a>
@@ -74,7 +74,7 @@
                 {
                     <div class="form-group text-center row-md-6">
                         <div class="button-holder">
-                            <a href="/Groups/ListElligibleStudents" class="btn btn-info btn-block">Add Students(Free slots: @this.ViewData["freeStudentSlots"])</a>
+                            <a href="/Groups/ListElligibleStudents" class="btn btn-info btn-block">Add Students (Free slots: @this.ViewData["freeStudentSlots"])</a>
                         </div>
                     </div>
 
@@ -82,28 +82,36 @@
                 <br />
                 @*//ASSIGNING TEACHER*@
                 <label asp-for="@Model.TeacherName" class="table-warning"></label>
-                @if (Model.TeacherName == null)
+                @if (Model.TeacherId == 0)
                 {
                     <p>No teacher assigned yet</p>
                     <div class="form-group text-center">
                         <div class="button-holder row-md-6">
-                            <a href="/Groups/AssignTeacher?groupId=@Model.Id" class="btn btn-info btn-block">Assign Teacher</a>
+                            <a href="/Groups/ListFreeTeachers" class="btn btn-info btn-block">Assign Teacher</a>
                         </div>
                     </div>
                 }
                 else
                 {
-                    <div class="form-group row-md-6">
-                        <a asp-controller="Teachers"
-                           asp-action="Details"
-                           asp-route-teacherId="@Model.TeacherId">@Model.TeacherName</a>
-                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="form-group row-md-6">
+                                    <a asp-controller="Teachers"
+                                       asp-action="Details"
+                                       asp-route-teacherId="@Model.TeacherId">@Model.TeacherName</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row-md-2" style="text-align:center;">
+                                    <a asp-action="UnassignTeacher" asp-route-teacherId="@Model.TeacherId" class="btn btn-warning" onclick="return confirm('Are you sure you want to unassign teacher from this group?')">Unassign</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                     <hr />
                 }
             </div>
-
-
-
         </div>
     </div>
 </section>
