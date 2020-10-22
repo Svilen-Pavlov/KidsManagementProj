@@ -1,4 +1,5 @@
-﻿using KidsManagement.Data.Models.Constants;
+﻿using CustomExtensions.Attributes;
+using KidsManagement.Data.Models.Constants;
 using KidsManagement.Data.Models.Enums;
 using KidsManagement.ViewModels.Groups;
 using KidsManagement.ViewModels.Levels;
@@ -15,22 +16,34 @@ namespace KidsManagement.ViewModels.Teachers
         public int Id { get; set; } //for edit only
 
         [Required]
-        [MinLength(Constants.humanNameMinLen), MaxLength(Constants.humanNameMaxLen)]
         [DisplayName("First Name")]
+        [RegularExpression(Constants.humanNamesRegex, ErrorMessage = Warnings.CreatHumanName)]
         public string FirstName { get; set; }
         [Required]
-        [MinLength(Constants.humanNameMinLen), MaxLength(Constants.humanNameMaxLen)]
         [DisplayName("Last Name")]
+        [RegularExpression(Constants.humanNamesRegex, ErrorMessage = Warnings.CreatHumanName)]
         public string LastName { get; set; }
+
         [Required]
         public Gender Gender { get; set; }
+
         [Required]
+        [Range(1, double.MaxValue, ErrorMessage = Warnings.SalaryPositive)]
         public decimal Salary { get; set; }
+
         [Required]
         [DisplayName("Hiring Date")]
-        public DateTime HiringDate { get; set; }
+        public DateTime? HiringDate { get; set; }
+
         
-        [DisplayName("Dissmisal Date")]
+       
+        [Required]
+        [Phone(ErrorMessage = Warnings.CreatePhone)]
+        [DisplayName("Phone Number")]
+
+        public string PhoneNumber { get; set; }
+        [DateGreaterThanAttribute("HiringDate")]
+        [DisplayName("Dissmisal Date (optional)")] 
         public DateTime? DismissalDate { get; set; }
 
         public string ProfilePicURI { get; set; } //for edit only
@@ -52,7 +65,7 @@ namespace KidsManagement.ViewModels.Teachers
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
- 
+
         [Required]
         [DataType(DataType.Password)]
         [Compare("Password")]

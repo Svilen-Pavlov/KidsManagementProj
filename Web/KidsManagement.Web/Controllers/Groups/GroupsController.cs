@@ -53,9 +53,13 @@ namespace KidsManagement.Web.Controllers.Groups
         [HttpPost]
         public async Task<IActionResult> Create(CreateEditGroupInputModel model)
         {
-            if (this.ModelState.IsValid == false) return this.Redirect("/"); //todo error page
-
-            var groupId = await this.groupsService.CreateGroup(model);  //todo ASYNC
+            if (ModelState.IsValid == false)
+            {
+                model.Teachers=this.teachersService.GetAllForSelection();
+                model.Levels = this.levelsService.GetAllForSelection();
+                return await Task.Run(() => this.View(model));
+            }
+            var groupId = await this.groupsService.CreateGroup(model);
             return RedirectToAction("Details", new { groupId = groupId });
         }
 
@@ -156,6 +160,8 @@ namespace KidsManagement.Web.Controllers.Groups
         [HttpPost]
         public async Task<IActionResult> EditInfo(CreateEditGroupInputModel model)
         {
+            if (ModelState.IsValid == false) return await Task.Run(() => this.View(model));
+
             int groupId = await CheckStudentId(TempData["groupId"]);
             model.Id = groupId;
             await this.groupsService.EditInfo(model);

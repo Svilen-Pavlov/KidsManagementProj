@@ -48,17 +48,19 @@ namespace KidsManagement.Web.Controllers.Teachers
         [HttpPost]
         public async Task<IActionResult> Create(CreateEditTeacherInputModel model)
         {
-            if (this.ModelState.IsValid == false)
+            if (ModelState.IsValid == false)
             {
-                return this.Redirect("/"); //todo error page
+                model.Levels = this.levelsService.GetAllForSelection().ToList();
+                model.Groups = this.groupsService.GetAllForSelection(false).ToList();
+                return await Task.Run(() => this.View(model));
             }
 
             if (await this.teachersService.UserExists(model.Username))
             {
-                return this.Redirect("/"); //todo error page User Exists
+                return this.Json("Existing Username"); //todo error page User Exists and in a separate method
             }
 
-            var newTeacherId = await this.teachersService.CreateTeacher(model);  //todo ASYNC
+            var newTeacherId = await this.teachersService.CreateTeacher(model);  
             return RedirectToAction("Details", new { teacherId = newTeacherId });
         }
 
@@ -159,6 +161,7 @@ namespace KidsManagement.Web.Controllers.Teachers
             await CheckTeacherId(teacherId);
             var model = await this.teachersService.GetInfoForEdit(teacherId);
             this.TempData["teacherId"] = teacherId;
+            this.TempData["profilePicUri"] = model.ProfilePicURI;
 
             return await Task.Run(() => this.View(model));
         }
@@ -166,6 +169,11 @@ namespace KidsManagement.Web.Controllers.Teachers
         [HttpPost]
         public async Task<IActionResult> EditInfo(CreateEditTeacherInputModel model)
         {
+            model.ProfilePicURI = this.TempData["profilePicUri"].ToString();
+            this.TempData.Keep("profilePicUri");
+
+            if (ModelState.IsValid == false) return await Task.Run(() => this.View(model));
+
             int teacherId = await CheckTeacherId(this.TempData["teacherId"]);
             model.Id = teacherId;
             await this.teachersService.EditInfo(model);

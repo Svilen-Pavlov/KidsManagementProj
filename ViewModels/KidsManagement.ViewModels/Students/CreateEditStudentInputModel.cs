@@ -21,17 +21,17 @@ namespace KidsManagement.ViewModels.Students
 
         [Required]
         [DisplayName("First Name")]
-        [RegularExpression(Constants.namesRegex, ErrorMessage = Warnings.CreatEntityName)]
+        [RegularExpression(Constants.humanNamesRegex, ErrorMessage = Warnings.CreatHumanName)]
         public string FirstName { get; set; }
 
         [Required]
         [DisplayName("Middle Name")]
-        [RegularExpression(Constants.namesRegex, ErrorMessage =Warnings.CreatEntityName)]
+        [RegularExpression(Constants.humanNamesRegex, ErrorMessage =Warnings.CreatHumanName)]
         public string MiddleName { get; set; }
 
         [Required]
         [DisplayName("Last Name")]
-        [RegularExpression(Constants.namesRegex, ErrorMessage = Warnings.CreatEntityName)]
+        [RegularExpression(Constants.humanNamesRegex, ErrorMessage = Warnings.CreatHumanName)]
         public string LastName { get; set; }
 
         [Required]

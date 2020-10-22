@@ -92,13 +92,13 @@
                         }
                     </table>
                     <hr />
-                    @if (this.User.IsInRole("Admin"))
-                    {
-                        <div>
-                            <a asp-action="AddGroups" asp-route-teacherId="@Model.Id" class="btn btn-info">Add Groups</a>
-                        </div>
-                    }
-
+                }
+                <br />
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <div>
+                        <a asp-action="AddGroups" asp-route-teacherId="@Model.Id" class="btn btn-info">Add Groups</a>
+                    </div>
                 }
 
             </div>

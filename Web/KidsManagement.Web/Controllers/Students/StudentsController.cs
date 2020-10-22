@@ -147,9 +147,8 @@ namespace KidsManagement.Web.Controllers.Students
             model.ProfilePicURI = this.TempData["profilePicUri"].ToString();
             this.TempData.Keep("profilePicUri");
             
-            if (ModelState.IsValid == false)
-                return await Task.Run(() => this.View(model));
-            
+            if (ModelState.IsValid == false) return await Task.Run(() => this.View(model));
+
             int studentId = await CheckStudentId(TempData["studentId"]);
             model.Id = studentId;
             await this.studentsService.EditInfo(model);

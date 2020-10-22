@@ -22,10 +22,12 @@
                         <div class="form-group row-md-6">
                             <label asp-for="FirstName"></label>
                             <input asp-for="FirstName" class="form-control" placeholder="First Name..." />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
                         <div class="form-group row-md-6">
                             <label asp-for="LastName"></label>
                             <input asp-for="LastName" class="form-control" placeholder="Last Name..." />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
                         </div>
                         <div class="form-group row-md-6">
                             <label asp-for="Gender"></label>
@@ -35,14 +37,17 @@
                         <div class="form-group row-md-6">
                             <label asp-for="Salary"></label>
                             <input asp-for="Salary" type="number" class="form-control" />
+                            <span asp-validation-for="Salary" class="text-danger"></span>
                         </div>
                         <div class="form-group row-md-6">
                             <label asp-for="HiringDate"></label>
-                            <input asp-for="HiringDate" type="date" class="form-control" value="DateTime.Today" />
+                            <input asp-for="HiringDate" type="date" class="form-control" />
+                            <span asp-validation-for="HiringDate" class="text-danger"></span>
                         </div>
                         <div class="form-group row-md-6">
                             <label asp-for="DismissalDate"></label>
-                            <input asp-for="DismissalDate" type="date" class="form-control" value="DateTime.Today" />
+                            <input asp-for="DismissalDate" type="date" class="form-control" />
+                            <span asp-validation-for="DismissalDate" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -55,19 +60,28 @@
 
                             <div class="form-group row-md-6">
                                 <label asp-for="Username"></label>
-                                <input asp-for="Username" type="text" class="form-control" placeholder="Account Username.." />
+                                <input asp-for="Username" type="text" class="form-control" placeholder="Account Username..." />
+                                <span asp-validation-for="Username" class="text-danger"></span>
                             </div>
                             <div class="form-group row-md-6">
                                 <label asp-for="Email"></label>
-                                <input asp-for="Email" type="email" class="form-control" placeholder="Account Email.." />
+                                <input asp-for="Email" type="email" class="form-control" placeholder="Account Email..." />
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                             <div class="form-group row-md-6">
                                 <label asp-for="Password"></label>
                                 <input asp-for="Password" type="password" class="form-control" placeholder="Password..." />
+                                <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
                             <div class="form-group row-md-6">
                                 <label asp-for="ConfirmPassword"></label>
                                 <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password..." />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row-md-6">
+                                <label asp-for="PhoneNumber"></label>
+                                <input asp-for="PhoneNumber" type="text" class="form-control" placeholder="0888..." />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="ProfileImage" class="control-label"></label>
@@ -76,7 +90,7 @@
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                                 @*<span asp-validation-for="ProfileImage" class="text-danger"></span>* apply this@
-                                    @*this indian guy carried me https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/*@
+            @*this indian guy carried me https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/*@
                             </div>
                         </div>
                     </div>

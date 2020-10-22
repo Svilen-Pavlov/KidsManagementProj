@@ -17,10 +17,9 @@ namespace KidsManagement.ViewModels.Groups
         public int Id { get; set; } //only for edit
 
         [Required]
-        [MaxLength(Constants.entityNameMaxLen)]
+        [DisplayName("First Name")]
+        [RegularExpression(Constants.entityNamesRegex, ErrorMessage = Warnings.CreatEntityName)]
         public string Name { get; set; }
-
-        //[Range(Const.entityMinCount, Const.entityMaxCount)]
 
         [DisplayName("Age Group")]
         [Required]
@@ -28,12 +27,13 @@ namespace KidsManagement.ViewModels.Groups
 
         [Required]
         [DisplayName("Start Date")]
-        public DateTime StartDate { get; set; } //DateTime
+        public DateTime? StartDate { get; set; } //DateTime
 
         [Required]
-        [DateGreaterThan("StartDate")]
         [DisplayName("End Date")]
-        public DateTime EndDate { get; set; } //DateTime
+        [DateIsInFuture]
+        [DateGreaterThan("StartDate")]
+        public DateTime? EndDate { get; set; } //DateTime
 
         [Required]
         [DisplayName("Weekday")]
@@ -49,8 +49,10 @@ namespace KidsManagement.ViewModels.Groups
         public TimeSpan EndTime { get; set; } //TimeSpan
 
         [Required]
-        [Column(TypeName = "time(0)")] //idk if I need this column
-        public TimeSpan Duration { get; set; } //TimeSpan
+        [Range(Constants.groupMinDuration,Constants.groupMaxDuration,ErrorMessage =Warnings.GroupDuration)] 
+        [DisplayName("Duration (in hours)")]
+
+        public int Duration { get; set; } //TimeSpan
 
         [Display(Name = "Teacher")]
         public int TeacherId { get; set; }

@@ -29,7 +29,9 @@ namespace KidsManagement.Services.Groups
 
         public async Task<int> CreateGroup(CreateEditGroupInputModel model)
         {
-            //a new non teacher group
+            DateTime startDate = model.StartDate ?? DateTime.Now;
+            DateTime endDate = model.EndDate ?? DateTime.Now;
+            TimeSpan duration = TimeSpan.FromMinutes(model.Duration);
 
             var group = new Group
             {
@@ -37,11 +39,11 @@ namespace KidsManagement.Services.Groups
                 AgeGroup = model.AgeGroup,
                 CurrentLessonNumber = 1, //0 and add logic for increasing lesson numbers
                 DayOfWeek = model.DayOfWeek,
-                Duration = model.Duration,
-                StartDate = model.StartDate,
-                EndDate = model.EndDate,
+                Duration = duration,
+                StartDate = startDate,
+                EndDate = endDate,
                 StartTime = model.StartTime,
-                EndTime = model.StartTime.Add(model.Duration),
+                EndTime = model.StartTime.Add(duration),
                 LevelId = model.LevelId,
                 Status = GroupStatus.Empty,
                 ActiveStatus = GroupActiveStatus.Initial,
@@ -347,7 +349,7 @@ namespace KidsManagement.Services.Groups
                 Name = group.Name,
                 AgeGroup = group.AgeGroup,
                 DayOfWeek = group.DayOfWeek,
-                Duration = group.Duration,
+                Duration = (int)group.Duration.TotalMinutes,
                 StartDate = group.StartDate,
                 EndDate = group.EndDate,
                 StartTime=group.StartTime,
@@ -359,15 +361,20 @@ namespace KidsManagement.Services.Groups
 
         public async Task EditInfo(CreateEditGroupInputModel model)
         {
+            DateTime StartDate = model.StartDate ?? DateTime.Now;
+            DateTime EndDate = model.EndDate ?? DateTime.Now;
+            TimeSpan duration = TimeSpan.FromMinutes(model.Duration);
+
+
             var group = await this.db.Groups.FirstOrDefaultAsync(x => x.Id == model.Id);
 
             group.Name = model.Name;
             group.AgeGroup = model.AgeGroup;
-            group.StartDate = model.StartDate;
-            group.EndDate = model.EndDate;
+            group.StartDate = StartDate;
+            group.EndDate = EndDate;
             group.StartTime = model.StartTime;
-            group.Duration = model.Duration;
-            group.EndTime = model.StartTime.Add(model.Duration);
+            group.Duration = duration;
+            group.EndTime = model.StartTime.Add(duration);
             group.DayOfWeek = model.DayOfWeek;
 
             await this.db.SaveChangesAsync();

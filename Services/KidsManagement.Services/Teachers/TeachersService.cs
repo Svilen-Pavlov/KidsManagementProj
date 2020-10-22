@@ -55,21 +55,24 @@ namespace KidsManagement.Services.Teachers
             user.PasswordHash = hashedPassword;
 
             var userStore = new UserStore<ApplicationUser>(this.db);
-            var result = userStore.CreateAsync(user);
+            var result = await userStore.CreateAsync(user);
 
             var roles = new string[] { "TEACHER" };
             await base.AssignRoles(user.NormalizedUserName, roles);
 
 
             //business side creation
+            DateTime hiringDate = model.HiringDate ?? DateTime.Now;
+
             var teacher = new Teacher
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Gender = model.Gender,
-                HiringDate = model.HiringDate,
+                HiringDate = hiringDate,
                 DismissalDate = model.DismissalDate,
                 Salary = model.Salary,
+                PhoneNumber=model.PhoneNumber,
                 ProfilePicURI = model.ProfileImage == null ? Constants.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null),
                 Groups = groupsToAssignToTeacher,
                 QualifiedLevels = qualifiedLevels.Select(ql => new LevelTeacher { Level = ql }).ToArray(),
@@ -117,7 +120,7 @@ namespace KidsManagement.Services.Teachers
                 FirstName = teacher.FirstName,
                 LastName = teacher.LastName,
                 Gender = teacher.Gender,
-                Salary = teacher.Salary,
+                Salary = string.Format(teacher.Salary.ToString(),Constants.salaryFormat),
                 HiringDate = teacher.HiringDate.ToString(Constants.dateOnlyFormat),
                 DismissalDate = dissmissalDate,
                 QualifiedLevels = levels,
@@ -368,6 +371,7 @@ namespace KidsManagement.Services.Teachers
                 Salary=teacher.Salary,
                 HiringDate=teacher.HiringDate,
                 DismissalDate=teacher.DismissalDate,
+                PhoneNumber=teacher.PhoneNumber,
                 ProfilePicURI = teacher.ProfilePicURI,
             };
 
@@ -376,6 +380,8 @@ namespace KidsManagement.Services.Teachers
 
         public async Task EditInfo(CreateEditTeacherInputModel model)
         {
+            DateTime hiringDate = model.HiringDate ?? DateTime.Now;
+
             var teacher = await this.db.Teachers
                .FirstOrDefaultAsync(x => x.Id == model.Id);
 
@@ -383,8 +389,9 @@ namespace KidsManagement.Services.Teachers
             teacher.LastName = model.LastName;
             teacher.Gender = model.Gender;
             teacher.Salary = model.Salary;
-            teacher.HiringDate = model.HiringDate;
+            teacher.HiringDate = hiringDate;
             teacher.DismissalDate = model.DismissalDate;
+            teacher.PhoneNumber = model.PhoneNumber;
             teacher.ProfilePicURI = model.ProfileImage == null ? Constants.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null);
         }
 

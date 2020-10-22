@@ -42,10 +42,8 @@ namespace KidsManagement.Web.Controllers.Parents
         [HttpPost]
         public async Task<IActionResult> Create(CreateEditParentInputModel model) //tozi model se vru6ta ot viewto
         {
-            if (ModelState.IsValid == false)
-            {
-                return this.Redirect("/"); //invalid student create ERROR
-            }
+            if (ModelState.IsValid == false) return await Task.Run(() => this.View());
+
 
             var userAdminId = this.User.FindFirstValue(ClaimTypes.NameIdentifier); // from https://stackoverflow.com/questions/30701006/how-to-get-the-current-logged-in-user-id-in-asp-net-core
             var parentId = await this.parentsService.CreateParent(model, userAdminId);
@@ -100,7 +98,7 @@ namespace KidsManagement.Web.Controllers.Parents
             await CheckParentId(parentId);
             var model = await this.parentsService.GetInfoForEdit(parentId);
             this.TempData["parentId"] = parentId;
-
+            this.TempData["profilePicUri"] = model.ProfilePicURI;
 
             return await Task.Run(() => this.View(model));
         }
@@ -108,6 +106,10 @@ namespace KidsManagement.Web.Controllers.Parents
         [HttpPost]
         public async Task<IActionResult> EditInfo(CreateEditParentInputModel model)
         {
+            model.ProfilePicURI = this.TempData["profilePicUri"].ToString();
+            this.TempData.Keep("profilePicUri");
+            if (ModelState.IsValid == false) return await Task.Run(() => this.View(model));
+
             int parentId = await CheckParentId(this.TempData["parentId"]);
             model.Id = parentId;
             await this.parentsService.EditInfo(model);

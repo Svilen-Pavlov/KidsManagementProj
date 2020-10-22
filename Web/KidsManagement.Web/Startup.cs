@@ -52,7 +52,6 @@ namespace KidsManagement.Web
             services.AddTransient<ICloudinaryService, Services.External.CloudinaryService.CloudinaryService>();
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
 
-
             services.AddDbContext<KidsManagementDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
