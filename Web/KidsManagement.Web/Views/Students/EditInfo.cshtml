@@ -16,14 +16,17 @@
                         <div class="form-group row-md-6">
                             <label asp-for="FirstName"></label>
                             <input asp-for="FirstName" type="text" class="form-control" id="FirstName" name="FirstName">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
                         <div class="form-group row-md-6">
                             <label asp-for="MiddleName"></label>
                             <input asp-for="MiddleName" type="text" class="form-control" id="MiddleName" name="MiddleName">
+                            <span asp-validation-for="MiddleName" class="text-danger"></span>
                         </div>
                         <div class="form-group row-md-6">
                             <label asp-for="LastName"></label>
                             <input asp-for="LastName" type="text" class="form-control" id="LastName">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
                         </div>
                         <div class="form-group row-md-6">
                             <label asp-for="Gender">Gender</label>
@@ -32,6 +35,7 @@
                         <div class="form-group row-md-6">
                             <label asp-for="BirthDate"></label>
                             <input asp-for="BirthDate" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" id="BirthDate" name="BirthDate">
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
                         </div>
                         <div class="form-group row-md-6">
                             <label asp-for="Grade"></label>
@@ -44,7 +48,6 @@
                                     <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
-                                @*<span asp-validation-for="ProfileImage" class="text-danger"></span>* apply this@
                                     @*this indian guy carried me https://www.c-sharpcorner.com/article/upload-and-display-image-in-asp-net-core-3-1/*@
                             </div>
                         </div>

@@ -14,11 +14,11 @@ namespace KidsManagement.ViewModels.Parents
         public int Id { get; set; }
 
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [MinLength(Constants.humanNameMinLen), MaxLength(Constants.humanNameMaxLen)]
         public string FirstName { get; set; }
 
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [MinLength(Constants.humanNameMinLen), MaxLength(Constants.humanNameMaxLen)]
         public string LastName { get; set; }
 
 

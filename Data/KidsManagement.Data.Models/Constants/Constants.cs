@@ -5,7 +5,7 @@ using System.Text;
 namespace KidsManagement.Data.Models.Constants
 {
     //toq klas trqa li mi vub6te?
-    public static class Const
+    public static class Constants
     {
         public const int humanNameMinLen = 2;
         public const int humanNameMaxLen = 40;
@@ -20,6 +20,10 @@ namespace KidsManagement.Data.Models.Constants
 
         public const double breakBetweenGroupsMinutes = 15;
 
-        public const string defaultProfPicURL = "http://res.cloudinary.com/svilenpavlov/image/upload/v1601641040/by5z42szy576diu5brz7.jpg";
+        public const string defaultProfPicURL = "http://res.cloudinary.com/svilenpavlov/image/upload/v1601641040/by5z42szy576diu5brz7.jpg"; //to test and change - new student with default, then edit his picture, that probably changes the default
+
+        public const string namesRegex = @"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,40}$";
+
+
     }
 }

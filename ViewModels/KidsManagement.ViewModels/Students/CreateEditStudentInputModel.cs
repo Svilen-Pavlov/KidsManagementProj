@@ -1,9 +1,11 @@
-﻿using KidsManagement.Data.Models.Constants;
+﻿using CustomExtensions.Attributes;
+using KidsManagement.Data.Models.Constants;
 using KidsManagement.Data.Models.Enums;
 using KidsManagement.ViewModels.Parents;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace KidsManagement.ViewModels.Students
@@ -18,23 +20,28 @@ namespace KidsManagement.ViewModels.Students
         public int Id { get; set; } //only for Edit
 
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [DisplayName("First Name")]
+        [RegularExpression(Constants.namesRegex, ErrorMessage = Warnings.CreatEntityName)]
         public string FirstName { get; set; }
 
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [DisplayName("Middle Name")]
+        [RegularExpression(Constants.namesRegex, ErrorMessage =Warnings.CreatEntityName)]
         public string MiddleName { get; set; }
 
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [DisplayName("Last Name")]
+        [RegularExpression(Constants.namesRegex, ErrorMessage = Warnings.CreatEntityName)]
         public string LastName { get; set; }
 
         [Required]
         public Gender Gender { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = Warnings.RequiredBirthDate)]
+        [DisplayName("Date of birth")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy HH:MM}")]
-        public DateTime BirthDate { get; set; }
+        [DateIsInPast]
+        public DateTime? BirthDate { get; set; }
 
         [Required]
         public GradeLevel Grade { get; set; }
@@ -43,6 +50,8 @@ namespace KidsManagement.ViewModels.Students
         public StudentStatus Status { get; set; }
 
         public string ProfilePicURI { get; set; } //only for edit
+
+        [DisplayName("Upload profile picture")]
         public IFormFile ProfileImage { get; set; }
         public int GroupId { get; set; }
 

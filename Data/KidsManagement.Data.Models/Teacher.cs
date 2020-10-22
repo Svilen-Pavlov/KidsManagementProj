@@ -15,10 +15,10 @@ namespace KidsManagement.Data.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [MinLength(Constants.Constants.humanNameMinLen), MaxLength(Constants.Constants.humanNameMaxLen)]
         public string FirstName { get; set; }
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [MinLength(Constants.Constants.humanNameMinLen), MaxLength(Constants.Constants.humanNameMaxLen)]
         public string LastName { get; set; }
         [NotMapped]
         public string FullName => string.Format("{0} {1}", FirstName, LastName);

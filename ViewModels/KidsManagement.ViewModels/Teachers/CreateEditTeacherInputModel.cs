@@ -15,11 +15,11 @@ namespace KidsManagement.ViewModels.Teachers
         public int Id { get; set; } //for edit only
 
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [MinLength(Constants.humanNameMinLen), MaxLength(Constants.humanNameMaxLen)]
         [DisplayName("First Name")]
         public string FirstName { get; set; }
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [MinLength(Constants.humanNameMinLen), MaxLength(Constants.humanNameMaxLen)]
         [DisplayName("Last Name")]
         public string LastName { get; set; }
         [Required]

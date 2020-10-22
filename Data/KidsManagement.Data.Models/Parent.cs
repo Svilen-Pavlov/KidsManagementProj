@@ -22,11 +22,11 @@ namespace KidsManagement.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [MinLength(Constants.Constants.humanNameMinLen), MaxLength(Constants.Constants.humanNameMaxLen)]
         public string FirstName { get; set; }
         
         [Required]
-        [MinLength(Const.humanNameMinLen), MaxLength(Const.humanNameMaxLen)]
+        [MinLength(Constants.Constants.humanNameMinLen), MaxLength(Constants.Constants.humanNameMaxLen)]
         public string LastName { get; set; }
 
         [NotMapped]

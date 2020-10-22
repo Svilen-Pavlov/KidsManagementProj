@@ -16,15 +16,15 @@ namespace KidsManagement.Data.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        [MaxLength(Const.entityNameMaxLen)]
+        [MaxLength(Constants.Constants.entityNameMaxLen)]
         public string Name { get; set; }
         
         [Required]
-        [MaxLength(Const.textMaxLen)]
+        [MaxLength(Constants.Constants.textMaxLen)]
         public string Description { get; set; }
 
         [Required]
-        [MaxLength(Const.textMaxLen)]
+        [MaxLength(Constants.Constants.textMaxLen)]
         public string StudyMaterialsDescription { get; set; }
 
         

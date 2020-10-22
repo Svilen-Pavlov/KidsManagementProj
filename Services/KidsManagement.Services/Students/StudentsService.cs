@@ -27,8 +27,9 @@ namespace KidsManagement.Services.Students
 
         public async Task<int> CreateStudent(CreateEditStudentInputModel model)
         {
-            var age = DateTime.Today.Year - model.BirthDate.Year;
-            if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
+            DateTime BirthDate= model.BirthDate ?? DateTime.Now;
+            var age = DateTime.Today.Year - BirthDate.Year;
+            if (BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
 
             var student = new Student
             {
@@ -37,10 +38,10 @@ namespace KidsManagement.Services.Students
                 LastName = model.LastName,
                 Gender = model.Gender,
                 Age = age,
-                BirthDate = model.BirthDate,
+                BirthDate = BirthDate,
                 Grade = model.Grade,
                 Status = model.Status,
-                ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, null)
+                ProfilePicURI = model.ProfileImage == null ? Constants.defaultProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, null)
             };
 
             await this.db.Students.AddAsync(student);
@@ -69,7 +70,7 @@ namespace KidsManagement.Services.Students
                 MiddleName = student.MiddleName,
                 LastName = student.LastName,
                 Age = student.Age,
-                BirthDate = student.BirthDate.ToString(Const.dateOnlyFormat),
+                BirthDate = student.BirthDate.ToString(Constants.dateOnlyFormat),
                 Gender = student.Gender,
                 Grade = student.Grade,
                 GroupId = (int?)student.GroupId == null ? 0 : student.GroupId,
@@ -178,19 +179,20 @@ namespace KidsManagement.Services.Students
 
         public async Task EditInfo(CreateEditStudentInputModel model)
         {
+            DateTime BirthDate = model.BirthDate ?? DateTime.Now;
             var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == model.Id);
 
-            var age = DateTime.Today.Year - model.BirthDate.Year;
-            if (model.BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
+            var age = DateTime.Today.Year - BirthDate.Year;
+            if (BirthDate.Date > DateTime.Today.AddYears(-age)) age--; //Case for a leap year
 
             student.FirstName = model.FirstName;
             student.MiddleName = model.MiddleName;
             student.LastName = model.LastName;
             student.Gender = model.Gender;
             student.Age = age;
-            student.BirthDate = model.BirthDate;
+            student.BirthDate = BirthDate;
             student.Grade = model.Grade;
-            student.ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, student.ProfilePicURI);
+            if (model.ProfileImage!=null) student.ProfilePicURI = await this.cloudinaryService.UploadPicASync(model.ProfileImage, student.ProfilePicURI);
 
             await this.db.SaveChangesAsync();
         }

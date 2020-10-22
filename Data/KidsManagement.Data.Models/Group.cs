@@ -19,10 +19,10 @@ namespace KidsManagement.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(Const.entityNameMaxLen)]
+        [MaxLength(Constants.Constants.entityNameMaxLen)]
         public string Name { get; set; }
 
-        [Range(Const.entityMinCount, Const.entityMaxCount)]
+        [Range(Constants.Constants.entityMinCount, Constants.Constants.entityMaxCount)]
         public int CurrentLessonNumber { get; set; }
 
         [Required]

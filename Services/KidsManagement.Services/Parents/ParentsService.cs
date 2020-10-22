@@ -45,7 +45,7 @@ namespace KidsManagement.Services.Parents
                 AlternativePhoneNumber = model.AlternativePhoneNumber,
                 Email = model.Email,
                 AlternativeEmail = model.AlternativeEmail,
-                ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, null),
+                ProfilePicURI = model.ProfileImage == null ? Constants.defaultProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, null),
 
             };
             var initialNote = new Note()
@@ -231,7 +231,7 @@ namespace KidsManagement.Services.Parents
             parent.AlternativeEmail = model.AlternativeEmail;
             parent.PhoneNumber = model.PhoneNumber;
             parent.AlternativePhoneNumber = model.AlternativePhoneNumber;
-            parent.ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, parent.ProfilePicURI);
+            parent.ProfilePicURI = model.ProfileImage == null ? Constants.defaultProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, parent.ProfilePicURI);
 
             await this.db.SaveChangesAsync();
         }

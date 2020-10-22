@@ -13,7 +13,7 @@ namespace KidsManagement.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(Const.textMaxLen)]
+        [MaxLength(Constants.Constants.textMaxLen)]
         public string Content { get; set; }
 
         [Required]

@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using KidsManagement.ViewModels.Teachers;
 using KidsManagement.ViewModels.Levels;
 using System.ComponentModel;
+using CustomExtensions.Attributes;
 
 namespace KidsManagement.ViewModels.Groups
 {
@@ -16,7 +17,7 @@ namespace KidsManagement.ViewModels.Groups
         public int Id { get; set; } //only for edit
 
         [Required]
-        [MaxLength(Const.entityNameMaxLen)]
+        [MaxLength(Constants.entityNameMaxLen)]
         public string Name { get; set; }
 
         //[Range(Const.entityMinCount, Const.entityMaxCount)]
@@ -25,20 +26,21 @@ namespace KidsManagement.ViewModels.Groups
         [Required]
         public AgeGroup AgeGroup { get; set; } //AgeGroup enum
 
-        [DisplayName("Start Date")]
         [Required]
+        [DisplayName("Start Date")]
         public DateTime StartDate { get; set; } //DateTime
 
-        [DisplayName("End Date")]
         [Required]
+        [DateGreaterThan("StartDate")]
+        [DisplayName("End Date")]
         public DateTime EndDate { get; set; } //DateTime
 
-        [DisplayName("Weekday")]
         [Required]
+        [DisplayName("Weekday")]
         public DayOfWeek DayOfWeek { get; set; } //DayOfWeek
 
-        [DisplayName("Start Time")]
         [Required]
+        [DisplayName("Start Time")]
         [Column(TypeName = "time(0)")]
         public TimeSpan StartTime { get; set; } //TimeSpan
 

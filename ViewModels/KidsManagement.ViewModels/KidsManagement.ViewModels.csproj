@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\KidsManagement.Data.Models\KidsManagement.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\KidsManagement.Data\KidsManagement.Data.csproj" />
+    <ProjectReference Include="..\..\KidsManagement\CustomExtensions\CustomExtensions.csproj" />
   </ItemGroup>
 
 </Project>

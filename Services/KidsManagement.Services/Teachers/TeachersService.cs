@@ -70,7 +70,7 @@ namespace KidsManagement.Services.Teachers
                 HiringDate = model.HiringDate,
                 DismissalDate = model.DismissalDate,
                 Salary = model.Salary,
-                ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null),
+                ProfilePicURI = model.ProfileImage == null ? Constants.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null),
                 Groups = groupsToAssignToTeacher,
                 QualifiedLevels = qualifiedLevels.Select(ql => new LevelTeacher { Level = ql }).ToArray(),
                 Status= groupsToAssignToTeacher.Length==0 ? TeacherStatus.Initial:TeacherStatus.Active,
@@ -98,7 +98,7 @@ namespace KidsManagement.Services.Teachers
             }).ToList();
 
 
-            string dissmissalDate = teacher.DismissalDate == null ? InfoStrings.GeneralNotSpecified : teacher.DismissalDate.Value.ToString(Const.dateOnlyFormat);
+            string dissmissalDate = teacher.DismissalDate == null ? InfoStrings.GeneralNotSpecified : teacher.DismissalDate.Value.ToString(Constants.dateOnlyFormat);
 
             string phoneNumber = InfoStrings.GeneralNotSpecified;
             string email = InfoStrings.GeneralNotSpecified;
@@ -118,7 +118,7 @@ namespace KidsManagement.Services.Teachers
                 LastName = teacher.LastName,
                 Gender = teacher.Gender,
                 Salary = teacher.Salary,
-                HiringDate = teacher.HiringDate.ToString(Const.dateOnlyFormat),
+                HiringDate = teacher.HiringDate.ToString(Constants.dateOnlyFormat),
                 DismissalDate = dissmissalDate,
                 QualifiedLevels = levels,
                 Status=teacher.Status,
@@ -213,7 +213,7 @@ namespace KidsManagement.Services.Teachers
             double weeklyMaxHours = 30;
             model.Statistics.WeeklyHoursCapacity = weeklyMaxHours.ToString(); //decide weather to leave it static TODO
             TimeSpan workHours = new TimeSpan(teacher.Groups.Sum(g => g.Duration.Ticks));
-            model.Statistics.WorkingHours = workHours.ToString(Const.hourMinutesFormat);
+            model.Statistics.WorkingHours = workHours.ToString(Constants.hourMinutesFormat);
             model.Statistics.Efficiency = string.Format("{0}%", Math.Round(workHours.TotalHours / weeklyMaxHours * 100, 2));
 
 
@@ -292,11 +292,11 @@ namespace KidsManagement.Services.Teachers
                     var timeSlot = new DayOfWeekTimeSlot()
                     {
                         GroupName = group.Name,
-                        StartTime = group.StartTime.ToString(Const.hourMinutesFormat),
-                        EndTime = group.EndTime.ToString(Const.hourMinutesFormat),
-                        Duration = group.Duration.ToString(Const.hourMinutesFormat),
-                        StartDate = group.StartDate.ToString(Const.dateOnlyFormat),
-                        EndDate = group.EndDate.ToString(Const.dateOnlyFormat),
+                        StartTime = group.StartTime.ToString(Constants.hourMinutesFormat),
+                        EndTime = group.EndTime.ToString(Constants.hourMinutesFormat),
+                        Duration = group.Duration.ToString(Constants.hourMinutesFormat),
+                        StartDate = group.StartDate.ToString(Constants.dateOnlyFormat),
+                        EndDate = group.EndDate.ToString(Constants.dateOnlyFormat),
                         StudentsCount = group.Students.Count(),
                         //KnownColorName=group.KnownColorName  TODO:Color in groups entity 
 
@@ -315,8 +315,8 @@ namespace KidsManagement.Services.Teachers
 
             var model = new ScheduleViewModel()
             {
-                FromDateDisplay = fromDate.ToString(Const.dateOnlyFormat),
-                ToDateDisplay = toDate.ToString(Const.dateOnlyFormat),
+                FromDateDisplay = fromDate.ToString(Constants.dateOnlyFormat),
+                ToDateDisplay = toDate.ToString(Constants.dateOnlyFormat),
                 FromDate = fromDate,
                 ToDate = toDate,
                 ScheduleWeekDays = scheduleWeekDays
@@ -385,7 +385,7 @@ namespace KidsManagement.Services.Teachers
             teacher.Salary = model.Salary;
             teacher.HiringDate = model.HiringDate;
             teacher.DismissalDate = model.DismissalDate;
-            teacher.ProfilePicURI = model.ProfileImage == null ? Const.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null);
+            teacher.ProfilePicURI = model.ProfileImage == null ? Constants.defaultProfPicURL : await this.cloudinaryService.UploadPicASync(model.ProfileImage, null);
         }
 
         public async Task<int> Delete(int teacherId)
@@ -474,7 +474,7 @@ namespace KidsManagement.Services.Teachers
         private bool CheckTeacherIsFree(DayOfWeek weekday, TimeSpan startTime, TimeSpan duration, Teacher teacher)
         {
             TimeSpan endTime = startTime.Add(duration);
-            TimeSpan recess = TimeSpan.FromMinutes(Const.breakBetweenGroupsMinutes);
+            TimeSpan recess = TimeSpan.FromMinutes(Constants.breakBetweenGroupsMinutes);
             bool result = true;
             var groups = teacher.Groups.ToArray();
             foreach (var group in groups.Where(g=>g.DayOfWeek==weekday)) //TODECIDE teacher working days or not filter

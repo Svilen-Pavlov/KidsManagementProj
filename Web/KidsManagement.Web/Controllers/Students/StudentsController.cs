@@ -43,7 +43,7 @@ namespace KidsManagement.Web.Controllers.Students
         [HttpPost]
         public async Task<IActionResult> Create(CreateEditStudentInputModel model)
         {
-            if (ModelState.IsValid == false) return this.Redirect("/"); //todo error
+            if (ModelState.IsValid == false) return await Task.Run(() => this.View());
 
             var studentId = await this.studentsService.CreateStudent(model);
             this.TempData["studentId"] = studentId;
@@ -135,6 +135,7 @@ namespace KidsManagement.Web.Controllers.Students
             await CheckStudentId(studentId);
             var model = await this.studentsService.GetInfoForEdit(studentId);
             this.TempData["studentId"] = studentId;
+            this.TempData["profilePicUri"] = model.ProfilePicURI;
 
 
             return await Task.Run(() => this.View(model));
@@ -143,7 +144,13 @@ namespace KidsManagement.Web.Controllers.Students
         [HttpPost]
         public async Task<IActionResult> EditInfo(CreateEditStudentInputModel model)
         {
-            int studentId=await CheckStudentId(TempData["studentId"]);
+            model.ProfilePicURI = this.TempData["profilePicUri"].ToString();
+            this.TempData.Keep("profilePicUri");
+            
+            if (ModelState.IsValid == false)
+                return await Task.Run(() => this.View(model));
+            
+            int studentId = await CheckStudentId(TempData["studentId"]);
             model.Id = studentId;
             await this.studentsService.EditInfo(model);
 
