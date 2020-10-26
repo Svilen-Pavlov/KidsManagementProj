@@ -38,7 +38,7 @@
                 </div>
                 @{
                     string groupButtonLabel = Model.GroupId == 0 ? "Add to group" : "Change group";
-                    string parentsButtonLabel = Model.Parents.Count() == 0 ? "Assign parents" : "Add more parents";
+                    string parentsButtonLabel = Model.Parents.Count() == 0 ? "Assign parents" : "Add more parents";  
                 }
                 <div class="form-group row-md-2">
                     <a asp-action="AddToGroup" asp-route-studentId="@Model.Id" class="btn btn-info">@groupButtonLabel</a>

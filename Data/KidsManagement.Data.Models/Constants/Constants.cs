@@ -24,7 +24,7 @@ namespace KidsManagement.Data.Models.Constants
         public const double groupMinDuration = 15;
         public const double groupMaxDuration = 180;
 
-        public const string defaultProfPicURL = "http://res.cloudinary.com/svilenpavlov/image/upload/v1601641040/by5z42szy576diu5brz7.jpg"; //to test and change - new student with default, then edit his picture, that probably changes the default
+        public const string defaultProfPicURL = "http://res.cloudinary.com/svilenpavlov/image/upload/v1601641040/by5z42szy576diu5brz7.jpg";
 
         public const string humanNamesRegex = @"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,39}$"; //equals 2 and 40 inclusive
         public const string entityNamesRegex = @"^[\w'\-,.][^_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{1,29}$"; //equals 2 and 30 inclusive can be numbers https://stackoverflow.com/questions/2385701/regular-expression-for-first-and-last-name

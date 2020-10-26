@@ -1,40 +1,30 @@
 ﻿using KidsManagement.Services.Groups;
 using KidsManagement.Services.Levels;
+using KidsManagement.Services.Parents;
 using KidsManagement.Services.Students;
 using KidsManagement.Services.Teachers;
 using KidsManagement.ViewModels.Groups;
-using KidsManagement.ViewModels.Students;
-using KidsManagement.ViewModels.Teachers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace KidsManagement.Web.Controllers.Groups
 {
-    public class GroupsController : Controller
+    public class GroupsController : BaseController
     {
-        private readonly IGroupsService groupsService;
-        private readonly ITeachersService teachersService;
         private readonly ILevelsService levelsService;
-        private readonly IStudentsService studentsService;
 
-        public GroupsController(IGroupsService groupsService, ITeachersService teachersService, ILevelsService levelsService, IStudentsService studentsService)
+        public GroupsController(IGroupsService groupsService, ITeachersService teachersService, IStudentsService studentsService, IParentsService parentsService, ILevelsService levelsService)
+            : base(groupsService, teachersService, studentsService, parentsService)
         {
-            this.groupsService = groupsService;
-            this.teachersService = teachersService;
             this.levelsService = levelsService;
-            this.studentsService = studentsService;
         }
         public async Task<IActionResult> Index()
         {
             var model = this.groupsService.GetAll();
             return await Task.Run(() => View(model)); ;
         }
-
-
 
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
@@ -55,7 +45,7 @@ namespace KidsManagement.Web.Controllers.Groups
         {
             if (ModelState.IsValid == false)
             {
-                model.Teachers=this.teachersService.GetAllForSelection();
+                model.Teachers = this.teachersService.GetAllForSelection();
                 model.Levels = this.levelsService.GetAllForSelection();
                 return await Task.Run(() => this.View(model));
             }
@@ -79,7 +69,7 @@ namespace KidsManagement.Web.Controllers.Groups
         public async Task<IActionResult> UnassignStudent(int studentId)
         {
             await CheckStudentId(studentId);
-            int groupId=await CheckGroupId(this.TempData["groupId"]);
+            int groupId = await CheckGroupId(this.TempData["groupId"]);
             await this.groupsService.RemoveStudentFromGroup(studentId);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
@@ -99,25 +89,25 @@ namespace KidsManagement.Web.Controllers.Groups
             return await Task.Run(() => View(model));
         }
 
-        
+
         public async Task<IActionResult> AddStudents(int studentId)
         {
             await CheckStudentId(studentId);
             int groupId = await CheckGroupId(this.TempData["groupId"]);
 
-            
+
             this.TempData.Keep("groupId");
 
             var groupIsFull = await this.groupsService.AddStudentToGroup(groupId, studentId);
-            if (groupIsFull ==false)
+            if (groupIsFull == false)
             {
-                this.ViewData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"]-1;
-                this.TempData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"]-1;
+                this.ViewData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1;
+                this.TempData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1;
                 return await Task.Run(() => this.RedirectToAction("ListElligibleStudents"));
             }
             else
             {
-            return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
+                return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
             }
 
         }
@@ -132,7 +122,7 @@ namespace KidsManagement.Web.Controllers.Groups
         }
         public async Task<IActionResult> ListFreeTeachers()
         {
-            int groupId=await CheckGroupId(this.TempData["groupId"]);
+            int groupId = await CheckGroupId(this.TempData["groupId"]);
             var model = await this.teachersService.GetAllEligibleTeacherForGroup(groupId);
             this.TempData["groupId"] = groupId;
 
@@ -177,40 +167,6 @@ namespace KidsManagement.Web.Controllers.Groups
             await this.teachersService.AssignGroup(teacherId, groupId);
 
             return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
-        }
-        public async Task<int> CheckGroupId(object groupIdNullable)
-        {
-            if (groupIdNullable == null || (groupIdNullable is int) == false)
-                throw new Exception(); //todo invalid userId Exception
-
-            int groupId = (int)groupIdNullable;
-            if (await this.groupsService.GroupExists(groupId) == false)
-                throw new Exception(); //todo teacher does not exist Exception
-
-            return groupId;
-        }
-        public async Task<int> CheckTeacherId(object teacherIdnullabe)
-        {
-            if (teacherIdnullabe == null || (teacherIdnullabe is int) == false)
-                throw new Exception(); //todo invalid userId Exception
-
-            int teacherId = (int)teacherIdnullabe;
-            if (await this.teachersService.TeacherExists(teacherId) == false)
-                throw new Exception(); //todo teacher does not exist Exception
-
-            return teacherId;
-        }
-
-        public async Task<int> CheckStudentId(object studentIdNullable)
-        {
-            if (studentIdNullable == null || (studentIdNullable is int) == false)
-                throw new Exception(); //todo invalid userId Exception
-
-            int studentId = (int)studentIdNullable;
-            if (await this.studentsService.Exists(studentId) == false)
-                throw new Exception(); //todo student does not exist Exception
-
-            return studentId;
         }
     }
 }

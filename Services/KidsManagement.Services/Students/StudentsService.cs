@@ -119,7 +119,7 @@ namespace KidsManagement.Services.Students
 
         public async Task AddParents(EditParentsInputModel model)
         {
-            var student = this.db.Students.FirstOrDefaultAsync(x => x.Id == model.StudentId).Result;
+            var student = await this.db.Students.FirstOrDefaultAsync(x => x.Id == model.StudentId);
 
             var parentIds = model.Parents.Where(x => x.Selected).Select(x => x.Id).ToArray();
             var parentsForStudent = this.db.Parents.Where(x => parentIds.Contains(x.Id)).ToArray();

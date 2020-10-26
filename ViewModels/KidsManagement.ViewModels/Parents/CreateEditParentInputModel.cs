@@ -44,7 +44,6 @@ namespace KidsManagement.ViewModels.Parents
         public string AlternativeEmail { get; set; }
 
 
-
         public string ProfilePicURI { get; set; } //only for edit
 
         [Required]

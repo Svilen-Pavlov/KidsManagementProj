@@ -171,7 +171,7 @@ namespace KidsManagement.Services.Parents
             parent.Status = ParentStatus.Quit;
 
 
-            return this.db.SaveChangesAsync().Result;
+            return await this.db.SaveChangesAsync();
         }
 
         public async Task<AllStudentsDetailsViewModel> GetNonQuitStudents(int parentId)

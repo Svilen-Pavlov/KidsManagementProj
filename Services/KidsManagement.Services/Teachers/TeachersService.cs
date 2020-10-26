@@ -405,7 +405,7 @@ namespace KidsManagement.Services.Teachers
             teacher.Status = TeacherStatus.Quit;
 
 
-            return this.db.SaveChangesAsync().Result;
+            return await this.db.SaveChangesAsync();
         }
         public static bool IsBirthDayInRange(DateTime birthday, DateTime start, DateTime end)
         {
