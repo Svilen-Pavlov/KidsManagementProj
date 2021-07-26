@@ -33,7 +33,7 @@ namespace KidsManagement.Services.Parents
 
         public async Task<int> CreateParent(CreateEditParentInputModel model, string userAdminId)
         {
-           
+
             var adminId = db.Admins.FirstOrDefault(a => a.ApplicationUserId == userAdminId).Id;
 
             var parent = new Parent
@@ -48,14 +48,17 @@ namespace KidsManagement.Services.Parents
                 ProfilePicURI = model.ProfileImage == null ? Constants.defaultProfPicURL : await cloudinaryService.UploadPicASync(model.ProfileImage, null),
 
             };
-            var initialNote = new Note()
-            {
-                AdminId = adminId,
-                Content = model.InitialAdminNote,
-                Date = DateTime.Now,
-            };
 
-            parent.AdminNotes.Add(initialNote);
+            if (model.InitialAdminNote != null)
+            {
+                var initialNote = new Note()
+                {
+                    AdminId = adminId,
+                    Content = model.InitialAdminNote,
+                    Date = DateTime.Now,
+                };
+                parent.AdminNotes.Add(initialNote);
+            }
 
             await this.db.Parents.AddAsync(parent);
             await this.db.SaveChangesAsync();
@@ -133,7 +136,7 @@ namespace KidsManagement.Services.Parents
         public AllParentsDetailsViewModel GetAll(int studentId)
         {
             var parentsRaw = this.db.Parents
-                .Where(p => p.Status != ParentStatus.Quit) 
+                .Where(p => p.Status != ParentStatus.Quit)
                 .Include(p => p.Children)
                 .Where(p => (studentId != 0) ? p.Children.Any(c => c.ParentId == p.Id) : true)
                 .ToArray();
@@ -163,12 +166,12 @@ namespace KidsManagement.Services.Parents
         public async Task<int> Delete(int parentId)
         {
             var parent = await this.db.Parents
-                .Include(p=>p.Children)
-                .ThenInclude(sp=>sp.Student)
+                .Include(p => p.Children)
+                .ThenInclude(sp => sp.Student)
                 .FirstOrDefaultAsync(s => s.Id == parentId);
 
-            if (parent.Children.All(sp=>sp.Student.Status == StudentStatus.Quit) || parent.Children.Count==0)
-            parent.Status = ParentStatus.Quit;
+            if (parent.Children.All(sp => sp.Student.Status == StudentStatus.Quit) || parent.Children.Count == 0)
+                parent.Status = ParentStatus.Quit;
 
 
             return await this.db.SaveChangesAsync();
@@ -189,7 +192,7 @@ namespace KidsManagement.Services.Parents
                     FullName = student.Student.FullName,
                     Age = student.Student.Age,
                     Gender = student.Student.Gender,
-                    Status=student.Student.Status
+                    Status = student.Student.Status
                 })
                 .ToArray();
 
@@ -210,10 +213,10 @@ namespace KidsManagement.Services.Parents
                 FirstName = parent.FirstName,
                 LastName = parent.LastName,
                 Gender = parent.Gender,
-                Email=parent.Email,
-                AlternativeEmail=parent.AlternativeEmail,
-                PhoneNumber=parent.PhoneNumber,
-                AlternativePhoneNumber=parent.AlternativePhoneNumber,
+                Email = parent.Email,
+                AlternativeEmail = parent.AlternativeEmail,
+                PhoneNumber = parent.PhoneNumber,
+                AlternativePhoneNumber = parent.AlternativePhoneNumber,
                 ProfilePicURI = parent.ProfilePicURI,
             };
 

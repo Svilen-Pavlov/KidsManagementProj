@@ -95,7 +95,6 @@ namespace KidsManagement.Web.Controllers.Groups
             await CheckStudentId(studentId);
             int groupId = await CheckGroupId(this.TempData["groupId"]);
 
-
             this.TempData.Keep("groupId");
 
             var groupIsFull = await this.groupsService.AddStudentToGroup(groupId, studentId);

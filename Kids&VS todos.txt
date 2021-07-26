@@ -1,0 +1,104 @@
+Functionalities:
+
+UNDERGOING: 
+
+Parents-Assign Children view+controller
+Parents-Add Notes 
+Pagination
+
+
+Admin zone:
+
+
+Admin - Manager role and crud for admin?
+Code optimization - pull out common service work, Partial views
+Add Role checks to methods
+Admin Teacher Schedules
+Make admin panel prettier
+
+Design Decisions:
+Show statuses of all entities (deleted/active) - parents, students, groups
+Deal with statuses - showed to frontend or not
+?<a asp-action="AddGroups" asp-route-teacherId=> da go napravq li navsqkude prosto id i v controlerite?
+Group create - assign teacher? (no way to filter before we know date)
+Teacher create- assign groups? (no way to filter them to not conflict with eachother)
+
+Teachers zone:
+Show finished groups in separate tab
+Add students Comments (AJAX https://www.thereformedprogrammer.net/asp-net-core-razor-pages-how-to-implement-ajax-requests/)
+https://www.w3schools.com/xml/ajax_intro.asp
+
+GENERAL:
+Pagination
+Error Pages
+AutoMapper
+
+ViewModels - labels
+Css theme, design, pretty
+
+Views: 
+asp-for labels to remove the actual html element text and just rely on the tag helpers
+Partial views - create and edit, DELETE Section would be easiest
+
+Students:
+Students link to Comments
+
+Groups:
+When selecting  a teacher, filter for compatibility with their schedule
+
+
+Teacher:
+Capacity and Efficiency calculation
+
+Data:
+
+Services:
+Async for everyone
+Universalize Names convention
+
+Visual studio:
+ctrl+w close window
+
+
+Completed:
+✔ Admin zone - Teachers list 
+✔ Add Group
+✔ Add Teacher
+✔ Students - Visualize pic from URI in FindByID
+✔ Add Students/Parents
+✔ Parents link to Children
+✔ Parents link to Notes
+✔ Users = confirm pass=pass
+✔ Teacher user details visible for admin in View
+✔ Also create overload for GetAllForSelection
+✔ Creating a group without a mandatory teacher
+✔ TeacherZone - My Students
+✔ Add to & change Group
+✔ Users - add teachers to appUsers
+✔ TeacherZone - My groups
+✔ TeacherZone - Statistics
+✔ TeacherZone - Notifications
+✔ TeacherZone - My schedule
+✔ Data - Make Groups-GroupStatus req w/o breaking existing groups. Maybe first enter then edit all groups and then make it req.
+✔ Students  - Delete
+✔ Students - add parents to the top of the Checkbox menu, just like in change Group View 
+✔ Students - Reworked add and remove parents
+✔ Students - Edit Info
+✔ Parents - Index
+✔ Parents - Delete
+✔ Parents - Edit
+✔ Teacher - Edit, EditLevels
+✔ Teacher - Delete
+✔ Group - Unassign student
+✔ Group - Add students
+✔ Group - Unassign teacher
+✔ Group - AssignTeacher
+✔ Group  - Delete
+✔ Group  - Edit - create with duration instead of EndTime
+✔ Students - Create and Edit Validation
+✔ Parents - Create and Edit Validation
+✔ Group - create/edit ensure end date>start date
+✔ Group - Creating select Duration, instead of EndTime
+✔ Group - Create and Edit Validation
+✔ Teacher - Create and Edit Validation
+✔ Controllers- condense with Base controller (parents checkId)

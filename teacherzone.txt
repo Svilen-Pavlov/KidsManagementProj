@@ -1,0 +1,22 @@
+Teacher my zone stats page:
+
+
+Number of groups
+Number of students
+
+GroupsCapacity/Week
+
+Working days
+Working hours
+
+
+Efficiency based on working days?
+
+
+
+
+Info page:
+
+Birthdays soon:
+GroupStarts soon:
+GroupEnds soon:

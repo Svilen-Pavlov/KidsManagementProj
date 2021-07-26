@@ -84,21 +84,23 @@
                         </tr>
                     }
                 </table>
-                <hr />
 
                 @*ADDING STUDENTS*@
                 @if (Model.Students.Count() < Model.MaxStudents)
                 {
+                    if (Model.Students.Count() == 0)
+                    {<p>No students added yet</p>}
+
                     <div class="form-group text-center row-md-6">
                         <div class="button-holder">
                             <a href="/Groups/ListElligibleStudents" class="btn btn-info btn-block">Add Students (Free slots: @this.ViewData["freeStudentSlots"])</a>
                         </div>
                     </div>
-
                 }
                 <br />
                 @*//ASSIGNING TEACHER*@
                 <label asp-for="@Model.TeacherName" class="table-warning"></label>
+                <hr />
                 @if (Model.TeacherId == 0)
                 {
                     <p>No teacher assigned yet</p>
@@ -126,7 +128,6 @@
                             </td>
                         </tr>
                     </table>
-                    <hr />
                 }
             </div>
         </div>

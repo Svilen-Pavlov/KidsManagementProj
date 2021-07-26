@@ -38,6 +38,10 @@
                     <input type="text" readonly class="form-control" id="Status" name="Status" value="@Model.Status">
                 </div>
                 <hr />
+                @{
+                    string childrenButtonLabel = Model.Children.Count() == 0 ? "Assign children" : "Add children";
+                    string notesButtonLabel = Model.AdminNotes.Count() == 0 ? "Add first note for this parent!" : "Add note";
+                }
                 @if (this.User.IsInRole("Admin"))
                 {
                     <table>
@@ -55,7 +59,6 @@
                         </tr>
                     </table>
                 }
-
             </div>
 
             <div class="col-md-6">
@@ -63,41 +66,75 @@
                     <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
                 </div>
                 <hr />
-                <div class="form-group row-md-6">
-                    <form asp-action="AddStudents" asp-route-parentId="@Model.Id">
-                        <button class="btn btn-info text-uppercase" style="margin-left: 200px;" type="submit">Assign Children</button>
-                    </form>
-                </div>
 
             </div>
 
             <div class="col-md-6">
                 <label class="table-info" asp-for="@Model.AdminNotes"></label>
                 <hr />
-                <dl>
-                    @foreach (var note in Model.AdminNotes)
-                    {
-                        <dt>On @note.Date , by @note.AdminName</dt>
-                        <dd>@note.Content</dd>
-                    }
-                </dl>
+                @if (Model.AdminNotes.Count() == 0)
+                {
+                    <p>No notes available</p>
 
+                }
+                else
+                {
+                    <dl>
+                        @foreach (var note in Model.AdminNotes)
+                        {
+                            <dt>On @note.Date , by @note.AdminName</dt>
+                            <dd>@note.Content</dd>
+                        }
+                    </dl>
+                    <br />
+                }
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <div class="form-group row-md-6" align="center">
+                        <a asp-action="AddNote" asp-route-parentId="@Model.Id" class="btn btn-info" align="middle">@notesButtonLabel</a>
+                    </div>
+                }
             </div>
 
             <div class="col-md-6">
                 <label class="table-info" asp-for="@Model.Children"></label>
                 <hr />
-                @foreach (var student in Model.Children)
+                @if (Model.Children.Count() == 0)
+                {
+                    <p>No children assigned yet</p>
+                }
+                else
+                {
+                    @foreach (var student in Model.Children)
+                    {
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="form-group row-md-6">
+                                        <a asp-controller="Students"
+                                           asp-action="Details"
+                                           asp-route-Id="@student.Id"> @student.Name</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row-md-2" style="text-align:center;">
+                                        <a asp-action="UnassignStudent" asp-route-studentId="@student.Id" class="btn btn-warning" onclick="return confirm('Are you sure you want to unassign student from this parent?')">Unassign</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                    <br />
+                }
+                @if (this.User.IsInRole("Admin"))
                 {
                     <div class="form-group row-md-6">
-                        <a asp-controller="Children"
-                           asp-action="Details"
-                           asp-route-Id="@student.Id"> @student.Name</a>
+                        <form asp-action="ListAddStudents" asp-route-parentId="@Model.Id">
+                            <button class="btn btn-info" style="margin-left: 200px;" type="submit">@childrenButtonLabel</button>
+                        </form>
                     </div>
                 }
             </div>
-
-
         </div>
     </div>
 </section>

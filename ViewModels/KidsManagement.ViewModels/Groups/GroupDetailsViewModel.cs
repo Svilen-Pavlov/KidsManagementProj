@@ -33,7 +33,7 @@ namespace KidsManagement.ViewModels.Groups
         [DisplayName("Weekday")]
         public DayOfWeek DayOfWeek { get; set; }
 
-        [DisplayName("Duration (in minutes)")]
+        [DisplayName("Duration (in hours)")]
         public string Duration { get; set; }
         [DisplayName("Start Time")]
         public string StartTime { get; set; }

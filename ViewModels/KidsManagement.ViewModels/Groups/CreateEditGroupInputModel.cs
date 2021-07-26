@@ -50,8 +50,7 @@ namespace KidsManagement.ViewModels.Groups
 
         [Required]
         [Range(Constants.groupMinDuration,Constants.groupMaxDuration,ErrorMessage =Warnings.GroupDuration)] 
-        [DisplayName("Duration (in hours)")]
-
+        [DisplayName("Duration (in minutes)")]
         public int Duration { get; set; } //TimeSpan
 
         [Display(Name = "Teacher")]

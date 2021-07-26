@@ -40,17 +40,37 @@ namespace KidsManagement.Web.Controllers.Parents
         public async Task<IActionResult> Details(int parentId)
         {
             await this.CheckParentId(parentId);
+            this.TempData["parentId"] = parentId;
 
             var parent = await this.parentsService.FindById(parentId);
-            return this.View(parent);
+            return await Task.Run(() => this.View(parent));
         }
-        public async Task<IActionResult> AddStudents(int parentId)
+        public async Task<IActionResult> ListAddStudents() //TODO
         {
-            await this.CheckParentId(parentId);
+            await this.CheckParentId(this.TempData["parentId"]);
+            this.TempData.Keep("parentId");
 
-            //TODO
-            var parent = await this.parentsService.FindById(parentId);
-            return this.View(parent);
+            var students = this.studentsService.GetAll(); //get all students
+            return await Task.Run(() => this.View(students));
+        }
+
+        public async Task<IActionResult> AddStudents(int studentId) //TODO
+        {
+            await this.CheckStudentId(studentId);
+            await this.CheckParentId(this.TempData["parentId"]);
+
+            this.TempData.Keep("parentId");
+            //var groupIsFull = await this.groupsService.AddStudentToGroup(groupId, studentId);
+            //if (groupIsFull == false)
+            //{
+                this.ViewData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1;
+                this.TempData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1; //todo how many children parent currently has
+                return await Task.Run(() => this.RedirectToAction("ListElligibleStudents"));
+            //}
+            //else
+            //{
+            //    return await Task.Run(() => this.RedirectToAction("Details", new { groupId = groupId }));
+            //}
         }
 
         public async Task<IActionResult> Delete(int parentId)
@@ -71,7 +91,7 @@ namespace KidsManagement.Web.Controllers.Parents
 
             var model = await this.parentsService.GetNonQuitStudents(parentId);
 
-            return this.View(model);
+            return await Task.Run(() => this.View(model));
         }
 
         public async Task<IActionResult> EditInfo(int parentId)
@@ -98,5 +118,16 @@ namespace KidsManagement.Web.Controllers.Parents
 
             return await Task.Run(() => this.RedirectToAction("Details", new { parentId = model.Id }));
         }
+
+        //public async Task<IActionResult> AddNote(int parentId)
+        //{
+        //    return await Task.Run(() => this.View());
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> AddNote(int parentId)
+        //{
+
+        //}
     }
 }

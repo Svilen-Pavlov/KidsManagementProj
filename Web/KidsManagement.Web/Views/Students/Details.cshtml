@@ -68,11 +68,11 @@
                     <img src="@Model.ProfilePicURI" class="img-fluid d-block mt-2 mr-auto ml-auto" align="middle" width="400" height="400">
                 </div>
                 <div class="form-group row-md-6">
-                    <label asp-for="@Model.Parents"></label>
-
+                    <label asp-for="@Model.Parents" class="table-warning"></label>
+                    <hr />
                     @if (@Model.Parents.Count() == 0)
                     {
-                        <input type="text" readonly class="form-control" id="Status" name="Status" value="No parents chosen yet">
+                        <p>No parents assigned yet</p>
                     }
                     else
                     {
@@ -87,7 +87,7 @@
 
                                     </td>
                                     <td>
-                                        
+
                                         <div class="form-group row-md-2">
                                             <a asp-action="UnassignParent" asp-route-parentId="@parent.Id" class="btn btn-info" onclick="return confirm('Are you sure you want to unassign parent from this student?')">Unassign</a>
                                         </div>
@@ -100,7 +100,6 @@
                 <div class="form-group row-md-6" align="left">
                     <a asp-action="AddParents" class="btn btn-info" align="middle">@parentsButtonLabel</a>
                 </div>
-                <hr />
             </div>
         </div>
     </div>

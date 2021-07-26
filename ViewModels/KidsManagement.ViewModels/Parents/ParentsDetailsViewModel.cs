@@ -45,6 +45,7 @@ namespace KidsManagement.ViewModels.Parents
 
         public string ProfilePicURI { get; set; }
 
+        [DisplayName("Admin Notes")]
         public IEnumerable<NotesSelectionViewModel> AdminNotes { get; set; } 
 
         public IEnumerable<StudentSelectionViewModel> Children { get; set; } 

@@ -46,7 +46,6 @@ namespace KidsManagement.ViewModels.Parents
 
         public string ProfilePicURI { get; set; } //only for edit
 
-        [Required]
         public IFormFile ProfileImage { get; set; }
 
         public IEnumerable<Student> Children { get; set; }
