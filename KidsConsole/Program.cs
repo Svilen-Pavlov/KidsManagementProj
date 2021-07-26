@@ -23,25 +23,64 @@ namespace KidsManagementConsole
             //Console.WriteLine(gs.GetAll().ToString());
 
             //db.Database.Migrate();
-            //SeedParentsTeachersAdmins(parents, teachers, db);
+            //SeedParentsTeachersAdmins(db);
             //SeedLevels(db);
             //SeedGroups(db);
             //SeedStudents(db);
-            // AddStudentsToGroup(db);
+            //AddStudentsToGroup(db);
             //SeedRoles(db);
             //UpdateGroupStatuses(db);
             //UpdateGroupAgeGroups(db);
             //UpdateStudentStatuses(db);
             //UpdateStudentGrades(db);
-            //UpdateParentsStatuses(db);
+
+            AssignStudentsToParents(db);
+            //UpdateParentsStatuses(db); does nothing if the item below is not met
+            //write a method to asign parents to children
+
             //testGettingPicString(); TOREMOVE
             //UpdateTeachersStatuses(db);
             //UpdateGroupActiveStatuses(db);
         }
 
+        private static void AssignStudentsToParents(KidsManagementDbContext db)
+        {
+            var amountOfParents = 5;
+            var amountOfStudents = 10;
+
+            var parentIds = db.Parents
+                .Take(amountOfParents)
+                .Select(p => p.Id)
+                .ToArray();
+
+            var students = db.Students
+                .Take(amountOfStudents)
+                .ToArray();
+
+            var counter = 0;
+
+
+            for (int i = 0; i < parentIds.Length; i++)
+            {
+                var parentId = parentIds[i];
+
+                var student1 = students[counter];
+                var student2 = students[counter+1];
+
+                var link = new StudentParent { ParentId = parentId };
+                var link2 = new StudentParent { ParentId = parentId };
+                
+                student1.Parents.Add(link);
+                student2.Parents.Add(link2);
+                counter += 2;            
+            }
+
+            db.SaveChanges();
+        }
+
         private static void UpdateGroupActiveStatuses(KidsManagementDbContext db)
         {
-            var groups=db.Groups.ToList();
+            var groups = db.Groups.ToList();
             var counter = 0;
             for (int i = 0; i < groups.Count; i++)
             {
@@ -50,14 +89,14 @@ namespace KidsManagementConsole
                 if (counter == 4)
                     counter = 0;
             }
-            
+
             db.SaveChanges();
         }
 
         private static void UpdateTeachersStatuses(KidsManagementDbContext db)
         {
             var teachers = db.Teachers
-                           .Include(t=>t.Groups)
+                           .Include(t => t.Groups)
                            .ToArray();
             foreach (var teacher in teachers)
             {
@@ -87,8 +126,8 @@ namespace KidsManagementConsole
                             .ToArray();
             foreach (var parent in parents)
             {
-                if (parent.Id == 72)
-                    Console.WriteLine();
+                //if (parent.Id == 72)
+                //    Console.WriteLine();
                 if (parent.Children.Count == 0)
                 {
                     parent.Status = ParentStatus.Initial;
@@ -194,44 +233,53 @@ namespace KidsManagementConsole
                 }
             }
 
-            //  db.SaveChanges();
+            //db.SaveChanges();
 
         }
 
         private static void SeedRoles(KidsManagementDbContext db)
         {
             var roles = new List<ApplicationRole>()
-            { 
-          //new ApplicationRole("Admin"),
+            {
+            new ApplicationRole("Admin"),
             new ApplicationRole("Teacher"),
             new ApplicationRole("Student"),
             new ApplicationRole("Manager")
             };
             db.Roles.AddRange(roles);
-            db.SaveChanges();
+            //db.SaveChanges();
 
         }
 
         private static void AddStudentsToGroup(KidsManagementDbContext db)
         {
-            var students = db.Students.Take(10).ToArray();
-            var group1 = db.Groups.FirstOrDefault(x => x.Id == 11);
-            var group2 = db.Groups.FirstOrDefault(x => x.Id == 12);
+            int amountOfStudents = 10;
+            var students = db.Students
+                .Where(s => s.GroupId == null)
+                .Take(amountOfStudents)
+                .ToArray();
+
+            int amountOfGroups = 2;
+            var groups = db.Groups.
+                Where(g => g.MaxStudents <= g.Students.Count)
+                .Take(amountOfGroups)
+                .ToArray();
 
             for (int i = 0; i < 10; i++)
             {
                 var student = students[i];
-                if (i < 8)
+                if (i < amountOfStudents / 2)
                 {
-                    student.GroupId = group1.Id;
+                    student.GroupId = groups[0].Id;
+
                 }
                 else
                 {
-                    student.GroupId = group2.Id;
+                    student.GroupId = groups[1].Id;
                 }
             }
 
-            db.SaveChanges();
+            // db.SaveChanges();
         }
 
         private static void SeedStudents(KidsManagementDbContext db)
@@ -261,7 +309,7 @@ namespace KidsManagementConsole
             }
 
             db.Students.AddRange(students);
-            //db.SaveChanges();
+            //  db.SaveChanges();
         }
 
         private static void SeedGroups(KidsManagementDbContext db)
@@ -293,7 +341,7 @@ namespace KidsManagementConsole
                 groups.Add(group);
             }
             db.Groups.AddRange(groups);
-            db.SaveChanges();
+            // db.SaveChanges();
         }
 
         private static void SeedLevels(KidsManagementDbContext db)
@@ -312,7 +360,7 @@ namespace KidsManagementConsole
             }
 
             db.Levels.AddRange(levels);
-            // db.SaveChanges();
+            //db.SaveChanges();
         }
 
         private static void SeedParentsTeachersAdmins(KidsManagementDbContext db)
@@ -323,7 +371,7 @@ namespace KidsManagementConsole
                 LastName = "pavlov",
                 Gender = Gender.Male,
                 HireDate = DateTime.Now,
-                Salary = 1360m
+                Salary = 1000m
             };
 
             List<Parent> parents = new List<Parent>();
@@ -347,6 +395,7 @@ namespace KidsManagementConsole
                     LastName = "Tomas",
                     Gender = Gender.Female,
                     HiringDate = DateTime.Now,
+                    PhoneNumber = "0888 888 888",
                     Salary = 1000m
                 };
                 teachers.Add(teacher);
@@ -355,7 +404,7 @@ namespace KidsManagementConsole
             db.Admins.Add(admin);
             db.Parents.AddRange(parents);
             db.Teachers.AddRange(teachers);
-            // db.SaveChanges();
+            //db.SaveChanges();
         }
     }
 }
