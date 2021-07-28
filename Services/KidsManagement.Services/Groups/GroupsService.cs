@@ -99,6 +99,7 @@ namespace KidsManagement.Services.Groups
             {
                 model.TeacherId = teacher.Id;
                 model.TeacherName = teacher.FullName;
+                model.TeacherApplicationUserId = teacher.ApplicationUserId == null ? string.Empty : teacher.ApplicationUserId;
             }
             else
             {

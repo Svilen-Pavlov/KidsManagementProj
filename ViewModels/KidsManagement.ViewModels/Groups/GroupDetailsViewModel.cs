@@ -46,6 +46,8 @@ namespace KidsManagement.ViewModels.Groups
         [DisplayName("Teacher")]
         public string TeacherName { get; set; }
 
+        public string TeacherApplicationUserId { get; set; }
+
         public int LevelId { get; set; }
         
         [DisplayName("Level")]

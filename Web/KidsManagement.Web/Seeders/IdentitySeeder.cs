@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection; // wow wtf must remember -> acti
 
 using System.Threading.Tasks;
 using System.Linq;
+using KidsManagement.Data.Models.Enums;
 
 namespace KidsManagement.Web.Seeders
 {
@@ -15,9 +16,13 @@ namespace KidsManagement.Web.Seeders
         private readonly KidsManagementDbContext db;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
-        private readonly string username1 = "John1";
-        private readonly string role1 = "Admin1";
-        private readonly string password1 = "1234";
+        private readonly string adminUserName = "John";
+        private readonly string adminRole = "Admin";
+        private readonly string adminPassword = "1234";
+        private readonly string teacherUserName = "Mark";
+        private readonly string teacherRole = "Teacher";
+        private readonly string teacherPassword = "1234";
+
 
         public IdentitySeeder(IServiceProvider serviceProvider, KidsManagementDbContext dbContext)
         {
@@ -28,64 +33,100 @@ namespace KidsManagement.Web.Seeders
         }
         public async Task SeedAll()
         {
-            await SeedUsersAsync();
-            await SeedRolesAsync();
-            await SeedUsersToRolesAsync();
+            await SeedRolesAsync(adminRole);
+            await SeedRolesAsync(teacherRole);
+
+            await SeedUsersAsync(adminUserName,adminPassword,adminRole);
+            await SeedUsersAsync(teacherUserName,teacherPassword, teacherRole);
+
+            await SeedUsersToRolesAsync(adminUserName, adminRole);
+            await SeedUsersToRolesAsync(teacherUserName, teacherRole);
         }
 
-        private async Task SeedUsersAsync()
+        private async Task SeedRolesAsync(string roleName)
         {
-            var exists = userManager.FindByNameAsync(username1);
-
-            if (exists != null)
+            if (await this.roleManager.FindByNameAsync(roleName) != null)
             {
-                //return;
+                return;
             }
 
-            var user = await this.userManager.CreateAsync(new ApplicationUser
+            await roleManager.CreateAsync(new ApplicationRole(roleName));
+        }
+
+        private async Task SeedUsersAsync(string username, string password, string roleName)
+        {
+            if (await this.userManager.FindByNameAsync(username) != null)
             {
-                UserName = username1,
-                Email = $"{username1}@abv.bg",
+                return;
+            }
+            var user = new ApplicationUser
+            {
+                UserName = username,
+                Email = $"{username}@abv.bg",
                 EmailConfirmed = true,
-                
-            },
-            password1);
 
-        }
-        private async Task SeedRolesAsync()
-        {
-            var role = await roleManager.FindByNameAsync(role1);
-            if (role != null)
+            };
+            var result=await this.userManager.CreateAsync(user,password);
+
+            switch (roleName)
             {
-                //return;
+                case "Admin":
+                    var admin = new Admin
+                    {
+                        FirstName = "Svilen",
+                        LastName = "Pavlov",
+                        Gender = Gender.Male,
+                        HireDate = DateTime.Now,
+                        Salary = 1000m,
+                        ApplicationUserId=user.Id
+                    };
+                    db.Admins.Add(admin);
+                    break;
+
+                case "Teacher":
+                    var teacher = new Teacher
+                    {
+                        FirstName = "Mark",
+                        LastName = "Tomas",
+                        Gender = Gender.Female,
+                        HiringDate = DateTime.Now,
+                        PhoneNumber = "0888 888 888",
+                        Salary = 1000m,
+                        ApplicationUserId = user.Id
+                    };
+                    db.Teachers.Add(teacher);
+                    break;
+                default:
+                    break;
             }
 
-            await roleManager.CreateAsync(new ApplicationRole(role1));
-
         }
-        private async Task SeedUsersToRolesAsync()
+
+        private async Task SeedUsersToRolesAsync(string username, string roleName)
         {
-            var user = await userManager.FindByNameAsync(username1);
-            var role = await roleManager.FindByNameAsync(role1);
-            if (user.Id==null || role.Id==null)
+            var user  = await this.userManager.FindByNameAsync(username);
+            var role = await this.roleManager.FindByNameAsync(roleName);
+            if (user.Id == null || role.Id == null)
             {
                 return;
             }
-            var exists = db.UserRoles.Any(x => x.UserId == user.Id && x.RoleId == role.Id);
 
-            if (exists)
+            var linkExists = db.UserRoles.Any(x => x.UserId == user.Id && x.RoleId == role.Id);
+
+            if (linkExists)
             {
                 return;
             }
-                
+
 
             db.UserRoles.Add(new IdentityUserRole<string>
             {
                 RoleId = role.Id,
-                UserId= user.Id,
-                
+                UserId = user.Id,
+
             });
 
+           
             await db.SaveChangesAsync();
         }
 

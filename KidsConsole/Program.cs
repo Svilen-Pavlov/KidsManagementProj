@@ -23,18 +23,17 @@ namespace KidsManagementConsole
             //Console.WriteLine(gs.GetAll().ToString());
 
             //db.Database.Migrate();
-            //SeedParentsTeachersAdmins(db);
+            SeedParentsTeachersAdmins(db);
             //SeedLevels(db);
             //SeedGroups(db);
             //SeedStudents(db);
             //AddStudentsToGroup(db);
-            //SeedRoles(db);
             //UpdateGroupStatuses(db);
             //UpdateGroupAgeGroups(db);
             //UpdateStudentStatuses(db);
             //UpdateStudentGrades(db);
 
-            AssignStudentsToParents(db);
+            //AssignStudentsToParents(db);
             //UpdateParentsStatuses(db); does nothing if the item below is not met
             //write a method to asign parents to children
 
@@ -237,19 +236,6 @@ namespace KidsManagementConsole
 
         }
 
-        private static void SeedRoles(KidsManagementDbContext db)
-        {
-            var roles = new List<ApplicationRole>()
-            {
-            new ApplicationRole("Admin"),
-            new ApplicationRole("Teacher"),
-            new ApplicationRole("Student"),
-            new ApplicationRole("Manager")
-            };
-            db.Roles.AddRange(roles);
-            //db.SaveChanges();
-
-        }
 
         private static void AddStudentsToGroup(KidsManagementDbContext db)
         {
@@ -367,8 +353,8 @@ namespace KidsManagementConsole
         {
             var admin = new Admin
             {
-                FirstName = "svilen",
-                LastName = "pavlov",
+                FirstName = "Svilen",
+                LastName = "Pavlov",
                 Gender = Gender.Male,
                 HireDate = DateTime.Now,
                 Salary = 1000m

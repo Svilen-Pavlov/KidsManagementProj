@@ -195,8 +195,6 @@ namespace KidsManagement.Services.Teachers
         {
             var businessEntityId = (await this.db.Teachers.FirstOrDefaultAsync(u => u.ApplicationUserId == userId)).Id; // are we making use of async
 
-            //var id = businessEntity.Id;
-
             return businessEntityId;
         }
 
@@ -226,7 +224,7 @@ namespace KidsManagement.Services.Teachers
             var notificationRangeEndDate = notificationRangeStartDate.AddDays(14);
             var notifications = new List<MyZoneNotification>();
 
-            //groups
+            //Groups
             //starting
             var groupsStarting = teacher.Groups
               .Where(g => g.StartDate >= notificationRangeStartDate && g.StartDate <= notificationRangeEndDate)

@@ -101,7 +101,7 @@ namespace KidsManagement.Web.Controllers.Groups
             if (groupIsFull == false)
             {
                 this.ViewData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1;
-                this.TempData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1;
+                this.TempData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1; //maybe remove one
                 return await Task.Run(() => this.RedirectToAction("ListElligibleStudents"));
             }
             else
@@ -113,7 +113,7 @@ namespace KidsManagement.Web.Controllers.Groups
 
         public async Task<IActionResult> UnassignTeacher(int groupId)
         {
-            await CheckGroupId(this.TempData["groupId"]);
+            await CheckGroupId(groupId);
 
             await this.teachersService.UnassignGroup(groupId);
 
@@ -157,7 +157,7 @@ namespace KidsManagement.Web.Controllers.Groups
 
             return await Task.Run(() => this.RedirectToAction("Details", new { groupId = model.Id }));
         }
-
+        [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> AssignTeacher(int teacherId)
         {
             int groupId = await CheckGroupId(this.TempData["groupId"]);

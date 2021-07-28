@@ -8,7 +8,7 @@ namespace KidsManagement.Services
 {
     public interface IApplicationUserService
     {
-       Task<bool> UserExists(string username);
+        Task<bool> UserExists(string username);
 
         Task<IdentityResult> AssignRoles(string username, string[] roles);
     }

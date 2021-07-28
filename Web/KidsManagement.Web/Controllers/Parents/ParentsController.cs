@@ -13,7 +13,7 @@ namespace KidsManagement.Web.Controllers.Parents
     {
         public ParentsController(IGroupsService groupsService, ITeachersService teachersService, IStudentsService studentsService, IParentsService parentsService)
             : base(groupsService, teachersService, studentsService, parentsService) { }
-       
+
         public async Task<IActionResult> Index()
         {
             var model = this.parentsService.GetAll();
@@ -63,9 +63,9 @@ namespace KidsManagement.Web.Controllers.Parents
             //var groupIsFull = await this.groupsService.AddStudentToGroup(groupId, studentId);
             //if (groupIsFull == false)
             //{
-                this.ViewData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1;
-                this.TempData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1; //todo how many children parent currently has
-                return await Task.Run(() => this.RedirectToAction("ListElligibleStudents"));
+            this.ViewData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1;
+            this.TempData["freeStudentSlots"] = (int)this.TempData["freeStudentSlots"] - 1; //todo how many children parent currently has
+            return await Task.Run(() => this.RedirectToAction("ListElligibleStudents"));
             //}
             //else
             //{
@@ -110,9 +110,14 @@ namespace KidsManagement.Web.Controllers.Parents
         {
             int parentId = await CheckParentId(this.TempData["parentId"]);
 
-            model.ProfilePicURI = this.TempData["profilePicUri"].ToString();
-            this.TempData.Keep("profilePicUri");
+            if (this.TempData["profilePicUri"] != null)
+            {
+                model.ProfilePicURI = this.TempData["profilePicUri"].ToString();
+                this.TempData.Keep("profilePicUri");
+            }
+
             if (ModelState.IsValid == false) return await Task.Run(() => this.View(model));
+
             model.Id = parentId;
             await this.parentsService.EditInfo(model);
 

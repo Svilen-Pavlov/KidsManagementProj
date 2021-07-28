@@ -217,8 +217,8 @@ namespace KidsManagement.Web.Controllers.Teachers
 
         public async Task<int?> GetLoggedInTeacherBussinessId()
         {
-            var userTeachernId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var teacherId = await this.teachersService.GetBussinessIdByUserId(userTeachernId);
+            var userTeacherId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacherId = await this.teachersService.GetBussinessIdByUserId(userTeacherId);
            
             return teacherId;
         }
